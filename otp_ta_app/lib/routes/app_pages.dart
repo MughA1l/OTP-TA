@@ -9,6 +9,8 @@ import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/login_screen.dart';
 import '../modules/auth/views/forgot_password_screen.dart';
 import '../modules/auth/views/change_password_screen.dart';
+import '../modules/admin/bindings/admin_dashboard_binding.dart';
+import '../modules/admin/views/admin_dashboard_screen.dart';
 import '../modules/admin/bindings/staff_binding.dart';
 import '../modules/admin/views/staff_list_screen.dart';
 import '../modules/admin/views/add_edit_staff_screen.dart';
@@ -58,7 +60,8 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.adminDashboard,
-      page: () => const Scaffold(body: Center(child: Text('Admin Dashboard'))),
+      page: () => const AdminDashboardScreen(),
+      binding: AdminDashboardBinding(),
     ),
     GetPage(
       name: AppRoutes.doctorDashboard,

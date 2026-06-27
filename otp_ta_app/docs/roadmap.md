@@ -315,11 +315,11 @@ Phase 12 → Final Polish, Testing & Deployment
   - Each card: Patient ID, Name, Appointment Time, Status chip
 - `[x] [F]` Build `patient_detail_screen.dart` (Doctor Mobile): full patient profile view with "Mark as Completed" / "No Show" actions
 
-### 5.7 Doctor Workload Tracking (Admin Web Dashboard)
+### ✅ 5.7 Doctor Workload Tracking (Admin Web Dashboard)
 
-- `[B]` Firestore query: count operations per doctor per day
-- `[F]` Stat cards on Admin Dashboard: appointments count per doctor
-- `[F]` Visual flag/warning badge if > 25 patients/day (SRS-49) using `colorWarning`
+- `[x] [B]` Firestore query: count operations per doctor per day
+- `[x] [F]` Stat cards on Admin Dashboard: appointments count per doctor
+- `[x] [F]` Visual flag/warning badge if > 25 patients/day (SRS-49) using `colorWarning`
 
 ---
 
