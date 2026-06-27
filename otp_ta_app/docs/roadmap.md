@@ -220,11 +220,11 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 4: Profile Management
 
-### 4.1 Backend Setup
+### ✅ 4.1 Backend Setup
 
-- `[B]` Create `staff` Firestore collection schema: `{staffId, name, email, phone, role, shiftAllocations, accessPermissions, createdAt}`
-- `[B]` Create `patients` Firestore collection schema: `{patientId, name, phone, address, medicalHistory, emergencyContact, profilePicUrl, createdAt}`
-- `[B]` Write Firestore Security Rule: patients can only update their own basic info fields
+- `[x] [B]` Create `staff` Firestore collection schema: `{staffId, name, email, phone, role, shiftAllocations, accessPermissions, createdAt}`
+- `[x] [B]` Create `patients` Firestore collection schema: `{patientId, name, phone, address, medicalHistory, emergencyContact, profilePicUrl, createdAt}`
+- `[x] [B]` Write Firestore Security Rule: patients can only update their own basic info fields
 
 ### 4.2 Staff Profile (Admin Web)
 
