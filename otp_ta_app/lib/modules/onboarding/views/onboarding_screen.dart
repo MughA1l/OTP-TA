@@ -16,7 +16,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
       'title': 'Real-Time OT Tracking',
       'subtitle':
           'Monitor every surgical procedure live. Track patient status from Pre-Op to Recovery with clinical precision.',
-      'icon': Icons.monitor_heart_rounded,
+      'imagePath': 'assets/images/ot_tracking.png',
       'gradientStart': AppColors.primary,
       'gradientEnd': AppColors.primaryDark,
       'glowColor': AppColors.primary,
@@ -25,7 +25,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
       'title': 'Automated Patient Onboarding',
       'subtitle':
           'Generate secure login credentials for patients instantly when their operation is scheduled. Zero paperwork.',
-      'icon': Icons.person_add_rounded,
+      'imagePath': 'assets/images/patient_onboarding.png',
       'gradientStart': AppColors.secondary,
       'gradientEnd': AppColors.secondaryDark,
       'glowColor': AppColors.secondary,
@@ -34,7 +34,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
       'title': 'Stay Connected with Your Care Team',
       'subtitle':
           'Real-time chat, medication schedules, and emergency alerts keep the entire surgical team in sync.',
-      'icon': Icons.groups_rounded,
+      'imagePath': 'assets/images/team_connection.png',
       'gradientStart': AppColors.success,
       'gradientEnd': AppColors.successDark,
       'glowColor': AppColors.success,
@@ -215,38 +215,40 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Glassmorphism Icon Container
+          // Glassmorphism Image Container
           FadeInDown(
-            key: ValueKey('icon_$pageIndex'),
+            key: ValueKey('image_$pageIndex'),
             duration: const Duration(milliseconds: 600),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Container(
-                  width: 160,
-                  height: 160,
+                  width: 280,
+                  height: 220,
                   decoration: BoxDecoration(
-                    color: (data['glowColor'] as Color).withOpacity(0.12),
+                    color: (data['glowColor'] as Color).withOpacity(0.08),
                     borderRadius:
                         BorderRadius.circular(AppDimensions.radiusXL),
                     border: Border.all(
-                      color: (data['glowColor'] as Color).withOpacity(0.3),
+                      color: (data['glowColor'] as Color).withOpacity(0.2),
                       width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
                         color:
-                            (data['glowColor'] as Color).withOpacity(0.25),
-                        blurRadius: 50,
-                        spreadRadius: 10,
+                            (data['glowColor'] as Color).withOpacity(0.15),
+                        blurRadius: 40,
+                        spreadRadius: 5,
                       ),
                     ],
                   ),
-                  child: Icon(
-                    data['icon'] as IconData,
-                    size: 80,
-                    color: data['glowColor'] as Color,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXL - 1),
+                    child: Image.asset(
+                      data['imagePath'] as String,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
