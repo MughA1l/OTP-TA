@@ -299,13 +299,13 @@ Phase 12 → Final Polish, Testing & Deployment
   - "Mark as On Leave" date picker with chip display
   - Conflict error if overlapping/duplicate shifts detected (SRS-41)
 
-### 5.5 Appointment Management (Admin/Receptionist Web)
+### ✅ 5.5 Appointment Management (Admin/Receptionist Web)
 
-- `[B]`/`[F]` Implement `AppointmentRepositoryImpl`: `bookAppointment()`, `reschedule()`, `cancel()`
-- `[F]` Create `AppointmentController`
-- `[F]` Build appointment booking form: Doctor selector (checks real-time availability) + date/time picker
-- `[F]` Status chip: Pending / Confirmed / Cancelled / Completed (SRS-43)
-- `[F]` Cancellation immediately frees time slot (SRS-44)
+- `[x] [B]`/`[x] [F]` Implement `AppointmentRepositoryImpl`: `bookAppointment()`, `reschedule()`, `cancel()`
+- `[x] [F]` Create `AppointmentController`
+- `[x] [F]` Build appointment booking form: Doctor selector (checks real-time availability) + date/time picker
+- `[x] [F]` Status chip: Scheduled / Cancelled / Completed / No Show (SRS-43)
+- `[x] [F]` Cancellation immediately frees time slot (SRS-44)
 
 ### 5.6 Assigned Patients (Doctor Mobile)
 
