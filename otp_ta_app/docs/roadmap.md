@@ -277,10 +277,11 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [B]` Create `appointments` collection schema: `{appointmentId, doctorId, patientId, dateTime, status, createdAt}`
 - `[x] [B]` Firestore Rule: Doctors can only edit their own profile; Admins have full access
 
-### 5.2 Doctor Repository & Controller
+### ✅ 5.2 Doctor Repository & Controller
 
-- `[B]`/`[F]` Implement `DoctorRepositoryImpl`: CRUD + `watchDoctorList()`, `updateAvailability()`
-- `[F]` Create `DoctorManagementController` (Admin) + `DoctorDashboardController` (Doctor)
+- `[x] [B]`/`[x] [F]` Implement `DoctorRepositoryImpl`: `createDoctor()`, `updateDoctor()`, `fetchDoctor(id)`
+- `[x] [F]` Create `DoctorManagementController`
+- `[x] [F]` Implement logic for managing availability slots (Array of time slots)
 
 ### 5.3 Add/Edit Doctor Profile (Admin Web)
 
