@@ -307,13 +307,13 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` Status chip: Scheduled / Cancelled / Completed / No Show (SRS-43)
 - `[x] [F]` Cancellation immediately frees time slot (SRS-44)
 
-### 5.6 Assigned Patients (Doctor Mobile)
+### ✅ 5.6 Assigned Patients (Doctor Mobile)
 
-- `[F]` Build `assigned_patients_screen.dart` (Mobile):
+- `[x] [F]` Build `assigned_patients_screen.dart` (Mobile):
   - Today's patient list with `FadeInUp` stagger
   - Filter by date, search by name (SRS-47)
   - Each card: Patient ID, Name, Appointment Time, Status chip
-- `[F]` Build `patient_detail_screen.dart` (Doctor Mobile): full patient profile view
+- `[x] [F]` Build `patient_detail_screen.dart` (Doctor Mobile): full patient profile view with "Mark as Completed" / "No Show" actions
 
 ### 5.7 Doctor Workload Tracking (Admin Web Dashboard)
 

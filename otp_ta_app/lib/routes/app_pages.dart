@@ -21,6 +21,9 @@ import '../modules/doctor/views/doctor_availability_screen.dart';
 import '../modules/appointment/bindings/appointment_binding.dart';
 import '../modules/appointment/views/appointment_list_screen.dart';
 import '../modules/appointment/views/book_appointment_screen.dart';
+import '../modules/doctor/bindings/assigned_patients_binding.dart';
+import '../modules/doctor/views/assigned_patients_screen.dart';
+import '../modules/doctor/views/patient_detail_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -104,6 +107,16 @@ abstract class AppPages {
       name: AppRoutes.bookAppointment,
       page: () => const BookAppointmentScreen(),
       binding: AppointmentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.assignedPatients,
+      page: () => const AssignedPatientsScreen(),
+      binding: AssignedPatientsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.patientDetail,
+      page: () => const PatientDetailScreen(),
+      binding: AssignedPatientsBinding(),
     ),
     GetPage(
       name: AppRoutes.patientList,
