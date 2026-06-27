@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
+import '../modules/splash/views/splash_screen.dart';
+import '../modules/splash/bindings/splash_binding.dart';
 
 abstract class AppPages {
   static final pages = [
     GetPage(
       name: AppRoutes.splash,
-      page: () => const Scaffold(body: Center(child: Text('Splash Screen'))),
+      page: () => const SplashScreen(),
+      binding: SplashBinding(),
     ),
     GetPage(
       name: AppRoutes.onboarding,

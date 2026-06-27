@@ -142,15 +142,15 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ### 2.1 Splash Screen
 
-- `[F]` Create `splash_screen.dart` with full dark background (`AppColors.background`)
-- `[F]` Implement app logo with `FadeTransition` (500ms) + `ScaleTransition` (400ms, after fade)
-- `[F]` Add tagline text with `SlideTransition` upward (300ms, delay 600ms)
-- `[F]` Add subtle animated background gradient or particle shimmer effect
-- `[F]` Create `SplashController` with `onInit()` logic:
+- `[x] [F]` Create `splash_screen.dart` with full dark background (`AppColors.background`)
+- `[x] [F]` Implement app logo with `FadeTransition` (500ms) + `ScaleTransition` (400ms, after fade)
+- `[x] [F]` Add tagline text with `SlideTransition` upward (300ms, delay 600ms)
+- `[x] [F]` Add subtle animated background gradient or particle shimmer effect
+- `[x] [F]` Create `SplashController` with `onInit()` logic:
   - Check `GetStorage` for `isFirstLaunch` → route to Onboarding if `true`
   - Check `FirebaseAuth.instance.currentUser` → route to correct Dashboard if logged in
   - Otherwise → route to Login screen
-- `[F]` Register `SplashController` in `SplashBinding`
+- `[x] [F]` Register `SplashController` in `SplashBinding`
 
 ### 2.2 Onboarding Screen (First-Time Users Only)
 
