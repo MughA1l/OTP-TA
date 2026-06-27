@@ -8,6 +8,7 @@ import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/login_screen.dart';
 import '../modules/auth/views/forgot_password_screen.dart';
+import '../modules/auth/views/change_password_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -33,8 +34,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.changePassword,
-      // change_password_screen.dart — will be created in Step 3.5
-      page: () => const Scaffold(backgroundColor: Color(0xFF080A0E), body: Center(child: CircularProgressIndicator())),
+      page: () => const ChangePasswordScreen(),
       binding: AuthBinding(),
     ),
     GetPage(

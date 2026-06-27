@@ -208,13 +208,13 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` On success: show informational snackbar + navigate back to Login (SRS-13)
 - `[x] [F]` On failure (email not found): show error snackbar (SRS-10)
 
-### 3.5 Change Password Screen (Settings)
+### ✅ 3.5 Change Password Screen (Settings)
 
-- `[F]` Create `change_password_screen.dart` (accessible from profile settings for all roles)
-- `[F]` Three fields: Old Password, New Password, Confirm New Password
-- `[F]` Validate security policy client-side before calling repository (SRS-15, SRS-16)
-- `[F]` On success: show "Password Updated Successfully" snackbar (SRS-16)
-- `[B]`/`[F]` Re-authenticate user with old password before updating (security requirement)
+- `[x] [F]` Create `change_password_screen.dart` (accessible from profile settings for all roles)
+- `[x] [F]` Three fields: Old Password, New Password, Confirm New Password
+- `[x] [F]` Validate security policy client-side before calling repository (SRS-15, SRS-16)
+- `[x] [F]` On success: show "Password Updated Successfully" snackbar (SRS-16)
+- `[x] [B]`/`[x] [F]` Re-authenticate user with old password before updating (security requirement)
 
 ---
 
