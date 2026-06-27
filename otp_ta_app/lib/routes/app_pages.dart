@@ -9,6 +9,9 @@ import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/login_screen.dart';
 import '../modules/auth/views/forgot_password_screen.dart';
 import '../modules/auth/views/change_password_screen.dart';
+import '../modules/admin/bindings/staff_binding.dart';
+import '../modules/admin/views/staff_list_screen.dart';
+import '../modules/admin/views/add_edit_staff_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -48,6 +51,16 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.patientDashboard,
       page: () => const Scaffold(body: Center(child: Text('Patient Dashboard'))),
+    ),
+    GetPage(
+      name: AppRoutes.staffList,
+      page: () => const StaffListScreen(),
+      binding: StaffBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.addEditStaff,
+      page: () => const AddEditStaffScreen(),
+      binding: StaffBinding(),
     ),
   ];
 }

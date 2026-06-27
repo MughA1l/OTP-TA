@@ -226,14 +226,14 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [B]` Create `patients` Firestore collection schema: `{patientId, name, phone, address, medicalHistory, emergencyContact, profilePicUrl, createdAt}`
 - `[x] [B]` Write Firestore Security Rule: patients can only update their own basic info fields
 
-### 4.2 Staff Profile (Admin Web)
+### ✅ 4.2 Staff Profile (Admin Web)
 
-- `[B]`/`[F]` Implement `StaffRepositoryImpl`: `createStaff()`, `updateStaff()`, `fetchAllStaff()`
-- `[F]` Create `StaffController` with: `staffList`, `isLoading`, `createStaff()`, `updateStaff()`
-- `[F]` Build `staff_list_screen.dart` (Web):
+- `[x] [B]`/`[x] [F]` Implement `StaffRepositoryImpl`: `createStaff()`, `updateStaff()`, `fetchAllStaff()`
+- `[x] [F]` Create `StaffController` with: `staffList`, `isLoading`, `createStaff()`, `updateStaff()`
+- `[x] [F]` Build `staff_list_screen.dart` (Web):
   - DataTable or animated list with search/filter bar
   - `FadeInUp` stagger on list items
-- `[F]` Build `add_edit_staff_screen.dart` (Web):
+- `[x] [F]` Build `add_edit_staff_screen.dart` (Web):
   - Form: Name, Email, Phone, Job Role (Dropdown), Shift Allocation
   - Inline validation; "Save" button with loading state
   - Success snackbar "Staff Profile Created Successfully" (SRS-21)

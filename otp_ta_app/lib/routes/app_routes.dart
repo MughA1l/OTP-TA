@@ -9,4 +9,8 @@ abstract class AppRoutes {
   static const adminDashboard = '/admin-dashboard';
   static const doctorDashboard = '/doctor-dashboard';
   static const patientDashboard = '/patient-dashboard';
+
+  // Admin Module
+  static const staffList = '/staff-list';
+  static const addEditStaff = '/add-edit-staff';
 }
