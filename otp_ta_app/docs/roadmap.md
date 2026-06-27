@@ -343,9 +343,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - Status labels use `StatusChip` widget from `shared_widgets/chips/`
   - Auto-refreshes via Firestore `snapshots()` stream (SRS-53, SRS-54)
 
-### 6.3 View Assigned Doctor
+### ✅ 6.3 View Assigned Doctor
 
-- `[F]` Doctor card on patient dashboard:
+- `[x] [F]` Doctor card on patient dashboard:
   - Shows: Name, Photo, Specialty, PMDC Number, Experience
   - Hides: Personal mobile number (SRS-56)
   - "Chat" button → navigates to chat room

@@ -182,18 +182,74 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
           const Divider(color: AppColors.glassBorder),
           const SizedBox(height: AppDimensions.paddingM),
           
+          const SizedBox(height: AppDimensions.paddingM),
           Text('Assigned Doctor', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Obx(() {
             final doc = controller.getDoctorForAppointment(appointment.doctorId);
-            if (doc == null) return Text('Loading...', style: AppTextStyles.bodyLarge);
-            return Text(
-              'Dr. ${doc.name} (${doc.specializations.isNotEmpty ? doc.specializations.first : ''})',
-              style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+            if (doc == null) {
+              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            }
+            return Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingM),
+              decoration: BoxDecoration(
+                color: AppColors.glassBackground,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                border: Border.all(color: AppColors.glassBorder),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: AppColors.primaryContainer,
+                        backgroundImage: doc.profilePicUrl != null && doc.profilePicUrl!.isNotEmpty
+                            ? NetworkImage(doc.profilePicUrl!)
+                            : null,
+                        child: doc.profilePicUrl == null || doc.profilePicUrl!.isEmpty
+                            ? Text(doc.name[0].toUpperCase(), style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary))
+                            : null,
+                      ),
+                      const SizedBox(width: AppDimensions.paddingM),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Dr. ${doc.name}', style: AppTextStyles.titleLarge),
+                            Text(
+                              doc.specializations.isNotEmpty ? doc.specializations.join(', ') : 'General',
+                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // Navigate to Chat Room
+                          // Get.toNamed(AppRoutes.chatRoom, arguments: {'doctorId': doc.doctorId});
+                        },
+                        icon: const Icon(Icons.chat_bubble_outline_rounded, color: AppColors.primary),
+                        tooltip: 'Chat with Doctor',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.paddingM),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _DoctorStat(label: 'PMDC', value: doc.pmdcNumber ?? 'N/A'),
+                      _DoctorStat(label: 'Experience', value: '${doc.experienceYears ?? 0} yrs'),
+                    ],
+                  ),
+                  // Note: Personal mobile number intentionally hidden (SRS-56)
+                ],
+              ),
             );
           }),
           
-          const SizedBox(height: AppDimensions.paddingM),
+          const SizedBox(height: AppDimensions.paddingL),
           Text('Time Slot', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
           const SizedBox(height: 4),
           Text(appointment.notes ?? 'Scheduled Slot', style: AppTextStyles.bodyLarge),
@@ -231,3 +287,22 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
     return months[month - 1];
   }
 }
+
+class _DoctorStat extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _DoctorStat({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(label, style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+        const SizedBox(height: 2),
+        Text(value, style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
+}
+
