@@ -3,7 +3,7 @@ abstract class AppConfig {
   static const String backendBaseUrl = 'https://otpta-backend.onrender.com';
   
   // Cloudinary
-  static const String cloudinaryCloudName = 'YOUR_CLOUDINARY_CLOUD_NAME';
+  static const String cloudinaryCloudName = 'db724xfxc';
   static const String cloudinaryUploadPresetReports = 'otpta_reports';
   static const String cloudinaryUploadPresetProfiles = 'otpta_profiles';
 }
