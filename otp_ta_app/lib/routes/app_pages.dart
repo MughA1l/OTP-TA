@@ -26,6 +26,8 @@ import '../modules/appointment/views/book_appointment_screen.dart';
 import '../modules/doctor/bindings/assigned_patients_binding.dart';
 import '../modules/doctor/views/assigned_patients_screen.dart';
 import '../modules/doctor/views/patient_detail_screen.dart';
+import '../modules/patient/bindings/patient_dashboard_binding.dart';
+import '../modules/patient/views/patient_dashboard_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -69,7 +71,8 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.patientDashboard,
-      page: () => const Scaffold(body: Center(child: Text('Patient Dashboard'))),
+      page: () => const PatientDashboardScreen(),
+      binding: PatientDashboardBinding(),
     ),
     GetPage(
       name: AppRoutes.staffList,

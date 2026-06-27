@@ -325,14 +325,14 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 6: Patient Portal Management
 
-### 6.1 Patient Dashboard (Mobile)
+### ✅ 6.1 Patient Dashboard (Mobile)
 
-- `[F]` Build `patient_dashboard_screen.dart` (Mobile):
+- `[x] [F]` Build `patient_dashboard_screen.dart` (Mobile):
   - Glassmorphism header card: "Hello, [Patient Name]" + date
   - Stat cards: Upcoming Schedule, Current OT Status, Assigned Doctor
   - "No active schedules" empty state widget if no operations (SRS-51)
   - All cards animate in with staggered `FadeInUp` (SRS-52 — dynamic updates)
-- `[B]`/`[F]` `PatientDashboardController` watches real-time Firestore streams
+- `[x] [B]`/`[x] [F]` `PatientDashboardController` watches real-time Firestore streams
 
 ### 6.2 Real-Time OT Status Tracking
 
