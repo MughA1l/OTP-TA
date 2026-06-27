@@ -197,6 +197,25 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
           Text('Time Slot', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
           const SizedBox(height: 4),
           Text(appointment.notes ?? 'Scheduled Slot', style: AppTextStyles.bodyLarge),
+          
+          const SizedBox(height: AppDimensions.paddingL),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                // Navigate to tracking screen (ideally passing the operationId tied to this appointment)
+                // For demo, we just navigate to the screen
+                Get.toNamed(AppRoutes.operationTracking);
+              },
+              icon: const Icon(Icons.monitor_heart_outlined, color: AppColors.secondary),
+              label: Text('Track Live OT Status', style: AppTextStyles.labelLarge.copyWith(color: AppColors.secondary)),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.secondary),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+              ),
+            ),
+          ),
         ],
       ),
     );

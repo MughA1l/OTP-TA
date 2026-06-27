@@ -28,6 +28,8 @@ import '../modules/doctor/views/assigned_patients_screen.dart';
 import '../modules/doctor/views/patient_detail_screen.dart';
 import '../modules/patient/bindings/patient_dashboard_binding.dart';
 import '../modules/patient/views/patient_dashboard_screen.dart';
+import '../modules/patient/bindings/operation_tracking_binding.dart';
+import '../modules/patient/views/operation_status_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -73,6 +75,11 @@ abstract class AppPages {
       name: AppRoutes.patientDashboard,
       page: () => const PatientDashboardScreen(),
       binding: PatientDashboardBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.operationTracking,
+      page: () => const OperationStatusScreen(),
+      binding: OperationTrackingBinding(),
     ),
     GetPage(
       name: AppRoutes.staffList,

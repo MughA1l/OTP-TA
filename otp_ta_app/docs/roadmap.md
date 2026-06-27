@@ -334,9 +334,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - All cards animate in with staggered `FadeInUp` (SRS-52 — dynamic updates)
 - `[x] [B]`/`[x] [F]` `PatientDashboardController` watches real-time Firestore streams
 
-### 6.2 Real-Time OT Status Tracking
+### ✅ 6.2 Real-Time OT Status Tracking
 
-- `[F]` Build `operation_status_screen.dart` (Mobile):
+- `[x] [F]` Build `operation_status_screen.dart` (Mobile):
   - Vertical stepper UI: Pre-Op → In Surgery → Recovery Room → Completed
   - **"In Surgery" step:** Animated pulsing teal glow (`colorSecondaryLight`) + live badge
   - Progress line animates between steps as status updates
