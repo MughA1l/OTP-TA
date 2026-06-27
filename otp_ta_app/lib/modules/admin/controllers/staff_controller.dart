@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/snackbar_helper.dart';
 import '../../../data/models/staff_model.dart';
 import '../../../data/repositories/staff_repository.dart';
@@ -27,7 +26,7 @@ class StaffController extends GetxController {
         filteredStaffList.value = staff;
       },
       onError: (e) {
-        SnackbarHelper.showError('Failed to load staff list');
+        SnackbarHelper.showError('Error', 'Failed to load staff list');
       },
     );
   }
@@ -61,14 +60,14 @@ class StaffController extends GetxController {
       final result = await _staffRepository.createStaff(staff, mockUid);
       
       result.fold(
-        (failure) => SnackbarHelper.showError(failure.message),
+        (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Staff Profile Created Successfully');
+          SnackbarHelper.showSuccess('Success', 'Staff Profile Created Successfully');
           Get.back(); // Go back to list
         },
       );
     } catch (e) {
-      SnackbarHelper.showError('An unexpected error occurred.');
+      SnackbarHelper.showError('Error', 'An unexpected error occurred.');
     } finally {
       isLoading.value = false;
     }
@@ -79,9 +78,9 @@ class StaffController extends GetxController {
     final result = await _staffRepository.updateStaff(staff);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Staff Profile Updated');
+        SnackbarHelper.showSuccess('Success', 'Staff Profile Updated');
         Get.back();
       },
     );
@@ -93,9 +92,9 @@ class StaffController extends GetxController {
     final result = await _staffRepository.updateAccountStatus(uid, status);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Account Status Updated to $status');
+        SnackbarHelper.showSuccess('Success', 'Account Status Updated to $status');
         // The watchAllStaff stream will auto-update the list if the user was in it,
         // but note that our watchAllStaff stream doesn't fetch 'status'. 
         // For a full admin view, it would. 

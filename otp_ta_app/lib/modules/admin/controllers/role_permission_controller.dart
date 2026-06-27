@@ -34,7 +34,7 @@ class RolePermissionController extends GetxController {
     isLoading.value = true;
     final result = await _repository.fetchAllRolePermissions();
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (roles) => rolePermissions.value = roles,
     );
     isLoading.value = false;
@@ -44,7 +44,7 @@ class RolePermissionController extends GetxController {
     isLoading.value = true;
     final result = await _repository.updateRolePermissions(role, allowedModules);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
         // Update local list
         final index = rolePermissions.indexWhere((r) => r.role == role);
@@ -54,7 +54,7 @@ class RolePermissionController extends GetxController {
           rolePermissions.add(RolePermissionModel(role: role, allowedModules: allowedModules));
         }
         rolePermissions.refresh();
-        SnackbarHelper.showSuccess('Permissions Updated Successfully'); // SRS-82
+        SnackbarHelper.showSuccess('Success', 'Permissions Updated Successfully'); // SRS-82
       },
     );
     isLoading.value = false;
