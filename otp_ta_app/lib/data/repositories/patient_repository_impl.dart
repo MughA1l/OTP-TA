@@ -75,4 +75,19 @@ class PatientRepositoryImpl implements IPatientRepository {
       return snapshot.docs.map((doc) => PatientModel.fromMap(doc.data(), doc.id)).toList();
     });
   }
+
+  @override
+  Future<Either<Failure, void>> updateAccountStatus(String uid, String status) async {
+    try {
+      await _firestore
+          .collection(FirebaseConstants.users)
+          .doc(uid)
+          .update({'status': status});
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(FirestoreFailure(message: e.message ?? 'Failed to update account status.'));
+    } catch (e) {
+      return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
+    }
+  }
 }

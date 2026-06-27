@@ -87,4 +87,20 @@ class StaffController extends GetxController {
     );
     isLoading.value = false;
   }
+
+  Future<void> updateAccountStatus(String uid, String status) async {
+    isLoading.value = true;
+    final result = await _staffRepository.updateAccountStatus(uid, status);
+    
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (_) {
+        SnackbarHelper.showSuccess('Account Status Updated to $status');
+        // The watchAllStaff stream will auto-update the list if the user was in it,
+        // but note that our watchAllStaff stream doesn't fetch 'status'. 
+        // For a full admin view, it would. 
+      },
+    );
+    isLoading.value = false;
+  }
 }

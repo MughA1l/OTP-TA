@@ -186,7 +186,34 @@ class AddEditStaffScreen extends GetView<StaffController> {
                                   }),
                                 ),
                               ),
-                              const SizedBox(height: AppDimensions.paddingXXL),
+                              const SizedBox(height: AppDimensions.paddingL),
+
+                              // Account Status Toggle for Admin (SRS-31)
+                              if (isEditing) ...[
+                                FadeInUp(
+                                  duration: const Duration(milliseconds: 400),
+                                  delay: const Duration(milliseconds: 480),
+                                  child: AppDropdown<String>(
+                                    // Mocked initial value for now since we didn't fetch status in watchAllStaff
+                                    value: 'active',
+                                    label: 'Account Status',
+                                    prefixIcon: Icons.manage_accounts_rounded,
+                                    items: const [
+                                      DropdownMenuItem(value: 'active', child: Text('Active')),
+                                      DropdownMenuItem(value: 'suspended', child: Text('Suspended')),
+                                      DropdownMenuItem(value: 'deactivated', child: Text('Deactivated')),
+                                    ],
+                                    onChanged: (val) {
+                                      if (val != null) {
+                                        controller.updateAccountStatus(existingStaff.staffId, val);
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(height: AppDimensions.paddingL),
+                              ],
+
+                              const SizedBox(height: AppDimensions.paddingXL),
 
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),

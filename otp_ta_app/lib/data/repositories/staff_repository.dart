@@ -11,4 +11,7 @@ abstract class IStaffRepository {
 
   /// Watch all staff members (real-time stream)
   Stream<List<StaffModel>> watchAllStaff();
+
+  /// Update account status (active, suspended, deactivated)
+  Future<Either<Failure, void>> updateAccountStatus(String uid, String status);
 }

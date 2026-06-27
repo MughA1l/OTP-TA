@@ -14,4 +14,7 @@ abstract class IPatientRepository {
 
   /// Watch all patients (real-time stream for admin list)
   Stream<List<PatientModel>> watchAllPatients();
+
+  /// Update account status (active, suspended, deactivated)
+  Future<Either<Failure, void>> updateAccountStatus(String uid, String status);
 }

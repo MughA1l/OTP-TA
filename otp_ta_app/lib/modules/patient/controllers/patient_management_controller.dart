@@ -96,4 +96,15 @@ class PatientManagementController extends GetxController {
     );
     isLoading.value = false;
   }
+
+  Future<void> updateAccountStatus(String uid, String status) async {
+    isLoading.value = true;
+    final result = await _patientRepository.updateAccountStatus(uid, status);
+    
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (_) => SnackbarHelper.showSuccess('Patient Account Status Updated to $status'),
+    );
+    isLoading.value = false;
+  }
 }

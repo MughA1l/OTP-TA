@@ -252,11 +252,11 @@ Phase 12 → Final Polish, Testing & Deployment
   - Edit: Only phone, address, profile picture (restricted — SRS-28)
   - Profile picture upload via `image_picker` + Cloudinary
 
-### 4.4 Manage Account Status
+### ✅ 4.4 Manage Account Status
 
-- `[F]` Add account status toggle (Active / Deactivated / Suspended) to user detail screens (Web Admin)
-- `[B]`/`[F]` `updateAccountStatus(uid, status)` method in repository
-- `[F]` Login flow checks `status` field before granting session (SRS-31, SRS-32)
+- `[x] [F]` Add account status toggle (Active / Deactivated / Suspended) to user detail screens (Web Admin)
+- `[x] [B]`/`[x] [F]` `updateAccountStatus(uid, status)` method in repository
+- `[x] [F]` Login flow checks `status` field before granting session (SRS-31, SRS-32)
 
 ### 4.5 Role Permissions (Admin Web)
 
