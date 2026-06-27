@@ -189,17 +189,17 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` Implement role-based routing in `AuthController` (`_navigateByRole()`)
 - `[x] [F]` Register binding in `AuthBinding`
 
-### 3.3 Login Screen (Shared — Web + Mobile)
+### ✅ 3.3 Login Screen (Shared — Web + Mobile)
 
-- `[F]` Create `login_screen.dart` with dark glassmorphism card design
-- `[F]` App logo + animated tagline at top
-- `[F]` Email `AppTextField` + Password `AppPasswordField` (toggle visibility)
-- `[F]` "Sign In" `PrimaryButton` — shows loading spinner via `Obx()`
-- `[F]` "Forgot Password?" `TextButton` link
-- `[F]` Implement inline form validation (`validators.dart`)
-- `[F]` Add staggered `FadeInUp` animation: logo → email → password → button (each +100ms delay)
-- `[F]` Display GetX error snackbar on failure (SRS-4)
-- `[F]` Handle "Account Deactivated" state with distinct error message (SRS-32)
+- `[x] [F]` Create `login_screen.dart` with dark glassmorphism card design
+- `[x] [F]` App logo + animated tagline at top
+- `[x] [F]` Email `AppTextField` + Password `AppPasswordField` (toggle visibility)
+- `[x] [F]` "Sign In" `PrimaryButton` — shows loading spinner via `Obx()`
+- `[x] [F]` "Forgot Password?" `TextButton` link
+- `[x] [F]` Implement inline form validation (`validators.dart`)
+- `[x] [F]` Add staggered `FadeInUp` animation: logo → email → password → button (each +100ms delay)
+- `[x] [F]` Display GetX error snackbar on failure (SRS-4)
+- `[x] [F]` Handle "Account Deactivated" state with distinct error message (SRS-32)
 
 ### 3.4 Forgot Password Screen
 

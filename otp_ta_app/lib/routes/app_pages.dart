@@ -6,6 +6,7 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/onboarding/views/onboarding_screen.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/auth/bindings/auth_binding.dart';
+import '../modules/auth/views/login_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -21,8 +22,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.signIn,
-      // login_screen.dart — will be created in Step 3.3
-      page: () => const Scaffold(backgroundColor: Color(0xFF080A0E), body: Center(child: CircularProgressIndicator())),
+      page: () => const LoginScreen(),
       binding: AuthBinding(),
     ),
     GetPage(
