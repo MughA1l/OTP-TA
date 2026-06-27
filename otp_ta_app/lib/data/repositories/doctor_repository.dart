@@ -17,4 +17,13 @@ abstract class IDoctorRepository {
 
   /// Update account status (active, suspended, deactivated)
   Future<Either<Failure, void>> updateAccountStatus(String uid, String status);
+
+  /// Update doctor's availability slots (SRS-41)
+  Future<Either<Failure, void>> updateAvailability(String doctorId, List<String> slots);
+
+  /// Mark dates as on-leave
+  Future<Either<Failure, void>> updateLeaveDates(String doctorId, List<String> leaveDates);
+
+  /// Fetch leave dates
+  Future<Either<Failure, List<String>>> fetchLeaveDates(String doctorId);
 }

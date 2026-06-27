@@ -17,6 +17,7 @@ import '../modules/admin/views/role_permissions_screen.dart';
 import '../modules/doctor/bindings/doctor_binding.dart';
 import '../modules/admin/views/doctor_list_screen.dart';
 import '../modules/admin/views/add_edit_doctor_screen.dart';
+import '../modules/doctor/views/doctor_availability_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -84,6 +85,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.addEditDoctor,
       page: () => const AddEditDoctorScreen(),
+      binding: DoctorBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.doctorAvailability,
+      page: () => const DoctorAvailabilityScreen(),
       binding: DoctorBinding(),
     ),
     GetPage(

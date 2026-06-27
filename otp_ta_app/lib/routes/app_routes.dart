@@ -18,6 +18,7 @@ abstract class AppRoutes {
   static const rolePermissions = '/role-permissions';
   static const doctorList = '/doctor-list';
   static const addEditDoctor = '/add-edit-doctor';
+  static const doctorAvailability = '/doctor-availability';
   
   // Patient Module
   static const patientProfile = '/patient-profile';

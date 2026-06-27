@@ -136,4 +136,73 @@ class DoctorManagementController extends GetxController {
       updateDoctor(updatedDoctor);
     }
   }
+
+  // ── Availability (SRS-41) ────────────────────────────────────────────────
+
+  /// Saves a clean list of slots after conflict detection
+  Future<void> saveAvailabilitySlots(String doctorId, List<String> newSlots) async {
+    // Conflict detection: duplicates within the list
+    final uniqueSlots = newSlots.toSet().toList();
+    if (uniqueSlots.length != newSlots.length) {
+      SnackbarHelper.showError('Conflict Detected: Duplicate time slot found. (SRS-41)');
+      return;
+    }
+
+    isLoading.value = true;
+    final result = await _doctorRepository.updateAvailability(doctorId, uniqueSlots);
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (_) {
+        SnackbarHelper.showSuccess('Availability Updated Successfully');
+        // Refresh local doctor
+        if (currentDoctor.value?.doctorId == doctorId) {
+          currentDoctor.value = currentDoctor.value!.copyWith(availabilitySlots: uniqueSlots);
+        }
+      },
+    );
+    isLoading.value = false;
+  }
+
+  // ── Leave Dates ──────────────────────────────────────────────────────────
+
+  final RxList<String> leaveDates = <String>[].obs;
+
+  Future<void> fetchLeaveDates(String doctorId) async {
+    isLoading.value = true;
+    final result = await _doctorRepository.fetchLeaveDates(doctorId);
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (dates) => leaveDates.value = dates,
+    );
+    isLoading.value = false;
+  }
+
+  Future<void> markOnLeave(String doctorId, String isoDate) async {
+    if (leaveDates.contains(isoDate)) {
+      SnackbarHelper.showError('Already marked as on leave for this date.');
+      return;
+    }
+    final updated = List<String>.from(leaveDates)..add(isoDate);
+    isLoading.value = true;
+    final result = await _doctorRepository.updateLeaveDates(doctorId, updated);
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (_) {
+        leaveDates.value = updated;
+        SnackbarHelper.showSuccess('Leave marked for $isoDate');
+      },
+    );
+    isLoading.value = false;
+  }
+
+  Future<void> removeLeaveDate(String doctorId, String isoDate) async {
+    final updated = List<String>.from(leaveDates)..remove(isoDate);
+    isLoading.value = true;
+    final result = await _doctorRepository.updateLeaveDates(doctorId, updated);
+    result.fold(
+      (failure) => SnackbarHelper.showError(failure.message),
+      (_) => leaveDates.value = updated,
+    );
+    isLoading.value = false;
+  }
 }

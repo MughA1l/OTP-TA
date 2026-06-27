@@ -290,13 +290,14 @@ Phase 12 → Final Polish, Testing & Deployment
   - Validation + "Doctor Profile Added Successfully" snackbar (SRS-35)
 - `[x] [F]` Build `doctor_list_screen.dart` (Web): searchable list with edit tap-through
 
-### 5.4 Doctor Availability & Duty Timings
+### ✅ 5.4 Doctor Availability & Duty Timings
 
-- `[B]`/`[F]` `updateAvailability(doctorId, slots)` with conflict detection logic
-- `[F]` Build `doctor_availability_screen.dart`:
-  - Weekly calendar grid showing shift slots
-  - "Mark as On Leave" date picker
-  - Conflict error if overlapping shifts detected (SRS-41)
+- `[x] [B]`/`[x] [F]` `updateAvailability(doctorId, slots)` with conflict detection logic (SRS-41)
+- `[x] [B]`/`[x] [F]` `updateLeaveDates(doctorId, leaveDates)` and `fetchLeaveDates(doctorId)`
+- `[x] [F]` Build `doctor_availability_screen.dart`:
+  - Weekly calendar grid showing shift slots (Mon–Sun × Morning/Afternoon/Evening)
+  - "Mark as On Leave" date picker with chip display
+  - Conflict error if overlapping/duplicate shifts detected (SRS-41)
 
 ### 5.5 Appointment Management (Admin/Receptionist Web)
 
