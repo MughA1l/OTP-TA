@@ -140,7 +140,7 @@ Phase 12 → Final Polish, Testing & Deployment
 
 > **Goal:** Create a stunning first impression and guide first-time users.
 
-### 2.1 Splash Screen
+### ✅ 2.1 Splash Screen
 
 - `[x] [F]` Create `splash_screen.dart` with full dark background (`AppColors.background`)
 - `[x] [F]` Implement app logo with `FadeTransition` (500ms) + `ScaleTransition` (400ms, after fade)
@@ -152,18 +152,18 @@ Phase 12 → Final Polish, Testing & Deployment
   - Otherwise → route to Login screen
 - `[x] [F]` Register `SplashController` in `SplashBinding`
 
-### 2.2 Onboarding Screen (First-Time Users Only)
+### ✅ 2.2 Onboarding Screen (First-Time Users Only)
 
-- `[B]` No backend dependency — purely local (`GetStorage` flag)
-- `[F]` Create `onboarding_screen.dart` with `PageView` (3 pages)
-- `[F]` Design 3 onboarding pages:
+- `[x] [B]` No backend dependency — purely local (`GetStorage` flag)
+- `[x] [F]` Create `onboarding_screen.dart` with `PageView` (3 pages)
+- `[x] [F]` Design 3 onboarding pages:
   - **Page 1:** "Real-Time OT Tracking" — Surgical precision illustration
   - **Page 2:** "Automated Patient Onboarding" — Credential generation illustration
   - **Page 3:** "Stay Connected with Your Care Team" — Chat & medication illustration
-- `[F]` Add animated page indicator dots (active dot width expands smoothly)
-- `[F]` Add staggered `FadeInUp` animation on each page's text content
-- `[F]` Add "Skip" button (top-right) + "Next" / "Get Started" (bottom CTA)
-- `[F]` On "Get Started": set `GetStorage().write('isFirstLaunch', false)` → navigate to Login
+- `[x] [F]` Add animated page indicator dots (active dot width expands smoothly)
+- `[x] [F]` Add staggered `FadeInUp` animation on each page's text content
+- `[x] [F]` Add "Skip" button (top-right) + "Next" / "Get Started" (bottom CTA)
+- `[x] [F]` On "Get Started": set `GetStorage().write('isFirstLaunch', false)` → navigate to Login
 
 ---
 

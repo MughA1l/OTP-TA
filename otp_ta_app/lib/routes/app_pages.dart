@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
 import '../modules/splash/views/splash_screen.dart';
 import '../modules/splash/bindings/splash_binding.dart';
+import '../modules/onboarding/views/onboarding_screen.dart';
+import '../modules/onboarding/bindings/onboarding_binding.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -13,7 +14,8 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.onboarding,
-      page: () => const Scaffold(body: Center(child: Text('Onboarding Screen'))),
+      page: () => const OnboardingScreen(),
+      binding: OnboardingBinding(),
     ),
     GetPage(
       name: AppRoutes.signIn,
