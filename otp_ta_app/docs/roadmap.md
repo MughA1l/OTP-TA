@@ -201,12 +201,12 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` Display GetX error snackbar on failure (SRS-4)
 - `[x] [F]` Handle "Account Deactivated" state with distinct error message (SRS-32)
 
-### 3.4 Forgot Password Screen
+### ✅ 3.4 Forgot Password Screen
 
-- `[F]` Create `forgot_password_screen.dart`
-- `[F]` Email input field + "Send Reset Link" button
-- `[F]` On success: show informational snackbar + navigate back to Login (SRS-13)
-- `[F]` On failure (email not found): show error snackbar (SRS-10)
+- `[x] [F]` Create `forgot_password_screen.dart`
+- `[x] [F]` Email input field + "Send Reset Link" button
+- `[x] [F]` On success: show informational snackbar + navigate back to Login (SRS-13)
+- `[x] [F]` On failure (email not found): show error snackbar (SRS-10)
 
 ### 3.5 Change Password Screen (Settings)
 
