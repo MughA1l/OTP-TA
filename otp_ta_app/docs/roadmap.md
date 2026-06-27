@@ -258,11 +258,11 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [B]`/`[x] [F]` `updateAccountStatus(uid, status)` method in repository
 - `[x] [F]` Login flow checks `status` field before granting session (SRS-31, SRS-32)
 
-### 4.5 Role Permissions (Admin Web)
+### ✅ 4.5 Role Permissions (Admin Web)
 
-- `[B]` Create `role_permissions` Firestore collection: `{role, allowedModules: []}`
-- `[B]`/`[F]` Implement `RolePermissionRepositoryImpl`
-- `[F]` Build `role_permissions_screen.dart` (Web):
+- `[x] [B]` Create `role_permissions` Firestore collection: `{role, allowedModules: []}`
+- `[x] [B]`/`[x] [F]` Implement `RolePermissionRepositoryImpl`
+- `[x] [F]` Build `role_permissions_screen.dart` (Web):
   - List of roles; tap to open checklist of module permissions
   - Toggle switches for each module; "Save Permissions" button
   - Success snackbar "Permissions Updated Successfully" (SRS-82 approach)

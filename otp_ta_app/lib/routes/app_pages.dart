@@ -12,6 +12,8 @@ import '../modules/auth/views/change_password_screen.dart';
 import '../modules/admin/bindings/staff_binding.dart';
 import '../modules/admin/views/staff_list_screen.dart';
 import '../modules/admin/views/add_edit_staff_screen.dart';
+import '../modules/admin/bindings/role_permission_binding.dart';
+import '../modules/admin/views/role_permissions_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -65,6 +67,11 @@ abstract class AppPages {
       name: AppRoutes.addEditStaff,
       page: () => const AddEditStaffScreen(),
       binding: StaffBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.rolePermissions,
+      page: () => const RolePermissionsScreen(),
+      binding: RolePermissionBinding(),
     ),
     GetPage(
       name: AppRoutes.patientList,
