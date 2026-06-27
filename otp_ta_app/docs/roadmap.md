@@ -169,25 +169,25 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 3: Security Management (Authentication)
 
-### 3.1 Backend Setup
+### ✅ 3.1 Backend Setup
 
-- `[B]` Confirm Firebase Auth Email/Password enabled
-- `[B]` Create `users` Firestore collection schema: `{uid, email, role, status, createdAt}`
-- `[B]` Write Firestore Security Rule: only authenticated users can read their own doc
-- `[B]` (Cloud Function) Write `onUserCreated` Cloud Function trigger: sets default user doc with role
+- `[x] [B]` Confirm Firebase Auth Email/Password enabled
+- `[x] [B]` Create `users` Firestore collection schema: `{uid, email, role, status, createdAt, fcmToken, isFirstLogin, tokenExpiry}`
+- `[x] [B]` Write Firestore Security Rule: only authenticated users can read their own doc
+- `[x] [B]` (Cloud Function) Write `onUserCreated` Cloud Function trigger: sets default user doc with role
 
-### 3.2 Auth Repository & Controller
+### ✅ 3.2 Auth Repository & Controller
 
-- `[F]` Create `IAuthRepository` interface with method signatures
-- `[B]`/`[F]` Implement `AuthRepositoryImpl`:
+- `[x] [F]` Create `IAuthRepository` interface with method signatures
+- `[x] [B]`/`[F]` Implement `AuthRepositoryImpl`:
   - `signIn(email, password)` → Firebase Auth + fetch user role from Firestore
   - `signOut()` → Firebase Auth sign out + clear GetStorage session
   - `sendPasswordResetEmail(email)` → Firebase Auth reset email
   - `updatePassword(old, new)` → re-authenticate + update
   - `fetchCurrentUserData()` → Firestore `users/{uid}` snapshot
-- `[F]` Create `AuthController` with observables: `isLoading`, `errorMessage`, `currentUser`
-- `[F]` Implement role-based routing in `AuthController` (`_navigateByRole()`)
-- `[F]` Register binding in `AuthBinding`
+- `[x] [F]` Create `AuthController` with observables: `isLoading`, `errorMessage`, `currentUser`
+- `[x] [F]` Implement role-based routing in `AuthController` (`_navigateByRole()`)
+- `[x] [F]` Register binding in `AuthBinding`
 
 ### 3.3 Login Screen (Shared — Web + Mobile)
 
