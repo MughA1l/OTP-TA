@@ -10,6 +10,7 @@ abstract class AppRoutes {
   static const doctorDashboard = '/doctor-dashboard';
   static const patientDashboard = '/patient-dashboard';
   static const operationTracking = '/operation-tracking';
+  static const checkUpHistory = '/check-up-history';
 
   // Admin Module
   static const staffList = '/staff-list';

@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../core/utils/snackbar_helper.dart';
-import '../../data/models/user_model.dart';
-import '../../data/repositories/auth_repository.dart';
-import '../../routes/app_routes.dart';
+import '../../../core/utils/snackbar_helper.dart';
+import '../../../data/models/user_model.dart';
+import '../../../data/repositories/auth_repository.dart';
+import '../../../routes/app_routes.dart';
 
 class AuthController extends GetxController {
   final IAuthRepository _authRepository;
@@ -49,7 +49,7 @@ class AuthController extends GetxController {
     final result = await _authRepository.signIn(email, password);
     result.fold(
       (failure) {
-        SnackbarHelper.showError(failure.message);
+        SnackbarHelper.showError('Error', failure.message);
       },
       (user) async {
         currentUser.value = user;
@@ -75,7 +75,7 @@ class AuthController extends GetxController {
     isLoading.value = true;
     final result = await _authRepository.signOut();
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
         currentUser.value = null;
         _storage.erase();
@@ -90,9 +90,10 @@ class AuthController extends GetxController {
     isLoading.value = true;
     final result = await _authRepository.sendPasswordResetEmail(email);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
         SnackbarHelper.showSuccess(
+          'Success',
           'Password reset link sent! Please check your inbox.',
         );
         Get.back();
@@ -112,9 +113,9 @@ class AuthController extends GetxController {
       newPassword: newPassword,
     );
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Password updated successfully.');
+        SnackbarHelper.showSuccess('Success', 'Password updated successfully.');
         if (currentUser.value != null) {
           _navigateByRole(currentUser.value!.role);
         } else {

@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../controllers/patient_dashboard_controller.dart';
+import '../../../routes/app_routes.dart';
 
 class PatientDashboardScreen extends GetView<PatientDashboardController> {
   const PatientDashboardScreen({super.key});
@@ -107,6 +108,37 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                       child: upcomingAppt == null
                           ? _buildEmptyState()
                           : _buildUpcomingAppointmentCard(upcomingAppt),
+                    ),
+                    const SizedBox(height: AppDimensions.paddingXL),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 400),
+                      delay: const Duration(milliseconds: 200),
+                      child: Text('Quick Actions', style: AppTextStyles.titleLarge),
+                    ),
+                    const SizedBox(height: AppDimensions.paddingM),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 400),
+                      delay: const Duration(milliseconds: 250),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => Get.toNamed(AppRoutes.checkUpHistory),
+                              icon: const Icon(Icons.history_rounded),
+                              label: const Text('Check-up History'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryContainer,
+                                foregroundColor: AppColors.primaryLight,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                                  side: const BorderSide(color: AppColors.glassBorder),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -239,8 +271,8 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _DoctorStat(label: 'PMDC', value: doc.pmdcNumber ?? 'N/A'),
-                      _DoctorStat(label: 'Experience', value: '${doc.experienceYears ?? 0} yrs'),
+                      _DoctorStat(label: 'PMDC', value: doc.pmdc.isNotEmpty ? doc.pmdc : 'N/A'),
+                      _DoctorStat(label: 'Experience', value: doc.experience.isNotEmpty ? doc.experience : 'N/A'),
                     ],
                   ),
                   // Note: Personal mobile number intentionally hidden (SRS-56)

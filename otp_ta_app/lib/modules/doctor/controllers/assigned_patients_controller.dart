@@ -50,7 +50,7 @@ class AssignedPatientsController extends GetxController {
         _fetchMissingPatients(appointments);
         applyFilters();
       },
-      onError: (_) => SnackbarHelper.showError('Failed to load appointments'),
+      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load appointments'),
     );
   }
 
@@ -110,8 +110,8 @@ class AssignedPatientsController extends GetxController {
     isLoading.value = true;
     final result = await _appointmentRepository.updateStatus(appointmentId, status);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Status updated to ${status.name}'),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Status updated to ${status.name}'),
     );
     isLoading.value = false;
   }

@@ -24,15 +24,11 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
 
     // Load leaves on entry
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchPatientProfile != null;
       controller.fetchLeaveDates(doctor.doctorId);
       controller.fetchDoctorProfile(doctor.doctorId);
     });
 
-    // Local slot selection state: "Mon|Morning (8am–12pm)" → bool
-    final RxSet<String> selectedSlots = RxSet<String>.from(
-      doctor.availabilitySlots.toSet(),
-    );
+    final selectedSlots = doctor.availabilitySlots.toSet().obs;
 
     return Scaffold(
       backgroundColor: AppColors.background,

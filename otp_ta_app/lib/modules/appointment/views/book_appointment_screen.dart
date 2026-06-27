@@ -11,6 +11,7 @@ import '../../../data/models/doctor_model.dart';
 import '../../../shared_widgets/buttons/primary_button.dart';
 import '../../../shared_widgets/inputs/app_text_field.dart';
 import '../../appointment/controllers/appointment_controller.dart';
+import '../../../core/utils/snackbar_helper.dart';
 
 class BookAppointmentScreen extends GetView<AppointmentController> {
   const BookAppointmentScreen({super.key});
@@ -271,7 +272,7 @@ class BookAppointmentScreen extends GetView<AppointmentController> {
                                 isLoading: controller.isLoading.value,
                                 onPressed: () {
                                   if (patientIdCtrl.text.trim().isEmpty) {
-                                    SnackbarHelper.showError('Please enter the patient ID.');
+                                    SnackbarHelper.showError('Error', 'Please enter the patient ID.');
                                     return;
                                   }
                                   controller.bookAppointment(patientIdCtrl.text.trim());

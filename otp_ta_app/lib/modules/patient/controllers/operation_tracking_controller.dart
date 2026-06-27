@@ -62,12 +62,12 @@ class OperationTrackingController extends GetxController {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         await Printing.layoutPdf(onLayout: (format) async => response.bodyBytes);
-        SnackbarHelper.showSuccess('Report Downloaded Successfully');
+        SnackbarHelper.showSuccess('Success', 'Report Downloaded Successfully');
       } else {
-        SnackbarHelper.showError('Failed to download report. Server responded with ${response.statusCode}');
+        SnackbarHelper.showError('Error', 'Failed to download report. Server responded with ${response.statusCode}');
       }
     } catch (e) {
-      SnackbarHelper.showError('An error occurred while downloading the report');
+      SnackbarHelper.showError('Error', 'An error occurred while downloading the report');
     } finally {
       isDownloading.value = false;
     }

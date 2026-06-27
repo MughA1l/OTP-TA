@@ -74,4 +74,17 @@ class PatientModel {
       createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  // Helper getters for medical and personal info (mapping from maps)
+  int get age {
+    final rawAge = medicalHistory['age'];
+    if (rawAge is int) return rawAge;
+    if (rawAge is String) return int.tryParse(rawAge) ?? 0;
+    return 0;
+  }
+  
+  String get gender => (medicalHistory['gender'] as String?) ?? 'Not Specified';
+  String? get guardianName => emergencyContact['name'] as String?;
+  String get bloodGroup => (medicalHistory['bloodGroup'] as String?) ?? 'Not Specified';
+  List<String> get medicalConditions => List<String>.from(medicalHistory['conditions'] ?? []);
 }

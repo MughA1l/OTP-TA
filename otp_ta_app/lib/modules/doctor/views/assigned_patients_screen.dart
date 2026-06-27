@@ -8,6 +8,7 @@ import '../../../data/models/appointment_model.dart';
 import '../../../routes/app_routes.dart';
 import '../controllers/assigned_patients_controller.dart';
 import '../../../shared_widgets/inputs/app_text_field.dart';
+import '../../../core/utils/snackbar_helper.dart';
 
 class AssignedPatientsScreen extends GetView<AssignedPatientsController> {
   const AssignedPatientsScreen({super.key});
@@ -134,7 +135,7 @@ class _PatientAppointmentCard extends GetView<AssignedPatientsController> {
             'appointment': appointment,
           });
         } else {
-          SnackbarHelper.showError('Loading patient details, please wait...');
+          SnackbarHelper.showError('Info', 'Loading patient details, please wait...');
         }
       },
       child: Container(

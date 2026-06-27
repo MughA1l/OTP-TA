@@ -357,9 +357,9 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` On success: "Report Downloaded Successfully" snackbar (SRS-59)
 - `[x] [F]` Use `pdf` + `printing` package to open/download report
 
-### 6.5 Check-up History
+### ✅ 6.5 Check-up History
 
-- `[F]` Build `check_up_history_screen.dart` (Mobile — Patient):
+- `[x] [F]` Build `check_up_history_screen.dart` (Mobile — Patient):
   - Chronological list of past appointments (SRS-60)
   - Search by date range or doctor name (SRS-61)
   - Tap on record → detail view with doctor notes + prescriptions (SRS-62)

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../../../data/repositories/operation_repository.dart';
 import '../../../data/repositories/operation_repository_impl.dart';
-import 'operation_tracking_controller.dart';
+import '../controllers/operation_tracking_controller.dart';
 
 class OperationTrackingBinding extends Bindings {
   @override

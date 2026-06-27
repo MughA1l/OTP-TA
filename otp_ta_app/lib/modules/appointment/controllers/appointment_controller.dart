@@ -35,7 +35,7 @@ class AppointmentController extends GetxController {
   void _watchAppointments() {
     _appointmentRepository.watchAllAppointments().listen(
       (list) => allAppointments.value = list,
-      onError: (_) => SnackbarHelper.showError('Failed to load appointments'),
+      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load appointments'),
     );
   }
 
@@ -82,13 +82,44 @@ class AppointmentController extends GetxController {
   bool _isSameDate(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
+  /// Evaluates if a given time slot is available on a specific date for a doctor
+  bool isSlotAvailable(DoctorModel doctor, DateTime date, String slot) {
+    // 1. Check if the day of week matches doctor's availability
+    // Format weekday short name, e.g. "Mon"
+    final dayName = _dayName(date.weekday);
+    
+    // Format check string, e.g., "Mon|Morning (8am–12pm)"
+    final checkString = '$dayName|$slot';
+    
+    if (!doctor.availabilitySlots.contains(checkString)) {
+      return false;
+    }
+
+    // 2. Check for appointment conflicts (overlap) in Firestore (SRS-42)
+    final hasConflict = allAppointments.any((appt) {
+      if (appt.doctorId != doctor.doctorId) return false;
+      if (appt.status == AppointmentStatus.cancelled) return false;
+      
+      final isSameDate = appt.dateTime.year == date.year &&
+                         appt.dateTime.month == date.month &&
+                         appt.dateTime.day == date.day;
+      
+      // Slot name is stored in notes field
+      final isSameSlot = appt.notes == slot;
+
+      return isSameDate && isSameSlot;
+    });
+
+    return !hasConflict;
+  }
+
   Future<void> bookAppointment(String patientId) async {
     final doctor = selectedDoctor.value;
     final date = selectedDate.value;
     final slot = selectedSlot.value;
 
     if (doctor == null || date == null || slot == null || patientId.isEmpty) {
-      SnackbarHelper.showError('Please fill all fields before booking.');
+      SnackbarHelper.showError('Error', 'Please fill all fields before booking.');
       return;
     }
 
@@ -104,9 +135,9 @@ class AppointmentController extends GetxController {
 
     final result = await _appointmentRepository.bookAppointment(appointment);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Appointment Booked Successfully');
+        SnackbarHelper.showSuccess('Success', 'Appointment Booked Successfully');
         _resetForm();
         Get.back();
       },
@@ -125,8 +156,8 @@ class AppointmentController extends GetxController {
     isLoading.value = true;
     final result = await _appointmentRepository.reschedule(appointmentId, newDateTime);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Appointment Rescheduled'),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Appointment Rescheduled'),
     );
     isLoading.value = false;
   }
@@ -135,8 +166,8 @@ class AppointmentController extends GetxController {
     isLoading.value = true;
     final result = await _appointmentRepository.cancel(appointmentId);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Appointment Cancelled'), // SRS-44
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Appointment Cancelled'), // SRS-44
     );
     isLoading.value = false;
   }
@@ -145,8 +176,8 @@ class AppointmentController extends GetxController {
     isLoading.value = true;
     final result = await _appointmentRepository.updateStatus(appointmentId, status);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Status updated to ${status.name}'),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Status updated to ${status.name}'),
     );
     isLoading.value = false;
   }

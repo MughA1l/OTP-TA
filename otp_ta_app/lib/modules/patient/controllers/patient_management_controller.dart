@@ -29,7 +29,7 @@ class PatientManagementController extends GetxController {
         filteredPatientList.value = patients;
       },
       onError: (e) {
-        SnackbarHelper.showError('Failed to load patient list');
+        SnackbarHelper.showError('Error', 'Failed to load patient list');
       },
     );
   }
@@ -58,14 +58,14 @@ class PatientManagementController extends GetxController {
       final result = await _patientRepository.createPatient(newPatient);
       
       result.fold(
-        (failure) => SnackbarHelper.showError(failure.message),
+        (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Patient Profile Created Successfully'); // SRS-27
+          SnackbarHelper.showSuccess('Success', 'Patient Profile Created Successfully'); // SRS-27
           Get.back();
         },
       );
     } catch (e) {
-      SnackbarHelper.showError('An unexpected error occurred.');
+      SnackbarHelper.showError('Error', 'An unexpected error occurred.');
     } finally {
       isLoading.value = false;
     }
@@ -76,9 +76,9 @@ class PatientManagementController extends GetxController {
     final result = await _patientRepository.updatePatient(patient);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Patient Profile Updated');
+        SnackbarHelper.showSuccess('Success', 'Patient Profile Updated');
         if (currentPatient.value?.uid == patient.uid) {
           currentPatient.value = patient;
         }
@@ -91,7 +91,7 @@ class PatientManagementController extends GetxController {
     isLoading.value = true;
     final result = await _patientRepository.fetchPatient(uid);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (patient) => currentPatient.value = patient,
     );
     isLoading.value = false;
@@ -102,8 +102,8 @@ class PatientManagementController extends GetxController {
     final result = await _patientRepository.updateAccountStatus(uid, status);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Patient Account Status Updated to $status'),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Patient Account Status Updated to $status'),
     );
     isLoading.value = false;
   }

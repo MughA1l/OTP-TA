@@ -28,7 +28,7 @@ class DoctorManagementController extends GetxController {
         filteredDoctorList.value = doctors;
       },
       onError: (e) {
-        SnackbarHelper.showError('Failed to load doctor list');
+        SnackbarHelper.showError('Error', 'Failed to load doctor list');
       },
     );
   }
@@ -51,7 +51,7 @@ class DoctorManagementController extends GetxController {
     isLoading.value = true;
     final result = await _doctorRepository.fetchDoctor(uid);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (doctor) => currentDoctor.value = doctor,
     );
     isLoading.value = false;
@@ -67,14 +67,14 @@ class DoctorManagementController extends GetxController {
       final result = await _doctorRepository.createDoctor(newDoctor);
       
       result.fold(
-        (failure) => SnackbarHelper.showError(failure.message),
+        (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Doctor Profile Created Successfully');
+          SnackbarHelper.showSuccess('Success', 'Doctor Profile Created Successfully');
           Get.back();
         },
       );
     } catch (e) {
-      SnackbarHelper.showError('An unexpected error occurred.');
+      SnackbarHelper.showError('Error', 'An unexpected error occurred.');
     } finally {
       isLoading.value = false;
     }
@@ -85,9 +85,9 @@ class DoctorManagementController extends GetxController {
     final result = await _doctorRepository.updateDoctor(doctor);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Doctor Profile Updated');
+        SnackbarHelper.showSuccess('Success', 'Doctor Profile Updated');
         if (currentDoctor.value?.doctorId == doctor.doctorId) {
           currentDoctor.value = doctor;
         }
@@ -101,8 +101,8 @@ class DoctorManagementController extends GetxController {
     final result = await _doctorRepository.updateAccountStatus(uid, status);
     
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
-      (_) => SnackbarHelper.showSuccess('Doctor Account Status Updated to $status'),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
+      (_) => SnackbarHelper.showSuccess('Success', 'Doctor Account Status Updated to $status'),
     );
     isLoading.value = false;
   }
@@ -112,7 +112,7 @@ class DoctorManagementController extends GetxController {
     final doctor = currentDoctor.value;
     if (doctor != null && doctor.doctorId == doctorId) {
       if (doctor.availabilitySlots.contains(slot)) {
-        SnackbarHelper.showError('Slot already exists');
+        SnackbarHelper.showError('Error', 'Slot already exists');
         return;
       }
       
@@ -144,16 +144,16 @@ class DoctorManagementController extends GetxController {
     // Conflict detection: duplicates within the list
     final uniqueSlots = newSlots.toSet().toList();
     if (uniqueSlots.length != newSlots.length) {
-      SnackbarHelper.showError('Conflict Detected: Duplicate time slot found. (SRS-41)');
+      SnackbarHelper.showError('Error', 'Conflict Detected: Duplicate time slot found. (SRS-41)');
       return;
     }
 
     isLoading.value = true;
     final result = await _doctorRepository.updateAvailability(doctorId, uniqueSlots);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Availability Updated Successfully');
+        SnackbarHelper.showSuccess('Success', 'Availability Updated Successfully');
         // Refresh local doctor
         if (currentDoctor.value?.doctorId == doctorId) {
           currentDoctor.value = currentDoctor.value!.copyWith(availabilitySlots: uniqueSlots);
@@ -171,7 +171,7 @@ class DoctorManagementController extends GetxController {
     isLoading.value = true;
     final result = await _doctorRepository.fetchLeaveDates(doctorId);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (dates) => leaveDates.value = dates,
     );
     isLoading.value = false;
@@ -179,17 +179,17 @@ class DoctorManagementController extends GetxController {
 
   Future<void> markOnLeave(String doctorId, String isoDate) async {
     if (leaveDates.contains(isoDate)) {
-      SnackbarHelper.showError('Already marked as on leave for this date.');
+      SnackbarHelper.showError('Error', 'Already marked as on leave for this date.');
       return;
     }
     final updated = List<String>.from(leaveDates)..add(isoDate);
     isLoading.value = true;
     final result = await _doctorRepository.updateLeaveDates(doctorId, updated);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
         leaveDates.value = updated;
-        SnackbarHelper.showSuccess('Leave marked for $isoDate');
+        SnackbarHelper.showSuccess('Success', 'Leave marked for $isoDate');
       },
     );
     isLoading.value = false;
@@ -200,7 +200,7 @@ class DoctorManagementController extends GetxController {
     isLoading.value = true;
     final result = await _doctorRepository.updateLeaveDates(doctorId, updated);
     result.fold(
-      (failure) => SnackbarHelper.showError(failure.message),
+      (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) => leaveDates.value = updated,
     );
     isLoading.value = false;

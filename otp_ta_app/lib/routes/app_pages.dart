@@ -30,6 +30,8 @@ import '../modules/patient/bindings/patient_dashboard_binding.dart';
 import '../modules/patient/views/patient_dashboard_screen.dart';
 import '../modules/patient/bindings/operation_tracking_binding.dart';
 import '../modules/patient/views/operation_status_screen.dart';
+import '../modules/patient/bindings/check_up_history_binding.dart';
+import '../modules/patient/views/check_up_history_screen.dart';
 import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
@@ -145,6 +147,11 @@ abstract class AppPages {
       name: AppRoutes.patientProfile,
       page: () => const PatientProfileScreen(),
       binding: PatientBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.checkUpHistory,
+      page: () => const CheckUpHistoryScreen(),
+      binding: CheckUpHistoryBinding(),
     ),
   ];
 }
