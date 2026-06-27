@@ -12,6 +12,10 @@ import '../modules/auth/views/change_password_screen.dart';
 import '../modules/admin/bindings/staff_binding.dart';
 import '../modules/admin/views/staff_list_screen.dart';
 import '../modules/admin/views/add_edit_staff_screen.dart';
+import '../modules/patient/bindings/patient_binding.dart';
+import '../modules/admin/views/patient_list_screen.dart';
+import '../modules/admin/views/add_patient_screen.dart';
+import '../modules/patient/views/patient_profile_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -61,6 +65,21 @@ abstract class AppPages {
       name: AppRoutes.addEditStaff,
       page: () => const AddEditStaffScreen(),
       binding: StaffBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.patientList,
+      page: () => const PatientListScreen(),
+      binding: PatientBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.addPatient,
+      page: () => const AddPatientScreen(),
+      binding: PatientBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.patientProfile,
+      page: () => const PatientProfileScreen(),
+      binding: PatientBinding(),
     ),
   ];
 }

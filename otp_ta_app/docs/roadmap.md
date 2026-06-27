@@ -239,15 +239,15 @@ Phase 12 → Final Polish, Testing & Deployment
   - Success snackbar "Staff Profile Created Successfully" (SRS-21)
   - Role-based permission auto-assignment display
 
-### 4.3 Patient Profile (Admin/Receptionist Web + Patient Mobile)
+### ✅ 4.3 Patient Profile (Admin/Receptionist Web + Patient Mobile)
 
-- `[B]`/`[F]` Implement `PatientRepositoryImpl`: `createPatient()`, `updatePatient()`, `fetchPatient(id)`
-- `[F]` Create `PatientManagementController`
-- `[F]` Build `patient_list_screen.dart` (Web): searchable, filterable list with `PatientCard`
-- `[F]` Build registration form (Web): Personal data, Medical History, Emergency Contact fields
+- `[x] [B]`/`[x] [F]` Implement `PatientRepositoryImpl`: `createPatient()`, `updatePatient()`, `fetchPatient(id)`
+- `[x] [F]` Create `PatientManagementController`
+- `[x] [F]` Build `patient_list_screen.dart` (Web): searchable, filterable list with `PatientCard`
+- `[x] [F]` Build registration form (Web): Personal data, Medical History, Emergency Contact fields
   - Unique Patient ID auto-generated and displayed on success (SRS-25)
   - "Patient Profile Created Successfully" snackbar (SRS-27)
-- `[F]` Build `patient_profile_screen.dart` (Mobile — Patient):
+- `[x] [F]` Build `patient_profile_screen.dart` (Mobile — Patient):
   - View: Name, Phone, Address, Profile Picture
   - Edit: Only phone, address, profile picture (restricted — SRS-28)
   - Profile picture upload via `image_picker` + Cloudinary
