@@ -1,16 +1,16 @@
 # 🗺️ OT Procedures & Tracking App — Development Roadmap
 
-> **Version:** 1.1 | **Date:** June 2026 (Updated — Free Stack)  
-> **Architecture:** Flutter + MVVM + GetX | **Backend:** Firebase (Auth + Firestore) + Cloudinary + Render.com  
+> **Version:** 1.2 | **Date:** June 2026 (Updated — 100% Serverless Flutter)  
+> **Architecture:** Flutter + MVVM + GetX | **Backend:** Firebase (Auth + Firestore) + Cloudinary  
 > **Symbols:** `[F]` = Frontend Task | `[B]` = Backend Task
 
 > [!IMPORTANT]
-> **Free Stack Decision Log:**
-> - ❌ `Firebase Storage` → ✅ **Cloudinary** (free tier: 25GB storage, 25GB bandwidth/month)
-> - ❌ `Firebase Cloud Functions` (requires Blaze/paid plan) → ✅ **Render.com** free Node.js server
-> - ❌ Cloud Functions email trigger → ✅ **EmailJS** (free: 200 emails/month) OR **Resend** (free: 3,000 emails/month)
-> - ❌ Cloud Functions scheduled reminders → ✅ **cron-job.org** (free HTTPS cron) → calls Render.com endpoint
-> - ✅ `FCM` stays — it is **completely free**. Use **HTTP v1 API** (modern, OAuth2-based) called from Render.com server
+> **Serverless Stack Decision Log:**
+> - ❌ `Firebase Storage` → ✅ **Cloudinary** (free tier: 25GB storage)
+> - ❌ `Node.js Backend` → ✅ **Removed entirely**. All logic runs in Flutter.
+> - ❌ `Backend Emails` → ✅ **EmailJS** called directly via Flutter `http`.
+> - ❌ `Cron Jobs (Reminders)` → ✅ **flutter_local_notifications** used directly on device.
+> - ❌ `Server FCM` → ✅ **googleapis_auth** embedded in Flutter to call FCM V1 REST API directly.
 
 ---
 
@@ -48,8 +48,8 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[B]` ~~Firebase Storage~~ → **NOT used** — Cloudinary handles all file storage (see below)
 - `[B]` Enable **Firebase Cloud Messaging (FCM)** → for push notifications (✅ Completely free, no limits)
   - In Firebase Console → Project Settings → Cloud Messaging → enable **Cloud Messaging API (V1)**
-  - Download the **Service Account JSON** (needed by Render.com server to call FCM HTTP v1)
-- `[B]` ~~Firebase Cloud Functions~~ → **NOT used** — replaced by free Render.com Node.js server (see Section 1.3)
+  - Download the **Service Account JSON** (needed by Flutter for `googleapis_auth` FCM HTTP v1)
+- `[B]` ~~Firebase Cloud Functions~~ → **NOT used** — handled completely inside Flutter.
 - `[B]` Download `google-services.json` (Android) — add to `android/app/`
 - `[B]` Run `flutterfire configure` to generate `firebase_options.dart`
 - `[B]` Define initial Firestore Security Rules (deny all by default; unlock by role in later phases)
@@ -63,26 +63,15 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[B]` Note down: `Cloud Name`, `Upload Preset names` — store in Flutter `.env` or `app_config.dart`
 - `[B]` Set Cloudinary folder structure: `otpta/reports/{patientId}/`, `otpta/profiles/{uid}/`
 
-#### 🖥️ Render.com Free Backend Server Setup (replaces Firebase Cloud Functions)
-> See **Section 1.3** for full Render.com server setup details.
+#### 📱 Serverless FCM & Local Notifications (Replaces Render/Cron)
+- `[F]` Set up `flutter_local_notifications` in Flutter for all appointment reminders (no cron jobs needed).
+- `[F]` Embed Service Account JSON inside Flutter (or in an `.env` file) to use with `googleapis_auth`.
+- `[F]` Create `fcm_client_service.dart` to make direct REST API POST requests to FCM v1.
 
-- `[B]` Create a free account at [render.com](https://render.com)
-- `[B]` Create a new **Web Service** (free tier: 512MB RAM, sleeps after 15min inactivity — acceptable for academic project)
-- `[B]` Initialize a `Node.js + Express` project in a separate `/backend` folder (or a separate GitHub repo)
-- `[B]` Add Firestore Service Account JSON as an environment variable in Render dashboard (never commit to git)
-- `[B]` Set environment variables in Render: `CLOUDINARY_NAME`, `EMAILJS_KEY` / `RESEND_API_KEY`, `FCM_PROJECT_ID`
-
-#### 📧 Email Service Setup (Free — replaces Cloud Functions email trigger)
-- `[B]` **Recommended:** Create a free [Resend](https://resend.com) account (3,000 emails/month free)
-  - OR use [EmailJS](https://emailjs.com) (200 emails/month free — can be called directly from Flutter client)
-- `[B]` In Resend: create an API key, verify sender domain OR use Resend's shared domain for testing
-- `[B]` Store Resend API key in Render.com environment variables (never in Flutter app)
-
-#### ⏰ Scheduled Tasks Setup (Free — replaces Cloud Functions cron triggers)
-- `[B]` Create a free account at [cron-job.org](https://cron-job.org)
-- `[B]` Create two cron jobs that call Render.com HTTPS endpoints:
-  - **24h reminder:** fires every hour → Render endpoint checks for appointments due in 24h
-  - **2h reminder:** fires every 30min → Render endpoint checks for appointments due in 2h
+#### 📧 EmailJS Setup (Free — replaces Cloud Functions email trigger)
+- `[B]` Create a free [EmailJS](https://emailjs.com) account (200 emails/month free).
+- `[B]` Note down: `Service ID`, `Template ID`, and `Public Key`.
+- `[F]` Create `email_service.dart` in Flutter to send credentials directly to patients via HTTP POST.
 
 ### 1.2 Flutter Project Setup
 
@@ -132,43 +121,18 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[F]` Initialize `GetStorage` for local session persistence
 - `[F]` Set up `.gitignore` to exclude `firebase_options.dart`, `.env`, `service-account.json`, and sensitive files
 
-### 1.3 Render.com Node.js Backend Setup (Free — replaces Cloud Functions)
+### 1.3 Serverless Flutter Services Setup
 
-> This small Express server handles: FCM HTTP v1 push notifications, email sending (Resend), and scheduled reminder logic. It runs free on Render.com.
+> All backend functionalities (push notifications, emails, scheduled cron jobs) have been moved directly into the Flutter app to maintain a 100% free, zero-maintenance architecture.
 
-- `[B]` Create `/backend` folder (separate from Flutter project) with structure:
-  ```
-  backend/
-  ├── index.js              # Express app entry point
-  ├── routes/
-  │   ├── notifications.js  # FCM HTTP v1 push endpoints
-  │   ├── email.js          # Resend email endpoints
-  │   └── reminders.js      # Cron-triggered reminder logic
-  ├── services/
-  │   ├── fcm_service.js    # FCM HTTP v1 — sends push via Google Auth
-  │   └── email_service.js  # Resend SDK wrapper
-  ├── package.json
-  └── .env.example          # Template (never commit real .env)
-  ```
-- `[B]` Install packages: `express`, `firebase-admin`, `resend`, `googleapis`, `node-cron`
-- `[B]` In `fcm_service.js`: use `firebase-admin` SDK initialized with Service Account JSON to send FCM via HTTP v1:
-  ```js
-  // FCM HTTP v1 — correct modern approach
-  admin.messaging().send({
-    token: deviceFcmToken,
-    notification: { title, body },
-    android: { priority: 'high' }
-  });
-  ```
-- `[B]` Expose REST endpoints (called from Flutter via `http` package):
-  - `POST /api/notify/single` — send push to one user
-  - `POST /api/notify/team` — send push to multiple users (surgical team alert)
-  - `POST /api/notify/emergency` — high-priority emergency alert (SRS-92)
-  - `POST /api/email/credentials` — send login credentials email (SRS-94)
-  - `GET /api/reminders/check` — called by cron-job.org to send 24h/2h reminders
-- `[B]` Deploy to Render.com → connect GitHub repo → set environment variables in Render dashboard
-- `[B]` Copy the Render.com HTTPS base URL → paste into Flutter `app_config.dart`
-- `[B]` Secure endpoints with a shared secret header (`X-API-Secret`) — Flutter sends this header, server verifies it
+- `[F]` Create `lib/core/services/fcm_client_service.dart`:
+  - Uses `googleapis_auth` to generate OAuth2 tokens from the Service Account.
+  - Sends direct HTTP POST requests to FCM v1 for Chat and Status updates.
+- `[F]` Create `lib/core/services/email_service.dart`:
+  - Uses `http` to post to EmailJS API.
+  - Sends temporary passwords to patients when an operation is scheduled.
+- `[F]` Create `lib/core/services/local_notification_service.dart`:
+  - Uses `flutter_local_notifications` and `timezone` to schedule 24h and 2h reminders locally on the patient's device without a server.
 
 ---
 
