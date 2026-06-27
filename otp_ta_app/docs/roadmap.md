@@ -283,11 +283,12 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [F]` Create `DoctorManagementController`
 - `[x] [F]` Implement logic for managing availability slots (Array of time slots)
 
-### 5.3 Add/Edit Doctor Profile (Admin Web)
+### ✅ 5.3 Add/Edit Doctor Profile (Admin Web)
 
-- `[F]` Build `add_edit_doctor_screen.dart` (Web):
+- `[x] [F]` Build `add_edit_doctor_screen.dart` (Web):
   - Fields: Name, Email, Phone, PMDC Number, Qualifications, Specializations (multi-chip input)
   - Validation + "Doctor Profile Added Successfully" snackbar (SRS-35)
+- `[x] [F]` Build `doctor_list_screen.dart` (Web): searchable list with edit tap-through
 
 ### 5.4 Doctor Availability & Duty Timings
 
