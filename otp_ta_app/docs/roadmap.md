@@ -269,13 +269,13 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ---
 
-## ✅ Phase 5: Doctor Management
+## Phase 5: Doctor Management
 
-### 5.1 Backend Setup
+### ✅ 5.1 Backend Setup
 
-- `[B]` Create `doctors` Firestore collection schema: `{doctorId, name, email, phone, qualifications, specializations[], pmdc, experience, availabilitySlots[], createdAt}`
-- `[B]` Create `appointments` collection schema: `{appointmentId, doctorId, patientId, dateTime, status, createdAt}`
-- `[B]` Firestore Rule: Doctors can only edit their own profile; Admins have full access
+- `[x] [B]` Create `doctors` Firestore collection schema: `{doctorId, name, email, phone, qualifications, specializations[], pmdc, experience, availabilitySlots[], createdAt}`
+- `[x] [B]` Create `appointments` collection schema: `{appointmentId, doctorId, patientId, dateTime, status, createdAt}`
+- `[x] [B]` Firestore Rule: Doctors can only edit their own profile; Admins have full access
 
 ### 5.2 Doctor Repository & Controller
 
