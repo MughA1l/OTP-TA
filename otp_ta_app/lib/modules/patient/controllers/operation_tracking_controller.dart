@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:printing/printing.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../data/models/operation_model.dart';
 import '../../../data/repositories/operation_repository.dart';
 
@@ -11,6 +14,9 @@ class OperationTrackingController extends GetxController {
 
   final Rx<OperationModel?> currentOperation = Rx<OperationModel?>(null);
   final RxBool isLoading = true.obs;
+  
+  // SRS-59: Download report state
+  final RxBool isDownloading = false.obs;
 
   @override
   void onInit() {
@@ -47,6 +53,23 @@ class OperationTrackingController extends GetxController {
         return 2;
       case OperationStatus.completed:
         return 3;
+    }
+  }
+
+  Future<void> downloadReport(String url) async {
+    try {
+      isDownloading.value = true;
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        await Printing.layoutPdf(onLayout: (format) async => response.bodyBytes);
+        SnackbarHelper.showSuccess('Report Downloaded Successfully');
+      } else {
+        SnackbarHelper.showError('Failed to download report. Server responded with ${response.statusCode}');
+      }
+    } catch (e) {
+      SnackbarHelper.showError('An error occurred while downloading the report');
+    } finally {
+      isDownloading.value = false;
     }
   }
 }

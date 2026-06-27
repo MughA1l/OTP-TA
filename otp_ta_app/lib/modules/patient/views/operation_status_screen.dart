@@ -113,6 +113,36 @@ class OperationStatusScreen extends GetView<OperationTrackingController> {
                   ],
                 ),
               ),
+
+              // SRS-59: Download Report Button
+              if (operation.reportUrl != null && operation.reportUrl!.isNotEmpty) ...[
+                const SizedBox(height: AppDimensions.paddingXXL),
+                FadeInUp(
+                  duration: const Duration(milliseconds: 400),
+                  child: Obx(() => ElevatedButton.icon(
+                    onPressed: controller.isDownloading.value
+                        ? null
+                        : () => controller.downloadReport(operation.reportUrl!),
+                    icon: controller.isDownloading.value
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.onPrimary),
+                          )
+                        : const Icon(Icons.picture_as_pdf_outlined),
+                    label: Text(
+                      controller.isDownloading.value ? 'Downloading...' : 'Download Report',
+                      style: AppTextStyles.labelLarge,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                    ),
+                  )),
+                ),
+              ],
             ],
           ),
         );

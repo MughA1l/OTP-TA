@@ -13,6 +13,7 @@ class OperationModel {
   final String patientId;
   final String doctorId;
   final OperationStatus status;
+  final String? reportUrl;
   final DateTime updatedAt;
   final DateTime createdAt;
 
@@ -22,6 +23,7 @@ class OperationModel {
     required this.patientId,
     required this.doctorId,
     required this.status,
+    this.reportUrl,
     required this.updatedAt,
     required this.createdAt,
   });
@@ -32,6 +34,7 @@ class OperationModel {
     String? patientId,
     String? doctorId,
     OperationStatus? status,
+    String? reportUrl,
     DateTime? updatedAt,
     DateTime? createdAt,
   }) {
@@ -41,6 +44,7 @@ class OperationModel {
       patientId: patientId ?? this.patientId,
       doctorId: doctorId ?? this.doctorId,
       status: status ?? this.status,
+      reportUrl: reportUrl ?? this.reportUrl,
       updatedAt: updatedAt ?? this.updatedAt,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -52,6 +56,7 @@ class OperationModel {
       'patientId': patientId,
       'doctorId': doctorId,
       'status': status.name,
+      if (reportUrl != null) 'reportUrl': reportUrl,
       'updatedAt': Timestamp.fromDate(updatedAt),
       'createdAt': Timestamp.fromDate(createdAt),
     };
@@ -67,6 +72,7 @@ class OperationModel {
         (e) => e.name == (map['status'] ?? 'preOp'),
         orElse: () => OperationStatus.preOp,
       ),
+      reportUrl: map['reportUrl'],
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );

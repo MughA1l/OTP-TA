@@ -350,12 +350,12 @@ Phase 12 → Final Polish, Testing & Deployment
   - Hides: Personal mobile number (SRS-56)
   - "Chat" button → navigates to chat room
 
-### 6.4 Download Operation Report
+### ✅ 6.4 Download Operation Report
 
-- `[B]` Report URL stored in Firestore (Cloudinary `secure_url`) — approved by doctor
-- `[F]` "Download Report" button with download progress indicator
-- `[F]` On success: "Report Downloaded Successfully" snackbar (SRS-59)
-- `[F]` Use `pdf` + `printing` package to open/download report
+- `[x] [B]` Report URL stored in Firestore (Cloudinary `secure_url`) — approved by doctor
+- `[x] [F]` "Download Report" button with download progress indicator
+- `[x] [F]` On success: "Report Downloaded Successfully" snackbar (SRS-59)
+- `[x] [F]` Use `pdf` + `printing` package to open/download report
 
 ### 6.5 Check-up History
 
