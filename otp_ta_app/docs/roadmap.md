@@ -433,14 +433,14 @@ Phase 12 → Final Polish, Testing & Deployment
   - "Submit Outcome" button → updates operation status to "Completed" (SRS-72)
   - On submit → `OperationController` calls `POST /api/email/credentials` on Render.com server to trigger patient credential generation (SRS-73)
 
-### 7.6 Upload Medical Reports (Doctor/Staff)
+### ✅ 7.6 Upload Medical Reports (Doctor/Staff)
 
-- `[F]` "Upload Report" button on operation detail screen
-- `[F]` `image_picker` for camera/gallery, file picker for PDF
-- `[F]` Client-side validation: type (PDF/JPG only), size (≤ 5MB) (SRS-76, SRS-77)
-- `[F]` Progress indicator during Cloudinary upload
-- `[B]`/`[F]` Store returned URL in `operations/{operationId}/reportUrls[]`
-- `[F]` "Invalid File or Size Exceeded" error snackbar (SRS-78)
+- `[x] [F]` "Upload Report" button on operation detail screen
+- `[x] [F]` `image_picker` for camera/gallery, file picker for PDF
+- `[x] [F]` Client-side validation: type (PDF/JPG only), size (≤ 5MB) (SRS-76, SRS-77)
+- `[x] [F]` Progress indicator during Cloudinary upload
+- `[x] [B]`/`[F]` Store returned URL in `operations/{operationId}/reportUrls[]`
+- `[x] [F]` "Invalid File or Size Exceeded" error snackbar (SRS-78)
 
 ### 7.7 View Operation History (Admin/Doctor Web)
 

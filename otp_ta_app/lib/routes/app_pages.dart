@@ -40,6 +40,7 @@ import '../modules/operation/bindings/operation_binding.dart';
 import '../modules/operation/views/create_operation_screen.dart';
 import '../modules/operation/views/assign_team_screen.dart';
 import '../modules/operation/views/record_outcome_screen.dart';
+import '../modules/operation/views/operation_detail_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -170,6 +171,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.recordOutcome,
       page: () => const RecordOutcomeScreen(),
+      binding: OperationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.operationDetail,
+      page: () => const OperationDetailScreen(),
       binding: OperationBinding(),
     ),
   ];

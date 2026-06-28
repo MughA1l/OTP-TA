@@ -33,4 +33,5 @@ abstract class AppRoutes {
   static const createOperation = '/create-operation';
   static const assignTeam = '/assign-team';
   static const recordOutcome = '/record-outcome';
+  static const operationDetail = '/operation-detail';
 }
