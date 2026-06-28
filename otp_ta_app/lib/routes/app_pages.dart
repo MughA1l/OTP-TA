@@ -50,6 +50,8 @@ import '../modules/chat/views/chat_list_screen.dart';
 import '../modules/chat/views/chat_room_screen.dart';
 import '../modules/notifications/bindings/notification_binding.dart';
 import '../modules/notifications/views/notification_center_screen.dart';
+import '../modules/reports/bindings/report_binding.dart';
+import '../modules/reports/views/analytics_dashboard_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -216,6 +218,11 @@ abstract class AppPages {
       name: AppRoutes.notificationCenter,
       page: () => const NotificationCenterScreen(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.analyticsDashboard,
+      page: () => const AnalyticsDashboardScreen(),
+      binding: ReportBinding(),
     ),
   ];
 }

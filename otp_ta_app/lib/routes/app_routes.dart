@@ -46,4 +46,7 @@ abstract class AppRoutes {
 
   // Notifications Module
   static const notificationCenter = '/notification-center';
+
+  // Reports Module
+  static const analyticsDashboard = '/analytics-dashboard';
 }

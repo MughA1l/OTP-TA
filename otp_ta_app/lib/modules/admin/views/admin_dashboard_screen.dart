@@ -97,6 +97,11 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
                       icon: Icons.accessible_forward_outlined,
                       onTap: () => Get.toNamed(AppRoutes.patientList),
                     ),
+                    _QuickActionBtn(
+                      label: 'View Analytics',
+                      icon: Icons.bar_chart_rounded,
+                      onTap: () => Get.toNamed(AppRoutes.analyticsDashboard),
+                    ),
                   ],
                 ),
               ),

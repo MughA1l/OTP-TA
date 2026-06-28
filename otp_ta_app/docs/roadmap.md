@@ -593,11 +593,11 @@ Phase 12 → Final Polish, Testing & Deployment
   - Recovery analytics: recovery time, readmission rates
 - `[x] [B]` For large dataset performance: write a Render.com endpoint `GET /api/analytics/precompute` that runs Firestore aggregation queries and caches results in a Firestore `analytics_cache` collection (updated nightly via cron-job.org)
 
-### 11.2 Analytics Dashboard (Admin Web)
+### ✅ 11.2 Analytics Dashboard (Admin Web)
 
-- `[B]`/`[F]` Implement `ReportRepositoryImpl`: `fetchOperationAnalytics(filters)`, `fetchDoctorPerformance(doctorId)`, `fetchRecoveryAnalytics(filters)`
-- `[F]` Create `ReportController`
-- `[F]` Build `analytics_dashboard_screen.dart` (Admin Web):
+- `[x] [B]`/`[F]` Implement `ReportRepositoryImpl`: `fetchOperationAnalytics(filters)`, `fetchDoctorPerformance(doctorId)`, `fetchRecoveryAnalytics(filters)`
+- `[x] [F]` Create `ReportController`
+- `[x] [F]` Build `analytics_dashboard_screen.dart` (Admin Web):
   - Date range filter: Weekly / Monthly / Custom (SRS-105)
   - `PieChartWidget` — surgery type breakdown (SRS-106)
   - `BarChartWidget` — operations per day/week (bars grow from 0 on mount)
