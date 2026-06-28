@@ -397,15 +397,15 @@ Phase 12 → Final Polish, Testing & Deployment
   - Credentials link contains a deep-link with 24h expiry (SRS-95) managed via Firestore `tokenExpiry` field
 - `[x] [B]` Firestore Indexes: operations by status, by doctorId, by patientId, by date
 
-### 7.2 Operation Repository & Controller
+### ✅ 7.2 Operation Repository & Controller
 
-- `[B]`/`[F]` Implement `OperationRepositoryImpl`:
+- `[x] [B]`/`[F]` Implement `OperationRepositoryImpl`:
   - `createOperation()`, `assignSurgicalTeam()`, `updateSurgicalTeam()`
   - `updateOperationStatus(id, status)`, `recordOutcome(id, outcome)`
   - `watchPatientOperationStatus(patientId)` → real-time stream
   - `fetchOperationHistory(filters)` with pagination
   - `uploadMedicalReport(file, operationId)` → Cloudinary + Firestore
-- `[F]` Create `OperationController`
+- `[x] [F]` Create `OperationController`
 
 ### 7.3 Create Operation Record (Admin Web)
 
