@@ -489,21 +489,21 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 9: Communication Management (Real-Time Chat)
 
-### 9.1 Backend Setup
+### ✅ 9.1 Backend Setup
 
-- `[B]` Create `chat_rooms` Firestore collection:
+- `[x] [B]` Create `chat_rooms` Firestore collection:
   ```
   {
     roomId (patientId_doctorId), participants: [uid1, uid2],
     lastMessage, lastMessageTime, hasEmergency: bool
   }
   ```
-- `[B]` Create `messages` sub-collection under each room:
+- `[x] [B]` Create `messages` sub-collection under each room:
   ```
   { messageId, senderId, text, status (Sent|Delivered|Read), timestamp, sharedFiles: [] }
   ```
-- `[B]` Firestore Rule: Only participants of a chat room can read/write messages (SRS-88)
-- `[B]` **Emergency Alert (replaces Cloud Function):**
+- `[x] [B]` Firestore Rule: Only participants of a chat room can read/write messages (SRS-88)
+- `[x] [B]` **Emergency Alert (replaces Cloud Function):**
   - Flutter calls `POST /api/notify/emergency` on Render.com server with list of team member FCM tokens
   - Render.com sends FCM HTTP v1 high-priority push to all surgical/ICU team members (SRS-92)
   - Firestore `chat_rooms/{roomId}/hasEmergency` is set to `true` by Flutter directly
