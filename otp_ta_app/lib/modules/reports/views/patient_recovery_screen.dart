@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/pdf_generator.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../controllers/report_controller.dart';
 
@@ -25,6 +26,18 @@ class PatientRecoveryScreen extends GetView<ReportController> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          Obx(() {
+            final stats = controller.recoveryStats;
+            if (stats.isEmpty) return const SizedBox.shrink();
+            return IconButton(
+              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              onPressed: () => PdfGenerator.generateRecoverySummaryPdf(stats),
+              tooltip: 'Export PDF',
+            );
+          }),
+          const SizedBox(width: AppDimensions.paddingM),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingL),

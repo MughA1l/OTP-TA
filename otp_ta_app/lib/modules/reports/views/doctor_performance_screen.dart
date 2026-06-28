@@ -8,6 +8,7 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../auth/controllers/auth_controller.dart';
 import '../../../data/models/user_model.dart';
+import '../../../core/utils/pdf_generator.dart';
 import '../controllers/report_controller.dart';
 
 class DoctorPerformanceScreen extends GetView<ReportController> {
@@ -30,6 +31,18 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          Obx(() {
+            final stats = controller.doctorPerformance.value;
+            if (stats == null) return const SizedBox.shrink();
+            return IconButton(
+              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              onPressed: () => PdfGenerator.generateDoctorPerformancePdf(stats),
+              tooltip: 'Export PDF',
+            );
+          }),
+          const SizedBox(width: AppDimensions.paddingM),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingL),

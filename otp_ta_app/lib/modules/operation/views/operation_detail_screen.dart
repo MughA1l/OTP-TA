@@ -11,6 +11,7 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../shared_widgets/buttons/primary_button.dart';
 import '../../../data/models/operation_model.dart';
+import '../../../core/utils/pdf_generator.dart';
 import '../controllers/operation_controller.dart';
 import '../../auth/controllers/auth_controller.dart';
 
@@ -71,6 +72,18 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           onPressed: () => Get.back(),
         ),
         title: Text('Operation Details', style: AppTextStyles.headlineMedium),
+        actions: [
+          Obx(() {
+            final op = operation.value;
+            if (op == null) return const SizedBox.shrink();
+            return IconButton(
+              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              onPressed: () => PdfGenerator.generateOperationSummaryPdf(op),
+              tooltip: 'Export PDF',
+            );
+          }),
+          const SizedBox(width: AppDimensions.paddingM),
+        ],
       ),
       body: Stack(
         children: [

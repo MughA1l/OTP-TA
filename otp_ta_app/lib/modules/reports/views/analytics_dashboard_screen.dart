@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/responsive_helper.dart';
+import '../../../core/utils/pdf_generator.dart';
 import '../../../routes/app_routes.dart';
 import '../controllers/report_controller.dart';
 
@@ -28,6 +29,15 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
           onPressed: () => Get.back(),
         ),
         actions: [
+          Obx(() {
+            final cache = controller.analytics.value;
+            if (cache == null) return const SizedBox.shrink();
+            return IconButton(
+              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              onPressed: () => PdfGenerator.generateAnalyticsSummaryPdf(cache),
+              tooltip: 'Export PDF',
+            );
+          }),
           TextButton.icon(
             icon: const Icon(Icons.healing_rounded, color: AppColors.secondaryLight, size: 20),
             label: Text('Patient Recovery', style: TextStyle(color: AppColors.secondaryLight)),

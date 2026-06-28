@@ -619,13 +619,13 @@ Phase 12 → Final Polish, Testing & Deployment
   - Filter by surgical procedure or age demographic (SRS-111)
   - Charts auto-update as new outcomes are submitted (SRS-112, live Firestore stream)
 
-### 11.5 PDF Report Generation & Print
+### ✅ 11.5 PDF Report Generation & Print
 
-- `[F]` Implement `pdf_generator.dart`:
+- `[x] [F]` Implement `pdf_generator.dart`:
   - Generate Operation Summary PDF (patient name, surgery, team, outcome, date)
   - Generate Doctor Performance PDF summary
   - Use `pdf` package to build layout, `printing` package to download/print
-- `[F]` "Download PDF" + "Print" buttons on each report screen
+- `[x] [F]` "Download PDF" + "Print" buttons on each report screen
 
 ---
 
