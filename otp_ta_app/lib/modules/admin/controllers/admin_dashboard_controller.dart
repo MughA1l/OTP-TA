@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../data/models/appointment_model.dart';
 import '../../../data/models/doctor_model.dart';
 import '../../../data/repositories/appointment_repository.dart';
@@ -18,6 +21,11 @@ class AdminDashboardController extends GetxController {
   final RxList<AppointmentModel> allAppointments = <AppointmentModel>[].obs;
   final RxBool isLoading = true.obs;
 
+  StreamSubscription<List<DoctorModel>>? _doctorsSubscription;
+  StreamSubscription<List<AppointmentModel>>? _appointmentsSubscription;
+  bool _doctorsLoaded = false;
+  bool _appointmentsLoaded = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -25,21 +33,46 @@ class AdminDashboardController extends GetxController {
   }
 
   void _watchData() {
-    _doctorRepository.watchAllDoctors().listen((docs) {
-      doctors.value = docs;
-      _checkLoading();
-    });
+    _doctorsSubscription = _doctorRepository.watchAllDoctors().listen(
+      (docs) {
+        doctors.value = docs;
+        _doctorsLoaded = true;
+        _checkLoading();
+      },
+      onError: (_) {
+        _doctorsLoaded = true;
+        SnackbarHelper.showError('Error', 'Failed to load doctors');
+        _checkLoading();
+      },
+    );
 
-    _appointmentRepository.watchAllAppointments().listen((appts) {
-      allAppointments.value = appts;
-      _checkLoading();
-    });
+    _appointmentsSubscription = _appointmentRepository
+        .watchAllAppointments()
+        .listen(
+          (appts) {
+            allAppointments.value = appts;
+            _appointmentsLoaded = true;
+            _checkLoading();
+          },
+          onError: (_) {
+            _appointmentsLoaded = true;
+            SnackbarHelper.showError('Error', 'Failed to load appointments');
+            _checkLoading();
+          },
+        );
   }
 
   void _checkLoading() {
-    if (doctors.isNotEmpty || allAppointments.isNotEmpty) {
+    if (_doctorsLoaded && _appointmentsLoaded) {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    _doctorsSubscription?.cancel();
+    _appointmentsSubscription?.cancel();
+    super.onClose();
   }
 
   /// Returns total appointments scheduled today across the clinic
