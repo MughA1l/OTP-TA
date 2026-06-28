@@ -442,9 +442,9 @@ Phase 12 → Final Polish, Testing & Deployment
 - `[x] [B]`/`[F]` Store returned URL in `operations/{operationId}/reportUrls[]`
 - `[x] [F]` "Invalid File or Size Exceeded" error snackbar (SRS-78)
 
-### 7.7 View Operation History (Admin/Doctor Web)
+### ✅ 7.7 View Operation History (Admin/Doctor Web)
 
-- `[F]` Build `operation_list_screen.dart` (Web):
+- `[x] [F]` Build `operation_list_screen.dart` (Web):
   - Filterable list: by date, surgeon, patient ID, status (SRS-79)
   - Infinite scroll with shimmer skeleton loading (SRS-80)
   - Each row: `OperationCard` with status chip, patient name, surgeon, date

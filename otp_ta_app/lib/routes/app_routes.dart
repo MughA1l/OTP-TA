@@ -34,4 +34,5 @@ abstract class AppRoutes {
   static const assignTeam = '/assign-team';
   static const recordOutcome = '/record-outcome';
   static const operationDetail = '/operation-detail';
+  static const operationList = '/operation-list';
 }
