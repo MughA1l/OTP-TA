@@ -20,6 +20,7 @@ import '../modules/doctor/bindings/doctor_binding.dart';
 import '../modules/admin/views/doctor_list_screen.dart';
 import '../modules/admin/views/add_edit_doctor_screen.dart';
 import '../modules/doctor/views/doctor_availability_screen.dart';
+import '../modules/doctor/views/doctor_dashboard_screen.dart';
 import '../modules/appointment/bindings/appointment_binding.dart';
 import '../modules/appointment/views/appointment_list_screen.dart';
 import '../modules/appointment/views/book_appointment_screen.dart';
@@ -52,6 +53,7 @@ import '../modules/notifications/bindings/notification_binding.dart';
 import '../modules/notifications/views/notification_center_screen.dart';
 import '../modules/reports/bindings/report_binding.dart';
 import '../modules/reports/views/analytics_dashboard_screen.dart';
+import '../modules/reports/views/doctor_performance_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -87,7 +89,8 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.doctorDashboard,
-      page: () => const Scaffold(body: Center(child: Text('Doctor Dashboard'))),
+      page: () => const DoctorDashboardScreen(),
+      binding: DoctorBinding(),
     ),
     GetPage(
       name: AppRoutes.patientDashboard,
@@ -222,6 +225,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.analyticsDashboard,
       page: () => const AnalyticsDashboardScreen(),
+      binding: ReportBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.doctorPerformance,
+      page: () => const DoctorPerformanceScreen(),
       binding: ReportBinding(),
     ),
   ];

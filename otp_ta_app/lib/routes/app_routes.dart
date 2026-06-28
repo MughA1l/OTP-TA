@@ -49,4 +49,5 @@ abstract class AppRoutes {
 
   // Reports Module
   static const analyticsDashboard = '/analytics-dashboard';
+  static const doctorPerformance = '/doctor-performance';
 }

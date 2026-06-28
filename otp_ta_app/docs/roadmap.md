@@ -604,9 +604,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - KPI stat cards: Total Ops, Success Rate, Avg Duration — count-up animation
   - All charts animate in with `FadeInUp` + data grows from zero (fl_chart)
 
-### 11.3 Doctor Performance Report (Admin + Doctor)
+### ✅ 11.3 Doctor Performance Report (Admin + Doctor)
 
-- `[F]` Build `doctor_performance_screen.dart` (Web):
+- `[x] [F]` Build `doctor_performance_screen.dart` (Web):
   - Completed operations, punctuality score, avg operation duration (SRS-109)
   - Doctor can only see their own report; Admin sees all (SRS-108)
   - Bar chart of operations per week
