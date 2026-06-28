@@ -27,7 +27,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
     final emailCtrl = TextEditingController(text: existingStaff?.email);
     final phoneCtrl = TextEditingController(text: existingStaff?.phone);
     final passwordCtrl = TextEditingController();
-    
+
     // Using Rx for the dropdown to update UI
     final roleValue = (existingStaff?.role ?? 'doctor').obs;
 
@@ -39,7 +39,10 @@ class AddEditStaffScreen extends GetView<StaffController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -55,10 +58,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                 gradient: RadialGradient(
                   center: Alignment(0, -0.6),
                   radius: 1.0,
-                  colors: [
-                    AppColors.primaryContainer,
-                    AppColors.background,
-                  ],
+                  colors: [AppColors.primaryContainer, AppColors.background],
                 ),
               ),
             ),
@@ -79,8 +79,13 @@ class AddEditStaffScreen extends GetView<StaffController> {
                         padding: const EdgeInsets.all(AppDimensions.paddingXL),
                         decoration: BoxDecoration(
                           color: AppColors.glassBackground,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-                          border: Border.all(color: AppColors.glassBorder, width: 1),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusXL,
+                          ),
+                          border: Border.all(
+                            color: AppColors.glassBorder,
+                            width: 1,
+                          ),
                         ),
                         child: Form(
                           key: formKey,
@@ -97,7 +102,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                                 ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
-                              
+
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 100),
@@ -106,7 +111,8 @@ class AddEditStaffScreen extends GetView<StaffController> {
                                   label: 'Email Address',
                                   prefixIcon: Icons.email_outlined,
                                   validator: Validators.validateEmail,
-                                  enabled: !isEditing, // Prevent email change after creation for simplicity
+                                  enabled:
+                                      !isEditing, // Prevent email change after creation for simplicity
                                 ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
@@ -126,19 +132,30 @@ class AddEditStaffScreen extends GetView<StaffController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 300),
-                                child: Obx(() => AppDropdown<String>(
-                                  value: roleValue.value,
-                                  label: 'Job Role',
-                                  prefixIcon: Icons.work_outline,
-                                  items: const [
-                                    DropdownMenuItem(value: 'admin', child: Text('Admin')),
-                                    DropdownMenuItem(value: 'doctor', child: Text('Doctor')),
-                                    DropdownMenuItem(value: 'receptionist', child: Text('Receptionist')),
-                                  ],
-                                  onChanged: (val) {
-                                    if (val != null) roleValue.value = val;
-                                  },
-                                )),
+                                child: Obx(
+                                  () => AppDropdown<String>(
+                                    value: roleValue.value,
+                                    label: 'Job Role',
+                                    prefixIcon: Icons.work_outline,
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: 'admin',
+                                        child: Text('Admin'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'doctor',
+                                        child: Text('Doctor'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'receptionist',
+                                        child: Text('Receptionist'),
+                                      ),
+                                    ],
+                                    onChanged: (val) {
+                                      if (val != null) roleValue.value = val;
+                                    },
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
 
@@ -161,26 +178,43 @@ class AddEditStaffScreen extends GetView<StaffController> {
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 450),
                                 child: Container(
-                                  padding: const EdgeInsets.all(AppDimensions.paddingM),
+                                  padding: const EdgeInsets.all(
+                                    AppDimensions.paddingM,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.primaryContainer.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                                    color: AppColors.primaryContainer
+                                        .withValues(alpha: 0.5),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusM,
+                                    ),
                                   ),
                                   child: Obx(() {
                                     String hints = '';
                                     if (roleValue.value == 'admin') {
-                                      hints = '• Full system access\n• Manage staff and patients\n• System settings';
+                                      hints =
+                                          '• Full system access\n• Manage staff and patients\n• System settings';
                                     } else if (roleValue.value == 'doctor') {
-                                      hints = '• View/Update assigned patients\n• Manage operation notes\n• Cannot manage other staff';
+                                      hints =
+                                          '• View/Update assigned patients\n• Manage operation notes\n• Cannot manage other staff';
                                     } else {
-                                      hints = '• Register new patients\n• Schedule appointments\n• View reports';
+                                      hints =
+                                          '• Register new patients\n• Schedule appointments\n• View reports';
                                     }
                                     return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text('Auto-assigned Permissions:', style: AppTextStyles.labelLarge),
-                                        const SizedBox(height: AppDimensions.paddingXS),
-                                        Text(hints, style: AppTextStyles.bodyMedium),
+                                        Text(
+                                          'Auto-assigned Permissions:',
+                                          style: AppTextStyles.labelLarge,
+                                        ),
+                                        const SizedBox(
+                                          height: AppDimensions.paddingXS,
+                                        ),
+                                        Text(
+                                          hints,
+                                          style: AppTextStyles.bodyMedium,
+                                        ),
                                       ],
                                     );
                                   }),
@@ -199,13 +233,25 @@ class AddEditStaffScreen extends GetView<StaffController> {
                                     label: 'Account Status',
                                     prefixIcon: Icons.manage_accounts_rounded,
                                     items: const [
-                                      DropdownMenuItem(value: 'active', child: Text('Active')),
-                                      DropdownMenuItem(value: 'suspended', child: Text('Suspended')),
-                                      DropdownMenuItem(value: 'deactivated', child: Text('Deactivated')),
+                                      DropdownMenuItem(
+                                        value: 'active',
+                                        child: Text('Active'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'suspended',
+                                        child: Text('Suspended'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'deactivated',
+                                        child: Text('Deactivated'),
+                                      ),
                                     ],
                                     onChanged: (val) {
                                       if (val != null) {
-                                        controller.updateAccountStatus(existingStaff.staffId, val);
+                                        controller.updateAccountStatus(
+                                          existingStaff.staffId,
+                                          val,
+                                        );
                                       }
                                     },
                                   ),
@@ -218,29 +264,40 @@ class AddEditStaffScreen extends GetView<StaffController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 500),
-                                child: Obx(() => PrimaryButton(
-                                  label: isEditing ? 'Save Changes' : 'Create Staff Profile',
-                                  isLoading: controller.isLoading.value,
-                                  icon: Icons.save_rounded,
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      final updatedStaff = StaffModel(
-                                        staffId: isEditing ? existingStaff.staffId : '', // ID is assigned by controller/repo if new
-                                        name: nameCtrl.text,
-                                        email: emailCtrl.text,
-                                        phone: phoneCtrl.text,
-                                        role: roleValue.value,
-                                        createdAt: isEditing ? existingStaff.createdAt : DateTime.now(),
-                                      );
+                                child: Obx(
+                                  () => PrimaryButton(
+                                    label: isEditing
+                                        ? 'Save Changes'
+                                        : 'Create Staff Profile',
+                                    isLoading: controller.isLoading.value,
+                                    icon: Icons.save_rounded,
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        final updatedStaff = StaffModel(
+                                          staffId: isEditing
+                                              ? existingStaff.staffId
+                                              : '', // ID is assigned by controller/repo if new
+                                          name: nameCtrl.text,
+                                          email: emailCtrl.text,
+                                          phone: phoneCtrl.text,
+                                          role: roleValue.value,
+                                          createdAt: isEditing
+                                              ? existingStaff.createdAt
+                                              : DateTime.now(),
+                                        );
 
-                                      if (isEditing) {
-                                        controller.updateStaff(updatedStaff);
-                                      } else {
-                                        controller.createStaff(updatedStaff, passwordCtrl.text);
+                                        if (isEditing) {
+                                          controller.updateStaff(updatedStaff);
+                                        } else {
+                                          controller.createStaff(
+                                            updatedStaff,
+                                            passwordCtrl.text,
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
-                                )),
+                                    },
+                                  ),
+                                ),
                               ),
                             ],
                           ),

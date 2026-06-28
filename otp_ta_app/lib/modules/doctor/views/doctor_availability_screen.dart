@@ -15,7 +15,11 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
 
   // Predefined shift slots for the weekly grid
   static const _weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const _timeBlocks = ['Morning (8am–12pm)', 'Afternoon (12pm–4pm)', 'Evening (4pm–8pm)'];
+  static const _timeBlocks = [
+    'Morning (8am–12pm)',
+    'Afternoon (12pm–4pm)',
+    'Evening (4pm–8pm)',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +40,25 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
         backgroundColor: AppColors.surfaceOverlay,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Availability & Duty Timings', style: AppTextStyles.headlineMedium),
-            Text(doctor.name, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary)),
+            Text(
+              'Availability & Duty Timings',
+              style: AppTextStyles.headlineMedium,
+            ),
+            Text(
+              doctor.name,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
           ],
         ),
       ),
@@ -51,7 +66,9 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
         padding: const EdgeInsets.all(AppDimensions.paddingL),
         child: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
+            constraints: BoxConstraints(
+              maxWidth: isWeb ? 800 : double.infinity,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -61,60 +78,84 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                   child: _buildGlassCard(
                     title: 'Weekly Shift Grid',
                     subtitle: 'Tap a cell to toggle availability',
-                    child: Obx(() => Column(
-                      children: _timeBlocks.map((block) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: AppDimensions.paddingM),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(block, style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary)),
-                              const SizedBox(height: AppDimensions.paddingS),
-                              Wrap(
-                                spacing: AppDimensions.paddingS,
-                                runSpacing: AppDimensions.paddingS,
-                                children: _weekDays.map((day) {
-                                  final slotKey = '$day|$block';
-                                  final isSelected = selectedSlots.contains(slotKey);
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (isSelected) {
-                                        selectedSlots.remove(slotKey);
-                                      } else {
-                                        selectedSlots.add(slotKey);
-                                      }
-                                    },
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
-                                      width: 60,
-                                      height: 48,
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? AppColors.primary.withOpacity(0.85)
-                                            : AppColors.glassBackground,
-                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-                                        border: Border.all(
-                                          color: isSelected ? AppColors.primary : AppColors.glassBorder,
-                                          width: isSelected ? 2 : 1,
+                    child: Obx(
+                      () => Column(
+                        children: _timeBlocks.map((block) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: AppDimensions.paddingM,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  block,
+                                  style: AppTextStyles.labelLarge.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: AppDimensions.paddingS),
+                                Wrap(
+                                  spacing: AppDimensions.paddingS,
+                                  runSpacing: AppDimensions.paddingS,
+                                  children: _weekDays.map((day) {
+                                    final slotKey = '$day|$block';
+                                    final isSelected = selectedSlots.contains(
+                                      slotKey,
+                                    );
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (isSelected) {
+                                          selectedSlots.remove(slotKey);
+                                        } else {
+                                          selectedSlots.add(slotKey);
+                                        }
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 200,
+                                        ),
+                                        width: 60,
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? AppColors.primary.withValues(
+                                                  alpha: 0.85,
+                                                )
+                                              : AppColors.glassBackground,
+                                          borderRadius: BorderRadius.circular(
+                                            AppDimensions.radiusS,
+                                          ),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? AppColors.primary
+                                                : AppColors.glassBorder,
+                                            width: isSelected ? 2 : 1,
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          day,
+                                          style: AppTextStyles.labelLarge
+                                              .copyWith(
+                                                color: isSelected
+                                                    ? AppColors.onPrimary
+                                                    : AppColors.textSecondary,
+                                                fontWeight: isSelected
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                              ),
                                         ),
                                       ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        day,
-                                        style: AppTextStyles.labelLarge.copyWith(
-                                          color: isSelected ? AppColors.onPrimary : AppColors.textSecondary,
-                                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    )),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppDimensions.paddingM),
@@ -123,17 +164,19 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                 FadeInUp(
                   duration: const Duration(milliseconds: 400),
                   delay: const Duration(milliseconds: 100),
-                  child: Obx(() => PrimaryButton(
-                    label: 'Save Availability',
-                    icon: Icons.save_rounded,
-                    isLoading: controller.isLoading.value,
-                    onPressed: () {
-                      controller.saveAvailabilitySlots(
-                        doctor.doctorId,
-                        selectedSlots.toList(),
-                      );
-                    },
-                  )),
+                  child: Obx(
+                    () => PrimaryButton(
+                      label: 'Save Availability',
+                      icon: Icons.save_rounded,
+                      isLoading: controller.isLoading.value,
+                      onPressed: () {
+                        controller.saveAvailabilitySlots(
+                          doctor.doctorId,
+                          selectedSlots.toList(),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: AppDimensions.paddingXL),
 
@@ -153,7 +196,9 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
                               builder: (context, child) => Theme(
                                 data: ThemeData.dark().copyWith(
                                   colorScheme: const ColorScheme.dark(
@@ -165,16 +210,29 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                               ),
                             );
                             if (picked != null) {
-                              final iso = picked.toIso8601String().split('T').first;
+                              final iso = picked
+                                  .toIso8601String()
+                                  .split('T')
+                                  .first;
                               controller.markOnLeave(doctor.doctorId, iso);
                             }
                           },
-                          icon: const Icon(Icons.calendar_today_rounded, color: AppColors.onPrimary),
-                          label: Text('Pick Leave Date', style: AppTextStyles.labelLarge.copyWith(color: AppColors.onPrimary)),
+                          icon: const Icon(
+                            Icons.calendar_today_rounded,
+                            color: AppColors.onPrimary,
+                          ),
+                          label: Text(
+                            'Pick Leave Date',
+                            style: AppTextStyles.labelLarge.copyWith(
+                              color: AppColors.onPrimary,
+                            ),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.warning,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusM,
+                              ),
                             ),
                           ),
                         ),
@@ -185,7 +243,9 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                           if (controller.leaveDates.isEmpty) {
                             return Text(
                               'No leave dates marked.',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                             );
                           }
                           return Wrap(
@@ -193,10 +253,24 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
                             runSpacing: AppDimensions.paddingS,
                             children: controller.leaveDates.map((date) {
                               return Chip(
-                                label: Text(date, style: AppTextStyles.labelLarge.copyWith(color: AppColors.onPrimary)),
-                                backgroundColor: AppColors.warning.withOpacity(0.8),
-                                deleteIcon: const Icon(Icons.close, color: AppColors.onPrimary, size: 16),
-                                onDeleted: () => controller.removeLeaveDate(doctor.doctorId, date),
+                                label: Text(
+                                  date,
+                                  style: AppTextStyles.labelLarge.copyWith(
+                                    color: AppColors.onPrimary,
+                                  ),
+                                ),
+                                backgroundColor: AppColors.warning.withValues(
+                                  alpha: 0.8,
+                                ),
+                                deleteIcon: const Icon(
+                                  Icons.close,
+                                  color: AppColors.onPrimary,
+                                  size: 16,
+                                ),
+                                onDeleted: () => controller.removeLeaveDate(
+                                  doctor.doctorId,
+                                  date,
+                                ),
                                 side: BorderSide.none,
                               );
                             }).toList(),
@@ -214,7 +288,11 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
     );
   }
 
-  Widget _buildGlassCard({required String title, required String subtitle, required Widget child}) {
+  Widget _buildGlassCard({
+    required String title,
+    required String subtitle,
+    required Widget child,
+  }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppDimensions.radiusL),
       child: BackdropFilter(
@@ -231,7 +309,12 @@ class DoctorAvailabilityScreen extends GetView<DoctorManagementController> {
             children: [
               Text(title, style: AppTextStyles.titleLarge),
               const SizedBox(height: 2),
-              Text(subtitle, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+              Text(
+                subtitle,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
               const SizedBox(height: AppDimensions.paddingL),
               child,
             ],

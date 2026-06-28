@@ -25,7 +25,9 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
   final formKey = GlobalKey<FormState>();
 
   final RxList<MedicineFormEntry> medicineEntries = <MedicineFormEntry>[].obs;
-  final Rx<PrescriptionModel?> existingPrescription = Rx<PrescriptionModel?>(null);
+  final Rx<PrescriptionModel?> existingPrescription = Rx<PrescriptionModel?>(
+    null,
+  );
 
   String operationId = '';
   String patientId = '';
@@ -40,7 +42,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
       operationId = args['operationId'] as String? ?? '';
       patientId = args['patientId'] as String? ?? '';
       doctorId = args['doctorId'] as String? ?? '';
-      final PrescriptionModel? presc = args['prescription'] as PrescriptionModel?;
+      final PrescriptionModel? presc =
+          args['prescription'] as PrescriptionModel?;
 
       if (presc != null) {
         existingPrescription.value = presc;
@@ -75,8 +78,12 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     if (isEditMode && existingPrescription.value != null) {
       // Edit mode: compare dosages to log to audit trail
       final oldPresc = existingPrescription.value!;
-      final oldDosages = oldPresc.medicines.map((m) => '${m.name}: ${m.dosage}').join(', ');
-      final newDosages = medicines.map((m) => '${m.name}: ${m.dosage}').join(', ');
+      final oldDosages = oldPresc.medicines
+          .map((m) => '${m.name}: ${m.dosage}')
+          .join(', ');
+      final newDosages = medicines
+          .map((m) => '${m.name}: ${m.dosage}')
+          .join(', ');
 
       if (oldDosages == newDosages) {
         Get.snackbar(
@@ -100,7 +107,9 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         prescriptionId: '',
         operationId: operationId,
         patientId: patientId,
-        doctorId: doctorId.isNotEmpty ? doctorId : (Get.find<AuthController>().currentUser.value?.uid ?? ''),
+        doctorId: doctorId.isNotEmpty
+            ? doctorId
+            : (Get.find<AuthController>().currentUser.value?.uid ?? ''),
         medicines: medicines,
         auditLog: [],
         createdAt: DateTime.now(),
@@ -121,10 +130,16 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: Text(isEditMode ? 'Edit Prescription' : 'Add Prescription', style: AppTextStyles.headlineMedium),
+        title: Text(
+          isEditMode ? 'Edit Prescription' : 'Add Prescription',
+          style: AppTextStyles.headlineMedium,
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -141,27 +156,33 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                   FadeInDown(
                     duration: const Duration(milliseconds: 400),
                     child: Text(
-                      isEditMode ? 'Modify Prescription Dosages' : 'Record New Postoperative Prescription',
-                      style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primaryLight),
+                      isEditMode
+                          ? 'Modify Prescription Dosages'
+                          : 'Record New Postoperative Prescription',
+                      style: AppTextStyles.headlineLarge.copyWith(
+                        color: AppColors.primaryLight,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(height: AppDimensions.paddingXXL),
 
                   // Dynamic list of medicine forms
-                  Obx(() => ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: medicineEntries.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 16),
-                        itemBuilder: (context, index) {
-                          final entry = medicineEntries[index];
-                          return FadeInUp(
-                            duration: const Duration(milliseconds: 300),
-                            child: _buildMedicineCard(entry, index),
-                          );
-                        },
-                      )),
+                  Obx(
+                    () => ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: medicineEntries.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final entry = medicineEntries[index];
+                        return FadeInUp(
+                          duration: const Duration(milliseconds: 300),
+                          child: _buildMedicineCard(entry, index),
+                        );
+                      },
+                    ),
+                  ),
                   const SizedBox(height: AppDimensions.paddingL),
 
                   // "Add More Medicine" Button
@@ -171,10 +192,15 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                       delay: const Duration(milliseconds: 100),
                       child: TextButton.icon(
                         onPressed: _addNewMedicineEntry,
-                        icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.secondary),
+                        icon: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: AppColors.secondary,
+                        ),
                         label: Text(
                           'Add More Medicine',
-                          style: AppTextStyles.labelLarge.copyWith(color: AppColors.secondary),
+                          style: AppTextStyles.labelLarge.copyWith(
+                            color: AppColors.secondary,
+                          ),
                         ),
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -187,55 +213,78 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                   FadeInUp(
                     duration: const Duration(milliseconds: 400),
                     delay: const Duration(milliseconds: 150),
-                    child: Obx(() => PrimaryButton(
-                          onPressed: controller.isLoading.value ? null : submitPrescription,
-                          label: isEditMode ? 'Update Prescription' : 'Save Prescription',
-                          isLoading: controller.isLoading.value,
-                        )),
+                    child: Obx(
+                      () => PrimaryButton(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : submitPrescription,
+                        label: isEditMode
+                            ? 'Update Prescription'
+                            : 'Save Prescription',
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: AppDimensions.paddingXXL),
 
                   // Audit logs list at the bottom in edit mode
                   Obx(() {
                     final presc = existingPrescription.value;
-                    if (presc == null || presc.auditLog.isEmpty) return const SizedBox.shrink();
+                    if (presc == null || presc.auditLog.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Divider(color: AppColors.glassBorder),
                         const SizedBox(height: AppDimensions.paddingL),
-                        Text('Prescription Modifications History', style: AppTextStyles.labelLarge),
+                        Text(
+                          'Prescription Modifications History',
+                          style: AppTextStyles.labelLarge,
+                        ),
                         const SizedBox(height: AppDimensions.paddingM),
                         ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: presc.auditLog.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 8),
+                          separatorBuilder: (_, _) => const SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             final log = presc.auditLog[index];
                             return Container(
-                              padding: const EdgeInsets.all(AppDimensions.paddingM),
+                              padding: const EdgeInsets.all(
+                                AppDimensions.paddingM,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppColors.surface.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                                border: Border.all(color: AppColors.glassBorder.withOpacity(0.5)),
+                                color: AppColors.surface.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusM,
+                                ),
+                                border: Border.all(
+                                  color: AppColors.glassBorder.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                ),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Modified By: ${log.changedBy}',
-                                        style: AppTextStyles.bodyMedium.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.secondaryLight,
-                                        ),
+                                        style: AppTextStyles.bodyMedium
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.secondaryLight,
+                                            ),
                                       ),
                                       Text(
-                                        DateFormat('MMM d, yyyy HH:mm').format(log.timestamp),
+                                        DateFormat(
+                                          'MMM d, yyyy HH:mm',
+                                        ).format(log.timestamp),
                                         style: AppTextStyles.bodySmall,
                                       ),
                                     ],
@@ -243,12 +292,16 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                                   const SizedBox(height: 6),
                                   Text(
                                     'Old Dosages: ${log.oldDosage}',
-                                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.errorLight),
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: AppColors.errorLight,
+                                    ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     'New Dosages: ${log.newDosage}',
-                                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.successLight),
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.successLight,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -281,10 +334,18 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Medicine #${index + 1}', style: AppTextStyles.titleLarge.copyWith(color: AppColors.primaryLight)),
+              Text(
+                'Medicine #${index + 1}',
+                style: AppTextStyles.titleLarge.copyWith(
+                  color: AppColors.primaryLight,
+                ),
+              ),
               if (medicineEntries.length > 1 && !isEditMode)
                 IconButton(
-                  icon: const Icon(Icons.delete_outline_rounded, color: AppColors.error),
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppColors.error,
+                  ),
                   onPressed: () => _removeMedicineEntry(index),
                 ),
             ],
@@ -298,7 +359,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             hint: 'e.g. Paracetamol, Amoxicillin',
             prefixIcon: Icons.medication_outlined,
             enabled: !isEditMode, // Name cannot be edited, only dosage
-            validator: (val) => Validators.validateRequired(val, fieldName: 'Drug Name'),
+            validator: (val) =>
+                Validators.validateRequired(val, fieldName: 'Drug Name'),
           ),
           const SizedBox(height: AppDimensions.paddingM),
 
@@ -308,7 +370,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             label: 'Dosage / Strength',
             hint: 'e.g. 500mg, 1 Capsule',
             prefixIcon: Icons.scale_outlined,
-            validator: (val) => Validators.validateRequired(val, fieldName: 'Dosage'),
+            validator: (val) =>
+                Validators.validateRequired(val, fieldName: 'Dosage'),
           ),
           const SizedBox(height: AppDimensions.paddingM),
 
@@ -319,7 +382,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             hint: 'e.g. Twice daily, Once at night',
             prefixIcon: Icons.repeat_outlined,
             enabled: !isEditMode,
-            validator: (val) => Validators.validateRequired(val, fieldName: 'Frequency'),
+            validator: (val) =>
+                Validators.validateRequired(val, fieldName: 'Frequency'),
           ),
           const SizedBox(height: AppDimensions.paddingM),
 
@@ -328,14 +392,19 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: isEditMode ? null : () => _selectDate(context, entry, isStart: true),
+                  onTap: isEditMode
+                      ? null
+                      : () => _selectDate(context, entry, isStart: true),
                   child: AbsorbPointer(
                     child: AppTextField(
                       controller: entry.startDateCtrl,
                       label: 'Start Date',
                       hint: 'YYYY-MM-DD',
                       prefixIcon: Icons.calendar_today_outlined,
-                      validator: (val) => Validators.validateRequired(val, fieldName: 'Start Date'),
+                      validator: (val) => Validators.validateRequired(
+                        val,
+                        fieldName: 'Start Date',
+                      ),
                     ),
                   ),
                 ),
@@ -343,14 +412,19 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: GestureDetector(
-                  onTap: isEditMode ? null : () => _selectDate(context, entry, isStart: false),
+                  onTap: isEditMode
+                      ? null
+                      : () => _selectDate(context, entry, isStart: false),
                   child: AbsorbPointer(
                     child: AppTextField(
                       controller: entry.endDateCtrl,
                       label: 'End Date',
                       hint: 'YYYY-MM-DD',
                       prefixIcon: Icons.event_busy_outlined,
-                      validator: (val) => Validators.validateRequired(val, fieldName: 'End Date'),
+                      validator: (val) => Validators.validateRequired(
+                        val,
+                        fieldName: 'End Date',
+                      ),
                     ),
                   ),
                 ),
@@ -362,7 +436,11 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context, MedicineFormEntry entry, {required bool isStart}) async {
+  Future<void> _selectDate(
+    BuildContext context,
+    MedicineFormEntry entry, {
+    required bool isStart,
+  }) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -411,13 +489,17 @@ class MedicineFormEntry {
     String frequency = '',
     DateTime? start,
     DateTime? end,
-  })  : nameCtrl = TextEditingController(text: name),
-        dosageCtrl = TextEditingController(text: dosage),
-        frequencyCtrl = TextEditingController(text: frequency),
-        startDateCtrl = TextEditingController(text: start != null ? DateFormat('yyyy-MM-dd').format(start) : ''),
-        endDateCtrl = TextEditingController(text: end != null ? DateFormat('yyyy-MM-dd').format(end) : ''),
-        startDate = start ?? DateTime.now(),
-        endDate = end ?? DateTime.now().add(const Duration(days: 7));
+  }) : nameCtrl = TextEditingController(text: name),
+       dosageCtrl = TextEditingController(text: dosage),
+       frequencyCtrl = TextEditingController(text: frequency),
+       startDateCtrl = TextEditingController(
+         text: start != null ? DateFormat('yyyy-MM-dd').format(start) : '',
+       ),
+       endDateCtrl = TextEditingController(
+         text: end != null ? DateFormat('yyyy-MM-dd').format(end) : '',
+       ),
+       startDate = start ?? DateTime.now(),
+       endDate = end ?? DateTime.now().add(const Duration(days: 7));
 
   factory MedicineFormEntry.fromModel(MedicineModel med) {
     return MedicineFormEntry(

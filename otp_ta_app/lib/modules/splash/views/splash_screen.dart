@@ -24,17 +24,14 @@ class SplashScreen extends GetView<SplashController> {
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: RadialGradient(
-                    colors: [
-                      AppColors.primaryContainer,
-                      AppColors.background,
-                    ],
+                    colors: [AppColors.primaryContainer, AppColors.background],
                     radius: 1.5,
                   ),
                 ),
               ),
             ),
           ),
-          
+
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,10 +46,13 @@ class SplashScreen extends GetView<SplashController> {
                       decoration: BoxDecoration(
                         color: AppColors.surfaceOverlay,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.glassBorder, width: 2),
+                        border: Border.all(
+                          color: AppColors.glassBorder,
+                          width: 2,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha: 0.3),
                             blurRadius: 40,
                             spreadRadius: 10,
                           ),
@@ -66,9 +66,9 @@ class SplashScreen extends GetView<SplashController> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // App Title
                 FadeInUp(
                   duration: const Duration(milliseconds: 600),
@@ -80,9 +80,9 @@ class SplashScreen extends GetView<SplashController> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Tagline text with Slide upward
                 SlideInUp(
                   duration: const Duration(milliseconds: 500),
@@ -101,7 +101,7 @@ class SplashScreen extends GetView<SplashController> {
               ],
             ),
           ),
-          
+
           // Bottom loading indicator
           Positioned(
             bottom: 48,
@@ -115,7 +115,9 @@ class SplashScreen extends GetView<SplashController> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryLight,
+                    ),
                   ),
                 ),
               ),

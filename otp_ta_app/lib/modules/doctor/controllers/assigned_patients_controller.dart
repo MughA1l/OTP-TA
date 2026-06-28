@@ -15,18 +15,19 @@ class AssignedPatientsController extends GetxController {
     required IAppointmentRepository appointmentRepository,
     required IPatientRepository patientRepository,
     required AuthController authController,
-  })  : _appointmentRepository = appointmentRepository,
-        _patientRepository = patientRepository,
-        _authController = authController;
+  }) : _appointmentRepository = appointmentRepository,
+       _patientRepository = patientRepository,
+       _authController = authController;
 
   final RxBool isLoading = false.obs;
-  
+
   // All appointments for the logged-in doctor
   final RxList<AppointmentModel> myAppointments = <AppointmentModel>[].obs;
-  
+
   // Filtered appointments for the UI
-  final RxList<AppointmentModel> filteredAppointments = <AppointmentModel>[].obs;
-  
+  final RxList<AppointmentModel> filteredAppointments =
+      <AppointmentModel>[].obs;
+
   // Cache for patient details: patientId -> PatientModel
   final RxMap<String, PatientModel> patientCache = <String, PatientModel>{}.obs;
 
@@ -50,11 +51,14 @@ class AssignedPatientsController extends GetxController {
         _fetchMissingPatients(appointments);
         applyFilters();
       },
-      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load appointments'),
+      onError: (_) =>
+          SnackbarHelper.showError('Error', 'Failed to load appointments'),
     );
   }
 
-  Future<void> _fetchMissingPatients(List<AppointmentModel> appointments) async {
+  Future<void> _fetchMissingPatients(
+    List<AppointmentModel> appointments,
+  ) async {
     for (final appt in appointments) {
       if (!patientCache.containsKey(appt.patientId)) {
         // Fetch patient details
@@ -81,20 +85,22 @@ class AssignedPatientsController extends GetxController {
 
   void applyFilters() {
     final query = searchQuery.value.toLowerCase();
-    
+
     filteredAppointments.value = myAppointments.where((appt) {
       // 1. Filter by Date (SRS-47)
-      final isSameDate = appt.dateTime.year == selectedDate.value.year &&
-                         appt.dateTime.month == selectedDate.value.month &&
-                         appt.dateTime.day == selectedDate.value.day;
-      
+      final isSameDate =
+          appt.dateTime.year == selectedDate.value.year &&
+          appt.dateTime.month == selectedDate.value.month &&
+          appt.dateTime.day == selectedDate.value.day;
+
       if (!isSameDate) return false;
 
       // 2. Search by Name or ID (SRS-47)
       if (query.isNotEmpty) {
         final patient = patientCache[appt.patientId];
         final matchesId = appt.patientId.toLowerCase().contains(query);
-        final matchesName = patient != null && patient.name.toLowerCase().contains(query);
+        final matchesName =
+            patient != null && patient.name.toLowerCase().contains(query);
         if (!matchesId && !matchesName) return false;
       }
 
@@ -106,12 +112,21 @@ class AssignedPatientsController extends GetxController {
     return patientCache[patientId];
   }
 
-  Future<void> updateAppointmentStatus(String appointmentId, AppointmentStatus status) async {
+  Future<void> updateAppointmentStatus(
+    String appointmentId,
+    AppointmentStatus status,
+  ) async {
     isLoading.value = true;
-    final result = await _appointmentRepository.updateStatus(appointmentId, status);
+    final result = await _appointmentRepository.updateStatus(
+      appointmentId,
+      status,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) => SnackbarHelper.showSuccess('Success', 'Status updated to ${status.name}'),
+      (_) => SnackbarHelper.showSuccess(
+        'Success',
+        'Status updated to ${status.name}',
+      ),
     );
     isLoading.value = false;
   }

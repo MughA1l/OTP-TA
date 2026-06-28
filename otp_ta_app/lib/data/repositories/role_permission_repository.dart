@@ -7,5 +7,8 @@ abstract class IRolePermissionRepository {
   Future<Either<Failure, List<RolePermissionModel>>> fetchAllRolePermissions();
 
   /// Update allowed modules for a specific role
-  Future<Either<Failure, void>> updateRolePermissions(String role, List<String> allowedModules);
+  Future<Either<Failure, void>> updateRolePermissions(
+    String role,
+    List<String> allowedModules,
+  );
 }

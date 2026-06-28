@@ -11,8 +11,8 @@ class AdminDashboardController extends GetxController {
   AdminDashboardController({
     required IDoctorRepository doctorRepository,
     required IAppointmentRepository appointmentRepository,
-  })  : _doctorRepository = doctorRepository,
-        _appointmentRepository = appointmentRepository;
+  }) : _doctorRepository = doctorRepository,
+       _appointmentRepository = appointmentRepository;
 
   final RxList<DoctorModel> doctors = <DoctorModel>[].obs;
   final RxList<AppointmentModel> allAppointments = <AppointmentModel>[].obs;
@@ -45,10 +45,13 @@ class AdminDashboardController extends GetxController {
   /// Returns total appointments scheduled today across the clinic
   int get totalAppointmentsToday {
     final now = DateTime.now();
-    return allAppointments.where((a) => 
-      a.status != AppointmentStatus.cancelled && 
-      _isSameDate(a.dateTime, now)
-    ).length;
+    return allAppointments
+        .where(
+          (a) =>
+              a.status != AppointmentStatus.cancelled &&
+              _isSameDate(a.dateTime, now),
+        )
+        .length;
   }
 
   /// Returns total active doctors
@@ -57,11 +60,14 @@ class AdminDashboardController extends GetxController {
   /// Returns workload for a specific doctor today (SRS-49)
   int getDoctorWorkloadToday(String doctorId) {
     final now = DateTime.now();
-    return allAppointments.where((a) =>
-      a.doctorId == doctorId &&
-      a.status != AppointmentStatus.cancelled &&
-      _isSameDate(a.dateTime, now)
-    ).length;
+    return allAppointments
+        .where(
+          (a) =>
+              a.doctorId == doctorId &&
+              a.status != AppointmentStatus.cancelled &&
+              _isSameDate(a.dateTime, now),
+        )
+        .length;
   }
 
   bool _isSameDate(DateTime a, DateTime b) {

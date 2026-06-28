@@ -89,7 +89,6 @@ class CreateOperationScreen extends GetView<OperationController> {
           selectedRoom.value != null &&
           selectedDate.value != null &&
           selectedTime.value != null) {
-        
         final combinedDateTime = DateTime(
           selectedDate.value!.year,
           selectedDate.value!.month,
@@ -100,7 +99,9 @@ class CreateOperationScreen extends GetView<OperationController> {
 
         final newOperation = OperationModel(
           operationId: '',
-          patientId: selectedPatient.value!.uid, // The user's UID for fetching user doc
+          patientId: selectedPatient
+              .value!
+              .uid, // The user's UID for fetching user doc
           patientName: selectedPatient.value!.name,
           surgeryType: surgeryTypeCtrl.text.trim(),
           otRoom: selectedRoom.value!,
@@ -143,7 +144,10 @@ class CreateOperationScreen extends GetView<OperationController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Schedule Operation', style: AppTextStyles.headlineMedium),
@@ -164,7 +168,9 @@ class CreateOperationScreen extends GetView<OperationController> {
                     duration: const Duration(milliseconds: 500),
                     child: Text(
                       'Create New Operation Record',
-                      style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primaryLight),
+                      style: AppTextStyles.headlineLarge.copyWith(
+                        color: AppColors.primaryLight,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -177,7 +183,9 @@ class CreateOperationScreen extends GetView<OperationController> {
                     child: Obx(() {
                       if (controller.patientList.isEmpty) {
                         return const Center(
-                          child: CircularProgressIndicator(color: AppColors.primary),
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
                         );
                       }
                       return Autocomplete<PatientModel>(
@@ -187,30 +195,38 @@ class CreateOperationScreen extends GetView<OperationController> {
                           if (textEditingValue.text.isEmpty) {
                             return controller.patientList;
                           }
-                          return controller.patientList.where((PatientModel patient) {
-                            return patient.name
-                                    .toLowerCase()
-                                    .contains(textEditingValue.text.toLowerCase()) ||
-                                patient.patientId
-                                    .toLowerCase()
-                                    .contains(textEditingValue.text.toLowerCase());
+                          return controller.patientList.where((
+                            PatientModel patient,
+                          ) {
+                            return patient.name.toLowerCase().contains(
+                                  textEditingValue.text.toLowerCase(),
+                                ) ||
+                                patient.patientId.toLowerCase().contains(
+                                  textEditingValue.text.toLowerCase(),
+                                );
                           });
                         },
-                        fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
-                          return AppTextField(
-                            controller: textEditingController,
-                            focusNode: focusNode,
-                            label: 'Select Patient',
-                            hint: 'Type patient name or ID...',
-                            prefixIcon: Icons.person_search_outlined,
-                            validator: (val) {
-                              if (selectedPatient.value == null) {
-                                return 'Patient is required.';
-                              }
-                              return null;
+                        fieldViewBuilder:
+                            (
+                              context,
+                              textEditingController,
+                              focusNode,
+                              onFieldSubmitted,
+                            ) {
+                              return AppTextField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                label: 'Select Patient',
+                                hint: 'Type patient name or ID...',
+                                prefixIcon: Icons.person_search_outlined,
+                                validator: (val) {
+                                  if (selectedPatient.value == null) {
+                                    return 'Patient is required.';
+                                  }
+                                  return null;
+                                },
+                              );
                             },
-                          );
-                        },
                         onSelected: (PatientModel selection) {
                           selectedPatient.value = selection;
                         },
@@ -228,7 +244,10 @@ class CreateOperationScreen extends GetView<OperationController> {
                       label: 'Surgery Type',
                       hint: 'e.g., General Laparoscopy, Bypass',
                       prefixIcon: Icons.medical_services_outlined,
-                      validator: (val) => Validators.validateRequired(val, fieldName: 'Surgery Type'),
+                      validator: (val) => Validators.validateRequired(
+                        val,
+                        fieldName: 'Surgery Type',
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppDimensions.paddingL),
@@ -237,19 +256,28 @@ class CreateOperationScreen extends GetView<OperationController> {
                   FadeInUp(
                     duration: const Duration(milliseconds: 400),
                     delay: const Duration(milliseconds: 200),
-                    child: Obx(() => AppDropdown<String>(
-                          value: selectedRoom.value,
-                          label: 'OT Room Room',
-                          hint: 'Choose operating room',
-                          prefixIcon: Icons.meeting_room_outlined,
-                          items: ['Room A', 'Room B', 'Room C', 'Room D', 'Room E'].map((room) {
-                            return DropdownMenuItem<String>(
-                              value: room,
-                              child: Text(room),
-                            );
-                          }).toList(),
-                          onChanged: (room) => selectedRoom.value = room,
-                        )),
+                    child: Obx(
+                      () => AppDropdown<String>(
+                        value: selectedRoom.value,
+                        label: 'OT Room Room',
+                        hint: 'Choose operating room',
+                        prefixIcon: Icons.meeting_room_outlined,
+                        items:
+                            [
+                              'Room A',
+                              'Room B',
+                              'Room C',
+                              'Room D',
+                              'Room E',
+                            ].map((room) {
+                              return DropdownMenuItem<String>(
+                                value: room,
+                                child: Text(room),
+                              );
+                            }).toList(),
+                        onChanged: (room) => selectedRoom.value = room,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: AppDimensions.paddingL),
 
@@ -265,7 +293,10 @@ class CreateOperationScreen extends GetView<OperationController> {
                           label: 'Scheduled Date',
                           hint: 'YYYY-MM-DD',
                           prefixIcon: Icons.calendar_today_outlined,
-                          validator: (val) => Validators.validateRequired(val, fieldName: 'Scheduled Date'),
+                          validator: (val) => Validators.validateRequired(
+                            val,
+                            fieldName: 'Scheduled Date',
+                          ),
                         ),
                       ),
                     ),
@@ -284,7 +315,10 @@ class CreateOperationScreen extends GetView<OperationController> {
                           label: 'Scheduled Time',
                           hint: 'HH:MM AM/PM',
                           prefixIcon: Icons.access_time_outlined,
-                          validator: (val) => Validators.validateRequired(val, fieldName: 'Scheduled Time'),
+                          validator: (val) => Validators.validateRequired(
+                            val,
+                            fieldName: 'Scheduled Time',
+                          ),
                         ),
                       ),
                     ),
@@ -295,11 +329,15 @@ class CreateOperationScreen extends GetView<OperationController> {
                   FadeInUp(
                     duration: const Duration(milliseconds: 400),
                     delay: const Duration(milliseconds: 350),
-                    child: Obx(() => PrimaryButton(
-                          onPressed: controller.isLoading.value ? null : submitForm,
-                          label: 'Create Record',
-                          isLoading: controller.isLoading.value,
-                        )),
+                    child: Obx(
+                      () => PrimaryButton(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : submitForm,
+                        label: 'Create Record',
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
                   ),
                 ],
               ),

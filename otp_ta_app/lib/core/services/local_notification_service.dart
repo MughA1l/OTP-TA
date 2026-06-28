@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -5,7 +7,8 @@ import 'package:timezone/timezone.dart' as tz;
 /// Serverless Local Notification Service
 /// Handles scheduling of checkup and operation reminders locally.
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
     // Initialize timezone data
@@ -13,25 +16,33 @@ class LocalNotificationService {
 
     // Android Initialization
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher'); // Update with your app icon
+        AndroidInitializationSettings(
+          '@mipmap/ic_launcher',
+        ); // Update with your app icon
 
     // iOS Initialization
-    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
 
     await _notificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         // Handle notification tap
-        print('Notification tapped: ${response.payload}');
+        developer.log(
+          'Notification tapped',
+          error: response.payload,
+          name: 'LocalNotificationService',
+        );
       },
     );
   }
@@ -53,14 +64,16 @@ class LocalNotificationService {
         android: AndroidNotificationDetails(
           'otpta_reminders',
           'Appointment Reminders',
-          channelDescription: 'Notifications for upcoming appointments and surgeries',
+          channelDescription:
+              'Notifications for upcoming appointments and surgeries',
           importance: Importance.high,
           priority: Priority.high,
         ),
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
     );
   }
@@ -72,7 +85,9 @@ class LocalNotificationService {
     required String doctorName,
   }) async {
     // 24 hours before
-    final twentyFourHoursBefore = appointmentDate.subtract(const Duration(hours: 24));
+    final twentyFourHoursBefore = appointmentDate.subtract(
+      const Duration(hours: 24),
+    );
     if (twentyFourHoursBefore.isAfter(DateTime.now())) {
       await scheduleReminder(
         id: operationId.hashCode, // Unique ID based on operationId
@@ -89,7 +104,8 @@ class LocalNotificationService {
       await scheduleReminder(
         id: operationId.hashCode + 1, // Different ID for the 2h reminder
         title: 'Surgery Today',
-        body: 'Your operation with Dr. $doctorName is scheduled in 2 hours. Please prepare.',
+        body:
+            'Your operation with Dr. $doctorName is scheduled in 2 hours. Please prepare.',
         scheduledDate: twoHoursBefore,
         payload: operationId,
       );

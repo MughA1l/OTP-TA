@@ -15,15 +15,10 @@ class RolePermissionModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'allowedModules': allowedModules,
-    };
+    return {'allowedModules': allowedModules};
   }
 
-  RolePermissionModel copyWith({
-    String? role,
-    List<String>? allowedModules,
-  }) {
+  RolePermissionModel copyWith({String? role, List<String>? allowedModules}) {
     return RolePermissionModel(
       role: role ?? this.role,
       allowedModules: allowedModules ?? this.allowedModules,

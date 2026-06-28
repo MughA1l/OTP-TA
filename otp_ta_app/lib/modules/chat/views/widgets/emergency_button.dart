@@ -17,7 +17,8 @@ class EmergencyButton extends StatefulWidget {
   State<EmergencyButton> createState() => _EmergencyButtonState();
 }
 
-class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProviderStateMixin {
+class _EmergencyButtonState extends State<EmergencyButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -29,9 +30,10 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
       duration: const Duration(seconds: 2),
     )..repeat();
 
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeOut),
-    );
+    _pulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeOut));
   }
 
   @override
@@ -42,7 +44,9 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.isTriggered ? AppColors.error : Colors.redAccent.shade700;
+    final color = widget.isTriggered
+        ? AppColors.error
+        : Colors.redAccent.shade700;
 
     return AnimatedBuilder(
       animation: _pulseAnimation,
@@ -56,7 +60,9 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
               height: 56 * _pulseAnimation.value,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color.withOpacity((2.0 - _pulseAnimation.value) / 3),
+                color: color.withValues(
+                  alpha: (2.0 - _pulseAnimation.value) / 3,
+                ),
               ),
             ),
             // Inner Pulsing Ring
@@ -65,7 +71,9 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
               height: 48 * _pulseAnimation.value,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color.withOpacity((2.0 - _pulseAnimation.value) / 2),
+                color: color.withValues(
+                  alpha: (2.0 - _pulseAnimation.value) / 2,
+                ),
               ),
             ),
             // Main Button
@@ -81,7 +89,7 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
                   color: color,
                   boxShadow: [
                     BoxShadow(
-                      color: color.withOpacity(0.5),
+                      color: color.withValues(alpha: 0.5),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -112,9 +120,16 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
         ),
         title: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 28),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: AppColors.error,
+              size: 28,
+            ),
             const SizedBox(width: 8),
-            Text('Trigger Emergency?', style: AppTextStyles.titleLarge.copyWith(color: AppColors.error)),
+            Text(
+              'Trigger Emergency?',
+              style: AppTextStyles.titleLarge.copyWith(color: AppColors.error),
+            ),
           ],
         ),
         content: Text(
@@ -123,19 +138,32 @@ class _EmergencyButtonState extends State<EmergencyButton> with SingleTickerProv
         ),
         actions: [
           TextButton(
-            child: Text('Cancel', style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              'Cancel',
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
             onPressed: () => Get.back(),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             onPressed: () {
               Get.back();
               widget.onTap();
             },
-            child: Text('TRIGGER', style: AppTextStyles.bodyLarge.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text(
+              'TRIGGER',
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

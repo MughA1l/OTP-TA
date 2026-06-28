@@ -25,7 +25,7 @@ abstract class AppRoutes {
   static const bookAppointment = '/book-appointment';
   static const assignedPatients = '/assigned-patients';
   static const patientDetail = '/patient-detail';
-  
+
   // Patient Module
   static const patientProfile = '/patient-profile';
 

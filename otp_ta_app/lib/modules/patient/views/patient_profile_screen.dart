@@ -37,8 +37,11 @@ class PatientProfileScreen extends GetView<PatientManagementController> {
         title: Text('My Profile', style: AppTextStyles.headlineMedium),
       ),
       body: Obx(() {
-        if (controller.isLoading.value && controller.currentPatient.value == null) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+        if (controller.isLoading.value &&
+            controller.currentPatient.value == null) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         final patient = controller.currentPatient.value;
@@ -73,12 +76,24 @@ class PatientProfileScreen extends GetView<PatientManagementController> {
                             backgroundColor: AppColors.primaryContainer,
                             radius: 30,
                             child: Text(
-                              patient.name.isNotEmpty ? patient.name[0].toUpperCase() : 'P',
-                              style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primary),
+                              patient.name.isNotEmpty
+                                  ? patient.name[0].toUpperCase()
+                                  : 'P',
+                              style: AppTextStyles.headlineLarge.copyWith(
+                                color: AppColors.primary,
+                              ),
                             ),
                           ),
-                          title: Text(patient.name, style: AppTextStyles.headlineMedium),
-                          subtitle: Text('ID: ${patient.patientId}', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary)),
+                          title: Text(
+                            patient.name,
+                            style: AppTextStyles.headlineMedium,
+                          ),
+                          subtitle: Text(
+                            'ID: ${patient.patientId}',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: AppDimensions.paddingL),
                         AppTextField(
@@ -121,7 +136,8 @@ class PatientProfileScreen extends GetView<PatientManagementController> {
                 child: _buildGlassCard(
                   title: 'Medical History',
                   child: Text(
-                    patient.medicalHistory['notes'] ?? 'No medical history recorded.',
+                    patient.medicalHistory['notes'] ??
+                        'No medical history recorded.',
                     style: AppTextStyles.bodyLarge,
                   ),
                 ),
@@ -137,9 +153,17 @@ class PatientProfileScreen extends GetView<PatientManagementController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow(Icons.person_outline, 'Name', patient.emergencyContact['name'] ?? 'N/A'),
+                      _buildInfoRow(
+                        Icons.person_outline,
+                        'Name',
+                        patient.emergencyContact['name'] ?? 'N/A',
+                      ),
                       const SizedBox(height: AppDimensions.paddingM),
-                      _buildInfoRow(Icons.phone_outlined, 'Phone', patient.emergencyContact['phone'] ?? 'N/A'),
+                      _buildInfoRow(
+                        Icons.phone_outlined,
+                        'Phone',
+                        patient.emergencyContact['phone'] ?? 'N/A',
+                      ),
                     ],
                   ),
                 ),
@@ -181,10 +205,13 @@ class PatientProfileScreen extends GetView<PatientManagementController> {
       children: [
         Icon(icon, color: AppColors.textSecondary, size: 20),
         const SizedBox(width: AppDimensions.paddingS),
-        Text('$label: ', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
-        Expanded(
-          child: Text(value, style: AppTextStyles.bodyLarge),
+        Text(
+          '$label: ',
+          style: AppTextStyles.labelLarge.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
+        Expanded(child: Text(value, style: AppTextStyles.bodyLarge)),
       ],
     );
   }

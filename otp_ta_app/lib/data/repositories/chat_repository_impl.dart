@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart' as http;
 import '../../core/error/failures.dart';
 import '../../core/services/render_api_service.dart';
 import '../models/chat_model.dart';
@@ -11,7 +9,10 @@ class ChatRepositoryImpl implements IChatRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<Either<Failure, void>> createRoomIfNotExists(String roomId, List<String> participants) async {
+  Future<Either<Failure, void>> createRoomIfNotExists(
+    String roomId,
+    List<String> participants,
+  ) async {
     try {
       final docRef = _firestore.collection('chat_rooms').doc(roomId);
       final snapshot = await docRef.get();
@@ -27,27 +28,32 @@ class ChatRepositoryImpl implements IChatRepository {
       }
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to create chat room.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to create chat room.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> sendMessage(String roomId, MessageModel message) async {
+  Future<Either<Failure, void>> sendMessage(
+    String roomId,
+    MessageModel message,
+  ) async {
     try {
       final batch = _firestore.batch();
-      
-      final roomRef = _firestore.collection('chat_rooms').doc(roomId);
-      final messageRef = roomRef.collection('messages').doc(message.messageId);
 
+      final roomRef = _firestore.collection('chat_rooms').doc(roomId);
       // We handle dynamic messageId creation if it's empty
-      final String idToUse = message.messageId.isEmpty ? roomRef.collection('messages').doc().id : message.messageId;
-      
+      final String idToUse = message.messageId.isEmpty
+          ? roomRef.collection('messages').doc().id
+          : message.messageId;
+
       final messageData = message.copyWith(messageId: idToUse).toMap();
-      
+
       batch.set(roomRef.collection('messages').doc(idToUse), messageData);
-      
+
       batch.update(roomRef, {
         'lastMessage': message.text,
         'lastMessageTime': Timestamp.fromDate(message.timestamp),
@@ -56,7 +62,9 @@ class ChatRepositoryImpl implements IChatRepository {
       await batch.commit();
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to send message.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to send message.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -70,7 +78,11 @@ class ChatRepositoryImpl implements IChatRepository {
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => MessageModel.fromMap(doc.data(), doc.id)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => MessageModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
   }
 
   @override
@@ -80,7 +92,11 @@ class ChatRepositoryImpl implements IChatRepository {
         .where('participants', arrayContains: userId)
         .orderBy('lastMessageTime', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => ChatRoomModel.fromMap(doc.data(), doc.id)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ChatRoomModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
   }
 
   @override
@@ -89,11 +105,17 @@ class ChatRepositoryImpl implements IChatRepository {
         .collection('chat_rooms')
         .doc(roomId)
         .snapshots()
-        .map((snapshot) => ChatRoomModel.fromMap(snapshot.data() ?? {}, snapshot.id));
+        .map(
+          (snapshot) =>
+              ChatRoomModel.fromMap(snapshot.data() ?? {}, snapshot.id),
+        );
   }
 
   @override
-  Future<Either<Failure, void>> markAsRead(String roomId, String messageId) async {
+  Future<Either<Failure, void>> markAsRead(
+    String roomId,
+    String messageId,
+  ) async {
     try {
       await _firestore
           .collection('chat_rooms')
@@ -103,34 +125,51 @@ class ChatRepositoryImpl implements IChatRepository {
           .update({'status': MessageStatus.read.name});
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to mark message as read.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to mark message as read.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, List<MessageModel>>> searchMessages(String roomId, String query) async {
+  Future<Either<Failure, List<MessageModel>>> searchMessages(
+    String roomId,
+    String query,
+  ) async {
     try {
       final snapshot = await _firestore
           .collection('chat_rooms')
           .doc(roomId)
           .collection('messages')
           .get();
-      
-      final messages = snapshot.docs.map((doc) => MessageModel.fromMap(doc.data(), doc.id)).toList();
-      final filteredMessages = messages.where((m) => m.text.toLowerCase().contains(query.toLowerCase())).toList();
-      
+
+      final messages = snapshot.docs
+          .map((doc) => MessageModel.fromMap(doc.data(), doc.id))
+          .toList();
+      final filteredMessages = messages
+          .where((m) => m.text.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+
       return Right(filteredMessages);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to search messages.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to search messages.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> triggerEmergencyAlert(String roomId, String triggeredById, List<String> fcmTokens) async {
+  Future<Either<Failure, void>> triggerEmergencyAlert(
+    String roomId,
+    String triggeredById,
+    List<String> fcmTokens,
+  ) async {
     try {
       // 1. Update Firestore Document
       await _firestore.collection('chat_rooms').doc(roomId).update({
@@ -144,7 +183,8 @@ class ChatRepositoryImpl implements IChatRepository {
         await RenderApiService.sendEmergencyAlert(
           fcmTokens: fcmTokens,
           roomId: roomId,
-          message: 'EMERGENCY: Immediate attention required in chat room $roomId',
+          message:
+              'EMERGENCY: Immediate attention required in chat room $roomId',
         );
       } catch (e) {
         // Suppress HTTP errors
@@ -152,7 +192,11 @@ class ChatRepositoryImpl implements IChatRepository {
 
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to trigger emergency alert.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to trigger emergency alert.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -167,7 +211,11 @@ class ChatRepositoryImpl implements IChatRepository {
       });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to acknowledge emergency.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to acknowledge emergency.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }

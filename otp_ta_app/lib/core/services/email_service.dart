@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 
 /// Serverless Email Service using EmailJS REST API
@@ -6,9 +7,11 @@ class EmailService {
   // TODO: Create a free account at EmailJS.com and fill these keys
   static const String _serviceId = 'YOUR_SERVICE_ID';
   static const String _templateId = 'YOUR_TEMPLATE_ID';
-  static const String _userId = 'YOUR_PUBLIC_KEY'; // Called "Public Key" in EmailJS
-  
-  static const String _emailJsUrl = 'https://api.emailjs.com/api/v1.0/email/send';
+  static const String _userId =
+      'YOUR_PUBLIC_KEY'; // Called "Public Key" in EmailJS
+
+  static const String _emailJsUrl =
+      'https://api.emailjs.com/api/v1.0/email/send';
 
   /// Sends login credentials to the patient directly from the Flutter app
   static Future<bool> sendCredentialsEmail({
@@ -31,20 +34,25 @@ class EmailService {
             'to_email': patientEmail,
             'to_name': patientName,
             'temp_password': tempPassword,
-            'message': 'Your operation has been scheduled. You can now log into the patient portal to track your status, view medications, and communicate with your surgical team. Please change your password within 24 hours.'
-          }
+            'message':
+                'Your operation has been scheduled. You can now log into the patient portal to track your status, view medications, and communicate with your surgical team. Please change your password within 24 hours.',
+          },
         }),
       );
 
       if (response.statusCode == 200) {
-        print('EmailJS: Email sent successfully');
+        developer.log('EmailJS: Email sent successfully', name: 'EmailService');
         return true;
       } else {
-        print('EmailJS Error: ${response.body}');
+        developer.log(
+          'EmailJS Error',
+          error: response.body,
+          name: 'EmailService',
+        );
         return false;
       }
     } catch (e) {
-      print('EmailJS Exception: $e');
+      developer.log('EmailJS Exception', error: e, name: 'EmailService');
       return false;
     }
   }

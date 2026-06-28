@@ -1,30 +1,58 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:otp_ta_app/main.dart';
+import 'package:otp_ta_app/core/utils/validators.dart';
+import 'package:otp_ta_app/shared_widgets/buttons/primary_button.dart';
+import 'package:otp_ta_app/shared_widgets/inputs/app_text_field.dart';
+import 'package:otp_ta_app/shared_widgets/chips/status_chip.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('PrimaryButton renders label and loading state', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PrimaryButton(label: 'Continue', onPressed: () {}),
+        ),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Continue'), findsOneWidget);
+    expect(find.byType(ElevatedButton), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('AppTextField shows validation feedback', (tester) async {
+    final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Form(
+            key: formKey,
+            child: AppTextField(
+              controller: controller,
+              label: 'Email',
+              validator: Validators.validateEmail,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byType(TextFormField), 'bad-email');
+    formKey.currentState!.validate();
     await tester.pump();
+    expect(find.text('Enter a valid email address.'), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('StatusChip renders with provided label', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatusChip(label: 'Completed', color: Colors.green),
+        ),
+      ),
+    );
+
+    expect(find.text('Completed'), findsOneWidget);
   });
 }

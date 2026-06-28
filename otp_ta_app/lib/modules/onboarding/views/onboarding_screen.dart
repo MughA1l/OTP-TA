@@ -48,21 +48,23 @@ class OnboardingScreen extends GetView<OnboardingController> {
       body: Stack(
         children: [
           // ─── Animated background radial gradient (changes per page) ──────
-          Obx(() => AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: const Alignment(0, -0.4),
-                    radius: 1.2,
-                    colors: [
-                      (_pages[controller.currentPage.value]['glowColor'] as Color)
-                          .withOpacity(0.12),
-                      AppColors.background,
-                    ],
-                  ),
+          Obx(
+            () => AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: const Alignment(0, -0.4),
+                  radius: 1.2,
+                  colors: [
+                    (_pages[controller.currentPage.value]['glowColor'] as Color)
+                        .withValues(alpha: 0.12),
+                    AppColors.background,
+                  ],
                 ),
-              )),
+              ),
+            ),
+          ),
 
           // ─── Main Page Content ────────────────────────────────────────────
           Column(
@@ -74,24 +76,26 @@ class OnboardingScreen extends GetView<OnboardingController> {
                     horizontal: AppDimensions.paddingL,
                     vertical: AppDimensions.paddingM,
                   ),
-                  child: Obx(() => AnimatedOpacity(
-                        duration: const Duration(milliseconds: 300),
-                        opacity: controller.isLastPage ? 0.0 : 1.0,
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: TextButton(
-                            onPressed: controller.isLastPage
-                                ? null
-                                : controller.skipOnboarding,
-                            child: Text(
-                              'Skip',
-                              style: AppTextStyles.labelLarge.copyWith(
-                                color: AppColors.textLink,
-                              ),
+                  child: Obx(
+                    () => AnimatedOpacity(
+                      duration: const Duration(milliseconds: 300),
+                      opacity: controller.isLastPage ? 0.0 : 1.0,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: TextButton(
+                          onPressed: controller.isLastPage
+                              ? null
+                              : controller.skipOnboarding,
+                          child: Text(
+                            'Skip',
+                            style: AppTextStyles.labelLarge.copyWith(
+                              color: AppColors.textLink,
                             ),
                           ),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
               ),
 
@@ -121,75 +125,90 @@ class OnboardingScreen extends GetView<OnboardingController> {
                 child: Column(
                   children: [
                     // Animated page indicator dots
-                    Obx(() => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            _pages.length,
-                            (index) => _DotIndicator(
-                              isActive: controller.currentPage.value == index,
-                              color: (_pages[controller.currentPage.value]
-                                  ['glowColor'] as Color),
-                            ),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          _pages.length,
+                          (index) => _DotIndicator(
+                            isActive: controller.currentPage.value == index,
+                            color:
+                                (_pages[controller
+                                        .currentPage
+                                        .value]['glowColor']
+                                    as Color),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
 
                     const SizedBox(height: AppDimensions.paddingXL),
 
                     // Next / Get Started CTA
-                    Obx(() => GestureDetector(
-                          onTap: controller.nextPage,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 350),
-                            curve: Curves.easeInOutCubic,
-                            width: double.infinity,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  _pages[controller.currentPage.value]
-                                      ['gradientStart'] as Color,
-                                  _pages[controller.currentPage.value]
-                                      ['gradientEnd'] as Color,
-                                ],
+                    Obx(
+                      () => GestureDetector(
+                        onTap: controller.nextPage,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeInOutCubic,
+                          width: double.infinity,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                _pages[controller
+                                        .currentPage
+                                        .value]['gradientStart']
+                                    as Color,
+                                _pages[controller
+                                        .currentPage
+                                        .value]['gradientEnd']
+                                    as Color,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusL,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    (_pages[controller
+                                                .currentPage
+                                                .value]['glowColor']
+                                            as Color)
+                                        .withValues(alpha: 0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
                               ),
-                              borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusL),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: (_pages[controller.currentPage.value]
-                                              ['glowColor'] as Color)
-                                          .withOpacity(0.4),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 8),
+                            ],
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  controller.isLastPage
+                                      ? 'Get Started'
+                                      : 'Next',
+                                  style: AppTextStyles.titleLarge.copyWith(
+                                    color: AppColors.onPrimary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(
+                                  controller.isLastPage
+                                      ? Icons.check_rounded
+                                      : Icons.arrow_forward_rounded,
+                                  color: AppColors.onPrimary,
+                                  size: 20,
                                 ),
                               ],
                             ),
-                            child: Center(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    controller.isLastPage
-                                        ? 'Get Started'
-                                        : 'Next',
-                                    style: AppTextStyles.titleLarge.copyWith(
-                                      color: AppColors.onPrimary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    controller.isLastPage
-                                        ? Icons.check_rounded
-                                        : Icons.arrow_forward_rounded,
-                                    color: AppColors.onPrimary,
-                                    size: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -227,24 +246,28 @@ class _OnboardingPage extends StatelessWidget {
                   width: 280,
                   height: 220,
                   decoration: BoxDecoration(
-                    color: (data['glowColor'] as Color).withOpacity(0.08),
-                    borderRadius:
-                        BorderRadius.circular(AppDimensions.radiusXL),
+                    color: (data['glowColor'] as Color).withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
                     border: Border.all(
-                      color: (data['glowColor'] as Color).withOpacity(0.2),
+                      color: (data['glowColor'] as Color).withValues(
+                        alpha: 0.2,
+                      ),
                       width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            (data['glowColor'] as Color).withOpacity(0.15),
+                        color: (data['glowColor'] as Color).withValues(
+                          alpha: 0.15,
+                        ),
                         blurRadius: 40,
                         spreadRadius: 5,
                       ),
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXL - 1),
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.radiusXL - 1,
+                    ),
                     child: Image.asset(
                       data['imagePath'] as String,
                       fit: BoxFit.cover,
@@ -264,9 +287,7 @@ class _OnboardingPage extends StatelessWidget {
             delay: const Duration(milliseconds: 150),
             child: Text(
               data['title'] as String,
-              style: AppTextStyles.displayMedium.copyWith(
-                height: 1.2,
-              ),
+              style: AppTextStyles.displayMedium.copyWith(height: 1.2),
               textAlign: TextAlign.center,
             ),
           ),
@@ -314,7 +335,7 @@ class _DotIndicator extends StatelessWidget {
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.5),
+                  color: color.withValues(alpha: 0.5),
                   blurRadius: 8,
                   spreadRadius: 1,
                 ),

@@ -7,8 +7,9 @@ import '../../auth/controllers/auth_controller.dart';
 class NotificationController extends GetxController {
   final INotificationRepository _notificationRepository;
 
-  NotificationController({required INotificationRepository notificationRepository})
-      : _notificationRepository = notificationRepository;
+  NotificationController({
+    required INotificationRepository notificationRepository,
+  }) : _notificationRepository = notificationRepository;
 
   final RxList<NotificationModel> notifications = <NotificationModel>[].obs;
   final RxInt unreadCount = 0.obs;
@@ -27,7 +28,8 @@ class NotificationController extends GetxController {
       }
     });
 
-    final currentUserId = Get.find<AuthController>().currentUser.value?.uid ?? '';
+    final currentUserId =
+        Get.find<AuthController>().currentUser.value?.uid ?? '';
     if (currentUserId.isNotEmpty) {
       _bindNotificationsStream(currentUserId);
     }
@@ -49,13 +51,14 @@ class NotificationController extends GetxController {
 
   /// Clears all notifications for the current user (SRS-103)
   Future<void> clearAll() async {
-    final currentUserId = Get.find<AuthController>().currentUser.value?.uid ?? '';
+    final currentUserId =
+        Get.find<AuthController>().currentUser.value?.uid ?? '';
     if (currentUserId.isEmpty) return;
 
     isLoading.value = true;
     final result = await _notificationRepository.clearAll(currentUserId);
     isLoading.value = false;
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Failed to Clear', failure.message),
       (_) {

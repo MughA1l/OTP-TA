@@ -18,7 +18,9 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
       backgroundColor: AppColors.background,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         final patient = controller.currentPatient.value;
@@ -49,14 +51,20 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                     FadeInDown(
                       duration: const Duration(milliseconds: 400),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusXL,
+                        ),
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                           child: Container(
-                            padding: const EdgeInsets.all(AppDimensions.paddingL),
+                            padding: const EdgeInsets.all(
+                              AppDimensions.paddingL,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.glassBackground,
-                              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusXL,
+                              ),
                               border: Border.all(color: AppColors.glassBorder),
                             ),
                             child: Row(
@@ -65,14 +73,18 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                                   radius: 28,
                                   backgroundColor: AppColors.primary,
                                   child: Text(
-                                    patient?.name.isNotEmpty == true ? patient!.name[0].toUpperCase() : 'P',
-                                    style: AppTextStyles.headlineMedium.copyWith(color: AppColors.onPrimary),
+                                    patient?.name.isNotEmpty == true
+                                        ? patient!.name[0].toUpperCase()
+                                        : 'P',
+                                    style: AppTextStyles.headlineMedium
+                                        .copyWith(color: AppColors.onPrimary),
                                   ),
                                 ),
                                 const SizedBox(width: AppDimensions.paddingM),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Hello, ${patient?.name ?? 'Patient'}',
@@ -82,7 +94,10 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                                       const SizedBox(height: 4),
                                       Text(
                                         '${_getWeekday(today.weekday)}, ${today.day} ${_getMonth(today.month)}',
-                                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                                        style: AppTextStyles.bodyMedium
+                                            .copyWith(
+                                              color: AppColors.textSecondary,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -101,10 +116,13 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                     FadeInUp(
                       duration: const Duration(milliseconds: 400),
                       delay: const Duration(milliseconds: 100),
-                      child: Text('Upcoming Schedule', style: AppTextStyles.titleLarge),
+                      child: Text(
+                        'Upcoming Schedule',
+                        style: AppTextStyles.titleLarge,
+                      ),
                     ),
                     const SizedBox(height: AppDimensions.paddingM),
-                    
+
                     FadeInUp(
                       duration: const Duration(milliseconds: 400),
                       delay: const Duration(milliseconds: 150),
@@ -116,7 +134,10 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                     FadeInUp(
                       duration: const Duration(milliseconds: 400),
                       delay: const Duration(milliseconds: 200),
-                      child: Text('Quick Actions', style: AppTextStyles.titleLarge),
+                      child: Text(
+                        'Quick Actions',
+                        style: AppTextStyles.titleLarge,
+                      ),
                     ),
                     const SizedBox(height: AppDimensions.paddingM),
                     FadeInUp(
@@ -126,16 +147,23 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                         children: [
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: () => Get.toNamed(AppRoutes.checkUpHistory),
+                              onPressed: () =>
+                                  Get.toNamed(AppRoutes.checkUpHistory),
                               icon: const Icon(Icons.history_rounded),
                               label: const Text('Check-up History'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryContainer,
                                 foregroundColor: AppColors.primaryLight,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                                  side: const BorderSide(color: AppColors.glassBorder),
+                                  borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusM,
+                                  ),
+                                  side: const BorderSide(
+                                    color: AppColors.glassBorder,
+                                  ),
                                 ),
                               ),
                             ),
@@ -164,13 +192,24 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.event_available_outlined, size: 64, color: AppColors.textSecondary),
+          const Icon(
+            Icons.event_available_outlined,
+            size: 64,
+            color: AppColors.textSecondary,
+          ),
           const SizedBox(height: AppDimensions.paddingM),
-          Text('No active schedules', style: AppTextStyles.titleLarge.copyWith(color: AppColors.textSecondary)),
+          Text(
+            'No active schedules',
+            style: AppTextStyles.titleLarge.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 8),
           Text(
             'You have no upcoming appointments at the moment.',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -182,9 +221,9 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: BoxDecoration(
-        color: AppColors.primaryContainer.withOpacity(0.3),
+        color: AppColors.primaryContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-        border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +233,11 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.calendar_month_outlined, color: AppColors.primary, size: 20),
+                  const Icon(
+                    Icons.calendar_month_outlined,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     '${appointment.dateTime.day}/${appointment.dateTime.month}/${appointment.dateTime.year}',
@@ -203,27 +246,46 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
                 ),
-                child: Text('Scheduled', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.5),
+                  ),
+                ),
+                child: Text(
+                  'Scheduled',
+                  style: AppTextStyles.labelMedium.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: AppDimensions.paddingM),
           const Divider(color: AppColors.glassBorder),
           const SizedBox(height: AppDimensions.paddingM),
-          
+
           const SizedBox(height: AppDimensions.paddingM),
-          Text('Assigned Doctor', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+          Text(
+            'Assigned Doctor',
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 8),
           Obx(() {
-            final doc = controller.getDoctorForAppointment(appointment.doctorId);
+            final doc = controller.getDoctorForAppointment(
+              appointment.doctorId,
+            );
             if (doc == null) {
-              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              );
             }
             return Container(
               padding: const EdgeInsets.all(AppDimensions.paddingM),
@@ -239,11 +301,20 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: AppColors.primaryContainer,
-                        backgroundImage: doc.profilePicUrl != null && doc.profilePicUrl!.isNotEmpty
+                        backgroundImage:
+                            doc.profilePicUrl != null &&
+                                doc.profilePicUrl!.isNotEmpty
                             ? NetworkImage(doc.profilePicUrl!)
                             : null,
-                        child: doc.profilePicUrl == null || doc.profilePicUrl!.isEmpty
-                            ? Text(doc.name[0].toUpperCase(), style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary))
+                        child:
+                            doc.profilePicUrl == null ||
+                                doc.profilePicUrl!.isEmpty
+                            ? Text(
+                                doc.name[0].toUpperCase(),
+                                style: AppTextStyles.titleLarge.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              )
                             : null,
                       ),
                       const SizedBox(width: AppDimensions.paddingM),
@@ -251,10 +322,17 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Dr. ${doc.name}', style: AppTextStyles.titleLarge),
                             Text(
-                              doc.specializations.isNotEmpty ? doc.specializations.join(', ') : 'General',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              'Dr. ${doc.name}',
+                              style: AppTextStyles.titleLarge,
+                            ),
+                            Text(
+                              doc.specializations.isNotEmpty
+                                  ? doc.specializations.join(', ')
+                                  : 'General',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -265,7 +343,10 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                           // Navigate to Chat Room
                           // Get.toNamed(AppRoutes.chatRoom, arguments: {'doctorId': doc.doctorId});
                         },
-                        icon: const Icon(Icons.chat_bubble_outline_rounded, color: AppColors.primary),
+                        icon: const Icon(
+                          Icons.chat_bubble_outline_rounded,
+                          color: AppColors.primary,
+                        ),
                         tooltip: 'Chat with Doctor',
                       ),
                     ],
@@ -274,8 +355,16 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _DoctorStat(label: 'PMDC', value: doc.pmdc.isNotEmpty ? doc.pmdc : 'N/A'),
-                      _DoctorStat(label: 'Experience', value: doc.experience.isNotEmpty ? doc.experience : 'N/A'),
+                      _DoctorStat(
+                        label: 'PMDC',
+                        value: doc.pmdc.isNotEmpty ? doc.pmdc : 'N/A',
+                      ),
+                      _DoctorStat(
+                        label: 'Experience',
+                        value: doc.experience.isNotEmpty
+                            ? doc.experience
+                            : 'N/A',
+                      ),
                     ],
                   ),
                   // Note: Personal mobile number intentionally hidden (SRS-56)
@@ -283,12 +372,20 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
               ),
             );
           }),
-          
+
           const SizedBox(height: AppDimensions.paddingL),
-          Text('Time Slot', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+          Text(
+            'Time Slot',
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(appointment.notes ?? 'Scheduled Slot', style: AppTextStyles.bodyLarge),
-          
+          Text(
+            appointment.notes ?? 'Scheduled Slot',
+            style: AppTextStyles.bodyLarge,
+          ),
+
           const SizedBox(height: AppDimensions.paddingL),
           SizedBox(
             width: double.infinity,
@@ -298,12 +395,22 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                 // For demo, we just navigate to the screen
                 Get.toNamed(AppRoutes.operationTracking);
               },
-              icon: const Icon(Icons.monitor_heart_outlined, color: AppColors.secondary),
-              label: Text('Track Live OT Status', style: AppTextStyles.labelLarge.copyWith(color: AppColors.secondary)),
+              icon: const Icon(
+                Icons.monitor_heart_outlined,
+                color: AppColors.secondary,
+              ),
+              label: Text(
+                'Track Live OT Status',
+                style: AppTextStyles.labelLarge.copyWith(
+                  color: AppColors.secondary,
+                ),
+              ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.secondary),
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                ),
               ),
             ),
           ),
@@ -320,7 +427,11 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
         clipBehavior: Clip.none,
         children: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary, size: 28),
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.textPrimary,
+              size: 28,
+            ),
             onPressed: () => Get.toNamed(AppRoutes.notificationCenter),
           ),
           if (count > 0)
@@ -333,10 +444,7 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                   color: AppColors.error,
                   shape: BoxShape.circle,
                 ),
-                constraints: const BoxConstraints(
-                  minWidth: 16,
-                  minHeight: 16,
-                ),
+                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
                 child: Text(
                   count > 9 ? '9+' : '$count',
                   style: const TextStyle(
@@ -354,12 +462,33 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
   }
 
   String _getWeekday(int weekday) {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
     return days[weekday - 1];
   }
 
   String _getMonth(int month) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return months[month - 1];
   }
 }
@@ -374,11 +503,18 @@ class _DoctorStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+        Text(
+          label,
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
         const SizedBox(height: 2),
-        Text(value, style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          value,
+          style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+        ),
       ],
     );
   }
 }
-

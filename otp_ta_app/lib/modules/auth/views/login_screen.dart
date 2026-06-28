@@ -37,10 +37,7 @@ class LoginScreen extends GetView<AuthController> {
                 gradient: RadialGradient(
                   center: Alignment(0, -0.6),
                   radius: 1.0,
-                  colors: [
-                    AppColors.primaryContainer,
-                    AppColors.background,
-                  ],
+                  colors: [AppColors.primaryContainer, AppColors.background],
                 ),
               ),
             ),
@@ -78,18 +75,20 @@ class LoginScreen extends GetView<AuthController> {
                           duration: const Duration(milliseconds: 500),
                           delay: const Duration(milliseconds: 100),
                           child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(AppDimensions.radiusXL),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusXL,
+                            ),
                             child: BackdropFilter(
-                              filter:
-                                  ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                              filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                               child: Container(
                                 padding: const EdgeInsets.all(
-                                    AppDimensions.paddingXL),
+                                  AppDimensions.paddingXL,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppColors.glassBackground,
                                   borderRadius: BorderRadius.circular(
-                                      AppDimensions.radiusXL),
+                                    AppDimensions.radiusXL,
+                                  ),
                                   border: Border.all(
                                     color: AppColors.glassBorder,
                                     width: 1,
@@ -101,10 +100,10 @@ class LoginScreen extends GetView<AuthController> {
                                   children: [
                                     // Welcome text
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 200),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 200),
                                       child: Text(
                                         'Welcome Back',
                                         style: AppTextStyles.headlineLarge,
@@ -112,12 +111,13 @@ class LoginScreen extends GetView<AuthController> {
                                       ),
                                     ),
                                     const SizedBox(
-                                        height: AppDimensions.paddingXS),
+                                      height: AppDimensions.paddingXS,
+                                    ),
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 250),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 250),
                                       child: Text(
                                         'Sign in to your account to continue',
                                         style: AppTextStyles.bodyMedium,
@@ -126,14 +126,15 @@ class LoginScreen extends GetView<AuthController> {
                                     ),
 
                                     const SizedBox(
-                                        height: AppDimensions.paddingXL),
+                                      height: AppDimensions.paddingXL,
+                                    ),
 
                                     // ─── Email Field ──────────────────────
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 300),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 300),
                                       child: AppTextField(
                                         controller: emailCtrl,
                                         label: 'Email Address',
@@ -149,14 +150,15 @@ class LoginScreen extends GetView<AuthController> {
                                     ),
 
                                     const SizedBox(
-                                        height: AppDimensions.paddingM),
+                                      height: AppDimensions.paddingM,
+                                    ),
 
                                     // ─── Password Field ───────────────────
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 400),
                                       child: AppPasswordField(
                                         controller: passwordCtrl,
                                         label: 'Password',
@@ -176,51 +178,52 @@ class LoginScreen extends GetView<AuthController> {
                                     ),
 
                                     const SizedBox(
-                                        height: AppDimensions.paddingS),
+                                      height: AppDimensions.paddingS,
+                                    ),
 
                                     // ─── Forgot Password ──────────────────
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 450),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 450),
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: TextButton(
                                           onPressed: () => Get.toNamed(
-                                              AppRoutes.forgotPassword),
+                                            AppRoutes.forgotPassword,
+                                          ),
                                           style: TextButton.styleFrom(
                                             padding: EdgeInsets.zero,
                                             minimumSize: Size.zero,
-                                            tapTargetSize:
-                                                MaterialTapTargetSize
-                                                    .shrinkWrap,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
                                           ),
                                           child: Text(
                                             'Forgot Password?',
-                                            style:
-                                                AppTextStyles.labelMedium.copyWith(
-                                              color: AppColors.textLink,
-                                            ),
+                                            style: AppTextStyles.labelMedium
+                                                .copyWith(
+                                                  color: AppColors.textLink,
+                                                ),
                                           ),
                                         ),
                                       ),
                                     ),
 
                                     const SizedBox(
-                                        height: AppDimensions.paddingXL),
+                                      height: AppDimensions.paddingXL,
+                                    ),
 
                                     // ─── Sign In Button ───────────────────
                                     FadeInUp(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      delay:
-                                          const Duration(milliseconds: 500),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      delay: const Duration(milliseconds: 500),
                                       child: Obx(
                                         () => PrimaryButton(
                                           label: 'Sign In',
-                                          isLoading:
-                                              controller.isLoading.value,
+                                          isLoading: controller.isLoading.value,
                                           icon: Icons.login_rounded,
                                           onPressed: () {
                                             if (formKey.currentState!

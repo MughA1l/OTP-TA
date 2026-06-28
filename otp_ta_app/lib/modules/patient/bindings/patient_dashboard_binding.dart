@@ -16,7 +16,7 @@ class PatientDashboardBinding extends Bindings {
     Get.lazyPut<IPatientRepository>(() => PatientRepositoryImpl());
     Get.lazyPut<IAppointmentRepository>(() => AppointmentRepositoryImpl());
     Get.lazyPut<IDoctorRepository>(() => DoctorRepositoryImpl());
-    
+
     Get.lazyPut<PatientDashboardController>(
       () => PatientDashboardController(
         authController: Get.find<AuthController>(),

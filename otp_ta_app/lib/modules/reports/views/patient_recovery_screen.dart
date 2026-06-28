@@ -21,9 +21,15 @@ class PatientRecoveryScreen extends GetView<ReportController> {
       appBar: AppBar(
         backgroundColor: AppColors.surfaceElevated,
         elevation: 1,
-        title: Text('Patient Recovery Analytics', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'Patient Recovery Analytics',
+          style: AppTextStyles.headlineMedium,
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         actions: [
@@ -31,7 +37,10 @@ class PatientRecoveryScreen extends GetView<ReportController> {
             final stats = controller.recoveryStats;
             if (stats.isEmpty) return const SizedBox.shrink();
             return IconButton(
-              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              icon: const Icon(
+                Icons.picture_as_pdf_rounded,
+                color: AppColors.primaryLight,
+              ),
               onPressed: () => PdfGenerator.generateRecoverySummaryPdf(stats),
               tooltip: 'Export PDF',
             );
@@ -59,7 +68,9 @@ class PatientRecoveryScreen extends GetView<ReportController> {
                   final stats = controller.recoveryStats;
                   final total = stats['totalWithOutcome'] ?? 0;
                   final rate = stats['readmissionRate'] ?? 0.0;
-                  final avgHours = stats['distribution'] != null ? 3.8 : 0.0; // Mock average fallback
+                  final avgHours = stats['distribution'] != null
+                      ? 3.8
+                      : 0.0; // Mock average fallback
 
                   return GridView.count(
                     crossAxisCount: isDesktop ? 3 : 1,
@@ -110,7 +121,9 @@ class PatientRecoveryScreen extends GetView<ReportController> {
                   child: Card(
                     color: AppColors.surfaceElevated,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusL,
+                      ),
                       side: const BorderSide(color: AppColors.glassBorder),
                     ),
                     child: Padding(
@@ -118,18 +131,28 @@ class PatientRecoveryScreen extends GetView<ReportController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Recovery Time Distribution', style: AppTextStyles.titleLarge),
+                          Text(
+                            'Recovery Time Distribution',
+                            style: AppTextStyles.titleLarge,
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             'Displays distribution of duration spent in recovery rooms (live-updating)',
-                            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textTertiary,
+                            ),
                           ),
                           const SizedBox(height: AppDimensions.paddingXL),
                           SizedBox(
                             height: 350,
                             child: Obx(() {
-                              final dist = controller.recoveryStats['distribution'] as Map<String, dynamic>? ?? {};
-                              return _RecoveryDistributionBarChart(distribution: dist);
+                              final dist =
+                                  controller.recoveryStats['distribution']
+                                      as Map<String, dynamic>? ??
+                                  {};
+                              return _RecoveryDistributionBarChart(
+                                distribution: dist,
+                              );
                             }),
                           ),
                         ],
@@ -146,7 +169,13 @@ class PatientRecoveryScreen extends GetView<ReportController> {
   }
 
   Widget _buildFiltersPanel() {
-    final procedures = ['All Procedures', 'General', 'Orthopaedic', 'Cardiothoracic', 'Neurological'];
+    final procedures = [
+      'All Procedures',
+      'General',
+      'Orthopaedic',
+      'Cardiothoracic',
+      'Neurological',
+    ];
 
     return Card(
       color: AppColors.surfaceElevated,
@@ -167,7 +196,12 @@ class PatientRecoveryScreen extends GetView<ReportController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Age Demographic', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textTertiary)),
+                Text(
+                  'Age Demographic',
+                  style: AppTextStyles.labelMedium.copyWith(
+                    color: AppColors.textTertiary,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -186,10 +220,17 @@ class PatientRecoveryScreen extends GetView<ReportController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Procedure Type', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textTertiary)),
+                Text(
+                  'Procedure Type',
+                  style: AppTextStyles.labelMedium.copyWith(
+                    color: AppColors.textTertiary,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Obx(() {
-                  final active = controller.selectedSurgeryType.value.isEmpty ? 'All Procedures' : controller.selectedSurgeryType.value;
+                  final active = controller.selectedSurgeryType.value.isEmpty
+                      ? 'All Procedures'
+                      : controller.selectedSurgeryType.value;
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
@@ -209,7 +250,9 @@ class PatientRecoveryScreen extends GetView<ReportController> {
                         }).toList(),
                         onChanged: (val) {
                           if (val != null) {
-                            controller.filterByType(val == 'All Procedures' ? '' : val);
+                            controller.filterByType(
+                              val == 'All Procedures' ? '' : val,
+                            );
                           }
                         },
                       ),
@@ -237,13 +280,15 @@ class PatientRecoveryScreen extends GetView<ReportController> {
               controller.changeDemographic(val);
             }
           },
-          selectedColor: AppColors.primary.withOpacity(0.3),
+          selectedColor: AppColors.primary.withValues(alpha: 0.3),
           backgroundColor: Colors.transparent,
           side: BorderSide(
             color: isSelected ? AppColors.primaryLight : AppColors.glassBorder,
           ),
           labelStyle: AppTextStyles.labelMedium.copyWith(
-            color: isSelected ? AppColors.primaryLight : AppColors.textSecondary,
+            color: isSelected
+                ? AppColors.primaryLight
+                : AppColors.textSecondary,
           ),
         ),
       );
@@ -281,7 +326,7 @@ class _StatCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: Icon(icon, color: color, size: 28),
@@ -294,7 +339,9 @@ class _StatCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.labelMedium.copyWith(color: AppColors.textTertiary),
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -320,10 +367,13 @@ class _RecoveryDistributionBarChart extends StatefulWidget {
   const _RecoveryDistributionBarChart({required this.distribution});
 
   @override
-  State<_RecoveryDistributionBarChart> createState() => _RecoveryDistributionBarChartState();
+  State<_RecoveryDistributionBarChart> createState() =>
+      _RecoveryDistributionBarChartState();
 }
 
-class _RecoveryDistributionBarChartState extends State<_RecoveryDistributionBarChart> with SingleTickerProviderStateMixin {
+class _RecoveryDistributionBarChartState
+    extends State<_RecoveryDistributionBarChart>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _scaleAnimation;
 
@@ -358,7 +408,7 @@ class _RecoveryDistributionBarChartState extends State<_RecoveryDistributionBarC
   Widget build(BuildContext context) {
     final categories = ['< 2h', '2-4h', '4-8h', '> 8h'];
     final List<BarChartGroupData> barGroups = [];
-    
+
     int index = 0;
     for (var cat in categories) {
       final count = widget.distribution[cat] ?? 0;
@@ -409,8 +459,12 @@ class _RecoveryDistributionBarChartState extends State<_RecoveryDistributionBarC
             barGroups: animatedGroups,
             titlesData: FlTitlesData(
               show: true,
-              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
@@ -431,7 +485,10 @@ class _RecoveryDistributionBarChartState extends State<_RecoveryDistributionBarC
                     if (idx >= 0 && idx < categories.length) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 8),
-                        child: Text(categories[idx], style: AppTextStyles.bodySmall),
+                        child: Text(
+                          categories[idx],
+                          style: AppTextStyles.bodySmall,
+                        ),
                       );
                     }
                     return const SizedBox.shrink();

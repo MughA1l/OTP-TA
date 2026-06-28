@@ -27,10 +27,15 @@ class DoctorListScreen extends GetView<DoctorManagementController> {
             padding: const EdgeInsets.only(right: AppDimensions.paddingM),
             child: ElevatedButton.icon(
               onPressed: () => Get.toNamed(AppRoutes.addEditDoctor),
-              icon: const Icon(Icons.person_add_rounded, color: AppColors.onPrimary),
+              icon: const Icon(
+                Icons.person_add_rounded,
+                color: AppColors.onPrimary,
+              ),
               label: Text(
                 'Add Doctor',
-                style: AppTextStyles.labelLarge.copyWith(color: AppColors.onPrimary),
+                style: AppTextStyles.labelLarge.copyWith(
+                  color: AppColors.onPrimary,
+                ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -62,8 +67,11 @@ class DoctorListScreen extends GetView<DoctorManagementController> {
             // List
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value && controller.filteredDoctorList.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                if (controller.isLoading.value &&
+                    controller.filteredDoctorList.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  );
                 }
 
                 if (controller.filteredDoctorList.isEmpty) {
@@ -71,11 +79,17 @@ class DoctorListScreen extends GetView<DoctorManagementController> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.medical_services_outlined, color: AppColors.textSecondary, size: 64),
+                        Icon(
+                          Icons.medical_services_outlined,
+                          color: AppColors.textSecondary,
+                          size: 64,
+                        ),
                         const SizedBox(height: AppDimensions.paddingM),
                         Text(
                           'No doctors found.',
-                          style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ],
                     ),
@@ -122,7 +136,9 @@ class _DoctorCard extends StatelessWidget {
           radius: 28,
           child: Text(
             doctor.name.isNotEmpty ? doctor.name[0].toUpperCase() : 'D',
-            style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary),
+            style: AppTextStyles.headlineMedium.copyWith(
+              color: AppColors.primary,
+            ),
           ),
         ),
         title: Text(doctor.name, style: AppTextStyles.titleLarge),
@@ -132,12 +148,18 @@ class _DoctorCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               doctor.specializations.join(' • '),
-              style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.primary,
+              ),
             ),
             const SizedBox(height: 2),
             Row(
               children: [
-                Icon(Icons.badge_outlined, size: 14, color: AppColors.textSecondary),
+                Icon(
+                  Icons.badge_outlined,
+                  size: 14,
+                  color: AppColors.textSecondary,
+                ),
                 const SizedBox(width: 4),
                 Text('PMDC: ${doctor.pmdc}', style: AppTextStyles.bodyMedium),
               ],
@@ -146,7 +168,8 @@ class _DoctorCard extends StatelessWidget {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
-          onPressed: () => Get.toNamed(AppRoutes.addEditDoctor, arguments: doctor),
+          onPressed: () =>
+              Get.toNamed(AppRoutes.addEditDoctor, arguments: doctor),
         ),
         onTap: () => Get.toNamed(AppRoutes.addEditDoctor, arguments: doctor),
       ),

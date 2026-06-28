@@ -9,20 +9,29 @@ enum UserStatus { active, deactivated, suspended }
 extension UserRoleExtension on UserRole {
   String get name {
     switch (this) {
-      case UserRole.admin:        return 'admin';
-      case UserRole.receptionist: return 'receptionist';
-      case UserRole.doctor:       return 'doctor';
-      case UserRole.patient:      return 'patient';
+      case UserRole.admin:
+        return 'admin';
+      case UserRole.receptionist:
+        return 'receptionist';
+      case UserRole.doctor:
+        return 'doctor';
+      case UserRole.patient:
+        return 'patient';
     }
   }
 
   static UserRole fromString(String value) {
     switch (value) {
-      case 'admin':        return UserRole.admin;
-      case 'receptionist': return UserRole.receptionist;
-      case 'doctor':       return UserRole.doctor;
-      case 'patient':      return UserRole.patient;
-      default:             return UserRole.patient;
+      case 'admin':
+        return UserRole.admin;
+      case 'receptionist':
+        return UserRole.receptionist;
+      case 'doctor':
+        return UserRole.doctor;
+      case 'patient':
+        return UserRole.patient;
+      default:
+        return UserRole.patient;
     }
   }
 }
@@ -30,18 +39,25 @@ extension UserRoleExtension on UserRole {
 extension UserStatusExtension on UserStatus {
   String get name {
     switch (this) {
-      case UserStatus.active:      return 'active';
-      case UserStatus.deactivated: return 'deactivated';
-      case UserStatus.suspended:   return 'suspended';
+      case UserStatus.active:
+        return 'active';
+      case UserStatus.deactivated:
+        return 'deactivated';
+      case UserStatus.suspended:
+        return 'suspended';
     }
   }
 
   static UserStatus fromString(String value) {
     switch (value) {
-      case 'active':      return UserStatus.active;
-      case 'deactivated': return UserStatus.deactivated;
-      case 'suspended':   return UserStatus.suspended;
-      default:            return UserStatus.active;
+      case 'active':
+        return UserStatus.active;
+      case 'deactivated':
+        return UserStatus.deactivated;
+      case 'suspended':
+        return UserStatus.suspended;
+      default:
+        return UserStatus.active;
     }
   }
 }
@@ -56,7 +72,7 @@ class UserModel {
   final String? displayName;
   final String? fcmToken;
   final bool isFirstLogin;
-  final DateTime? tokenExpiry;   // For first-login password reset (SRS-96)
+  final DateTime? tokenExpiry; // For first-login password reset (SRS-96)
   final DateTime createdAt;
 
   const UserModel({
@@ -76,7 +92,9 @@ class UserModel {
       uid: uid,
       email: map['email'] as String? ?? '',
       role: UserRoleExtension.fromString(map['role'] as String? ?? 'patient'),
-      status: UserStatusExtension.fromString(map['status'] as String? ?? 'active'),
+      status: UserStatusExtension.fromString(
+        map['status'] as String? ?? 'active',
+      ),
       displayName: map['displayName'] as String?,
       fcmToken: map['fcmToken'] as String?,
       isFirstLogin: map['isFirstLogin'] as bool? ?? false,

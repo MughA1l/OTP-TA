@@ -8,19 +8,28 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<Either<Failure, String>> bookAppointment(AppointmentModel appointment) async {
+  Future<Either<Failure, String>> bookAppointment(
+    AppointmentModel appointment,
+  ) async {
     try {
-      final docRef = await _firestore.collection('appointments').add(appointment.toMap());
+      final docRef = await _firestore
+          .collection('appointments')
+          .add(appointment.toMap());
       return Right(docRef.id);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to book appointment.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to book appointment.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> reschedule(String appointmentId, DateTime newDateTime) async {
+  Future<Either<Failure, void>> reschedule(
+    String appointmentId,
+    DateTime newDateTime,
+  ) async {
     try {
       await _firestore.collection('appointments').doc(appointmentId).update({
         'dateTime': Timestamp.fromDate(newDateTime),
@@ -28,7 +37,11 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
       });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to reschedule appointment.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to reschedule appointment.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -43,22 +56,28 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
       });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to cancel appointment.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to cancel appointment.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> updateStatus(String appointmentId, AppointmentStatus status) async {
+  Future<Either<Failure, void>> updateStatus(
+    String appointmentId,
+    AppointmentStatus status,
+  ) async {
     try {
-      await _firestore
-          .collection('appointments')
-          .doc(appointmentId)
-          .update({'status': status.name});
+      await _firestore.collection('appointments').doc(appointmentId).update({
+        'status': status.name,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update status.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to update status.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -70,7 +89,11 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
         .collection('appointments')
         .orderBy('dateTime', descending: false)
         .snapshots()
-        .map((snap) => snap.docs.map((d) => AppointmentModel.fromMap(d.data(), d.id)).toList());
+        .map(
+          (snap) => snap.docs
+              .map((d) => AppointmentModel.fromMap(d.data(), d.id))
+              .toList(),
+        );
   }
 
   @override
@@ -80,7 +103,11 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
         .where('doctorId', isEqualTo: doctorId)
         .orderBy('dateTime', descending: false)
         .snapshots()
-        .map((snap) => snap.docs.map((d) => AppointmentModel.fromMap(d.data(), d.id)).toList());
+        .map(
+          (snap) => snap.docs
+              .map((d) => AppointmentModel.fromMap(d.data(), d.id))
+              .toList(),
+        );
   }
 
   @override
@@ -90,6 +117,10 @@ class AppointmentRepositoryImpl implements IAppointmentRepository {
         .where('patientId', isEqualTo: patientId)
         .orderBy('dateTime', descending: false)
         .snapshots()
-        .map((snap) => snap.docs.map((d) => AppointmentModel.fromMap(d.data(), d.id)).toList());
+        .map(
+          (snap) => snap.docs
+              .map((d) => AppointmentModel.fromMap(d.data(), d.id))
+              .toList(),
+        );
   }
 }

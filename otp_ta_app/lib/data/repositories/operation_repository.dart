@@ -9,10 +9,15 @@ abstract class IOperationRepository {
   Future<Either<Failure, OperationModel>> fetchOperation(String operationId);
 
   /// Fetch an operation tied to a specific appointment
-  Future<Either<Failure, OperationModel?>> fetchOperationByAppointment(String appointmentId);
+  Future<Either<Failure, OperationModel?>> fetchOperationByAppointment(
+    String appointmentId,
+  );
 
   /// Update the status of an operation
-  Future<Either<Failure, void>> updateStatus(String operationId, OperationStatus status);
+  Future<Either<Failure, void>> updateStatus(
+    String operationId,
+    OperationStatus status,
+  );
 
   /// Watch operation by its ID for real-time updates (SRS-53)
   Stream<OperationModel?> watchOperation(String operationId);
@@ -24,7 +29,10 @@ abstract class IOperationRepository {
   Future<Either<Failure, String>> createOperation(OperationModel operation);
 
   /// Assign surgical team to an operation (SRS-66, SRS-69)
-  Future<Either<Failure, void>> assignSurgicalTeam(String operationId, SurgicalTeamModel team);
+  Future<Either<Failure, void>> assignSurgicalTeam(
+    String operationId,
+    SurgicalTeamModel team,
+  );
 
   /// Update surgical team and append audit log (SRS-67, SRS-68, SRS-70)
   Future<Either<Failure, void>> updateSurgicalTeam(
@@ -34,7 +42,10 @@ abstract class IOperationRepository {
   );
 
   /// Record outcome of an operation (SRS-72, SRS-73)
-  Future<Either<Failure, void>> recordOutcome(String operationId, OperationOutcomeModel outcome);
+  Future<Either<Failure, void>> recordOutcome(
+    String operationId,
+    OperationOutcomeModel outcome,
+  );
 
   /// Watch the most recent operation status of a patient in real-time
   Stream<OperationModel?> watchPatientOperationStatus(String patientId);
@@ -47,5 +58,8 @@ abstract class IOperationRepository {
   });
 
   /// Upload report to Cloudinary and append URL to operation reportUrls (SRS-76, SRS-78)
-  Future<Either<Failure, String>> uploadMedicalReport(File file, String operationId);
+  Future<Either<Failure, String>> uploadMedicalReport(
+    File file,
+    String operationId,
+  );
 }

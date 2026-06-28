@@ -7,13 +7,19 @@ abstract class IAppointmentRepository {
   Future<Either<Failure, String>> bookAppointment(AppointmentModel appointment);
 
   /// Reschedule an existing appointment (SRS-43)
-  Future<Either<Failure, void>> reschedule(String appointmentId, DateTime newDateTime);
+  Future<Either<Failure, void>> reschedule(
+    String appointmentId,
+    DateTime newDateTime,
+  );
 
   /// Cancel an appointment – frees the slot (SRS-44)
   Future<Either<Failure, void>> cancel(String appointmentId);
 
   /// Update appointment status
-  Future<Either<Failure, void>> updateStatus(String appointmentId, AppointmentStatus status);
+  Future<Either<Failure, void>> updateStatus(
+    String appointmentId,
+    AppointmentStatus status,
+  );
 
   /// Watch all appointments (real-time)
   Stream<List<AppointmentModel>> watchAllAppointments();

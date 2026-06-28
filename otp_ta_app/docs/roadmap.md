@@ -633,35 +633,35 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ### 12.1 UI/UX Polish
 
-- `[F]` Review all screens for animation consistency (refer to Animation Guidelines)
-- `[F]` Add skeleton shimmer loaders to every list/data screen during loading
-- `[F]` Implement `empty_state_widget.dart` on all lists (clear illustration + message)
-- `[F]` Ensure all snackbars use `SnackbarHelper` (no raw `ScaffoldMessenger`)
-- `[F]` Review responsive layout on: Android phone, Android tablet, Web 1366×768, Web 1920×1080
-- `[F]` Implement auto-logout after inactivity (timer in shell controllers)
-- `[F]` Confirm all string literals moved to `app_strings.dart`
-- `[F]` Add `Hero` transitions between list cards and detail screens for smooth navigation
-- `[F]` Optimize image loading with `CachedNetworkImage` on all profile pictures
+- `[x] [F]` Review all screens for animation consistency (refer to Animation Guidelines)
+- `[x] [F]` Add skeleton shimmer loaders to every list/data screen during loading
+- `[x] [F]` Implement `empty_state_widget.dart` on all lists (clear illustration + message)
+- `[x] [F]` Ensure all snackbars use `SnackbarHelper` (no raw `ScaffoldMessenger`)
+- `[x] [F]` Review responsive layout on: Android phone, Android tablet, Web 1366×768, Web 1920×1080
+- `[x] [F]` Implement auto-logout after inactivity (timer in shell controllers)
+- `[x] [F]` Confirm all string literals moved to `app_strings.dart`
+- `[x] [F]` Add `Hero` transitions between list cards and detail screens for smooth navigation
+- `[x] [F]` Optimize image loading with `CachedNetworkImage` on all profile pictures
 
-### 12.2 Security Hardening
+### ✅ 12.2 Security Hardening
 
-- `[B]` Lock Firestore Security Rules (remove test mode, implement full RBAC rules)
-- `[B]` Set up Firebase App Check for API abuse prevention
-- `[B]` Review all Cloudinary upload presets (restrict to allowed file types only)
-- `[B]` Set FCM server key restrictions
-- `[B]` Enable Firebase Audit Logs
+- `[x] [B]` Lock Firestore Security Rules (remove test mode, implement full RBAC rules)
+- `[x] [B]` Set up Firebase App Check for API abuse prevention
+- `[x] [B]` Review all Cloudinary upload presets (restrict to allowed file types only)
+- `[x] [B]` Set FCM server key restrictions
+- `[x] [B]` Enable Firebase Audit Logs
 
-### 12.3 Testing
+### ✅ 12.3 Testing
 
-- `[F]` Unit tests for all `validators.dart` functions
-- `[F]` Unit tests for all Repository `fromMap()`/`toMap()` model parsing
-- `[F]` Widget tests for critical shared widgets: `AppTextField`, `PrimaryButton`, `StatusChip`
-- `[F]` Integration test: Full sign-in flow (email → role-based routing)
-- `[F]` Integration test: Create operation → assign team → update status → patient sees update
-- `[B]` Test all Render.com endpoints locally using Postman or REST Client before deploying
-- `[B]` Use `firebase emulators:start` to test Firestore rules and Auth locally
-- `[F]` Test on minimum spec Android device (Android 6.0, API 23)
-- `[F]` Test web portal on Chrome, Firefox, and Edge (SRS-2.4.1)
+- `[x] [F]` Unit tests for all `validators.dart` functions
+- `[x] [F]` Unit tests for all Repository `fromMap()`/`toMap()` model parsing
+- `[x] [F]` Widget tests for critical shared widgets: `AppTextField`, `PrimaryButton`, `StatusChip`
+- `[x] [F]` Integration test: Full sign-in flow (email → role-based routing)
+- `[x] [F]` Integration test: Create operation → assign team → update status → patient sees update
+- `[x] [B]` Test all Render.com endpoints locally using Postman or REST Client before deploying
+- `[x] [B]` Use `firebase emulators:start` to test Firestore rules and Auth locally
+- `[x] [F]` Test on minimum spec Android device (Android 6.0, API 23)
+- `[x] [F]` Test web portal on Chrome, Firefox, and Edge (SRS-2.4.1)
 
 ### 12.4 Deployment
 

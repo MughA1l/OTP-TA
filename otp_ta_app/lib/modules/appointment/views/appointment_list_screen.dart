@@ -24,8 +24,16 @@ class AppointmentListScreen extends GetView<AppointmentController> {
             padding: const EdgeInsets.only(right: AppDimensions.paddingM),
             child: ElevatedButton.icon(
               onPressed: () => Get.toNamed(AppRoutes.bookAppointment),
-              icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.onPrimary),
-              label: Text('Book', style: AppTextStyles.labelLarge.copyWith(color: AppColors.onPrimary)),
+              icon: const Icon(
+                Icons.add_circle_outline_rounded,
+                color: AppColors.onPrimary,
+              ),
+              label: Text(
+                'Book',
+                style: AppTextStyles.labelLarge.copyWith(
+                  color: AppColors.onPrimary,
+                ),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
@@ -39,17 +47,29 @@ class AppointmentListScreen extends GetView<AppointmentController> {
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.paddingL),
         child: Obx(() {
-          if (controller.isLoading.value && controller.allAppointments.isEmpty) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          if (controller.isLoading.value &&
+              controller.allAppointments.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
           if (controller.allAppointments.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.event_note_rounded, size: 64, color: AppColors.textSecondary),
+                  Icon(
+                    Icons.event_note_rounded,
+                    size: 64,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(height: AppDimensions.paddingM),
-                  Text('No appointments yet.', style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary)),
+                  Text(
+                    'No appointments yet.',
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -107,7 +127,9 @@ class _AppointmentCard extends GetView<AppointmentController> {
                       const SizedBox(height: 2),
                       Text(
                         'Dr. ${appointment.doctorId}',
-                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -118,7 +140,11 @@ class _AppointmentCard extends GetView<AppointmentController> {
             const SizedBox(height: AppDimensions.paddingS),
             Row(
               children: [
-                const Icon(Icons.access_time_rounded, color: AppColors.textSecondary, size: 16),
+                const Icon(
+                  Icons.access_time_rounded,
+                  color: AppColors.textSecondary,
+                  size: 16,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '${appointment.dateTime.day}/${appointment.dateTime.month}/${appointment.dateTime.year}  ${appointment.notes ?? ''}',
@@ -138,7 +164,8 @@ class _AppointmentCard extends GetView<AppointmentController> {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: context,
-                        initialDate: appointment.dateTime.isAfter(DateTime.now())
+                        initialDate:
+                            appointment.dateTime.isAfter(DateTime.now())
                             ? appointment.dateTime
                             : DateTime.now().add(const Duration(days: 1)),
                         firstDate: DateTime.now(),
@@ -154,7 +181,10 @@ class _AppointmentCard extends GetView<AppointmentController> {
                         ),
                       );
                       if (picked != null) {
-                        controller.reschedule(appointment.appointmentId, picked);
+                        controller.reschedule(
+                          appointment.appointmentId,
+                          picked,
+                        );
                       }
                     },
                   ),
@@ -163,16 +193,22 @@ class _AppointmentCard extends GetView<AppointmentController> {
                     label: 'Cancel',
                     icon: Icons.cancel_outlined,
                     color: AppColors.error,
-                    onTap: () => Get.dialog(_CancelConfirmDialog(
-                      onConfirm: () => controller.cancel(appointment.appointmentId),
-                    )),
+                    onTap: () => Get.dialog(
+                      _CancelConfirmDialog(
+                        onConfirm: () =>
+                            controller.cancel(appointment.appointmentId),
+                      ),
+                    ),
                   ),
                   const SizedBox(width: AppDimensions.paddingM),
                   _actionButton(
                     label: 'Completed',
                     icon: Icons.check_circle_outline,
                     color: AppColors.success,
-                    onTap: () => controller.updateStatus(appointment.appointmentId, AppointmentStatus.completed),
+                    onTap: () => controller.updateStatus(
+                      appointment.appointmentId,
+                      AppointmentStatus.completed,
+                    ),
                   ),
                 ],
               ),
@@ -197,16 +233,19 @@ class _AppointmentCard extends GetView<AppointmentController> {
           vertical: AppDimensions.paddingXS,
         ),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.15),
+          color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          border: Border.all(color: color.withOpacity(0.4)),
+          border: Border.all(color: color.withValues(alpha: 0.4)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 14, color: color),
             const SizedBox(width: 4),
-            Text(label, style: AppTextStyles.labelMedium.copyWith(color: color)),
+            Text(
+              label,
+              style: AppTextStyles.labelMedium.copyWith(color: color),
+            ),
           ],
         ),
       ),
@@ -246,11 +285,14 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
-      child: Text(label, style: AppTextStyles.labelMedium.copyWith(color: color)),
+      child: Text(
+        label,
+        style: AppTextStyles.labelMedium.copyWith(color: color),
+      ),
     );
   }
 }
@@ -266,11 +308,19 @@ class _CancelConfirmDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: AppColors.surface,
       title: Text('Cancel Appointment', style: AppTextStyles.titleLarge),
-      content: Text('This will free up the time slot immediately. Are you sure?', style: AppTextStyles.bodyLarge),
+      content: Text(
+        'This will free up the time slot immediately. Are you sure?',
+        style: AppTextStyles.bodyLarge,
+      ),
       actions: [
         TextButton(
           onPressed: () => Get.back(),
-          child: Text('No', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+          child: Text(
+            'No',
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
         ),
         ElevatedButton(
           onPressed: () {
@@ -278,7 +328,12 @@ class _CancelConfirmDialog extends StatelessWidget {
             onConfirm();
           },
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-          child: Text('Yes, Cancel', style: AppTextStyles.labelLarge.copyWith(color: AppColors.onPrimary)),
+          child: Text(
+            'Yes, Cancel',
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.onPrimary,
+            ),
+          ),
         ),
       ],
     );

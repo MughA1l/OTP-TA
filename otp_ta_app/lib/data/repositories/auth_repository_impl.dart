@@ -12,7 +12,10 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   // ─── Sign In ──────────────────────────────────────────────────────────────
   @override
-  Future<Either<Failure, UserModel>> signIn(String email, String password) async {
+  Future<Either<Failure, UserModel>> signIn(
+    String email,
+    String password,
+  ) async {
     try {
       final credential = await _auth.signInWithEmailAndPassword(
         email: email.trim(),
@@ -26,7 +29,9 @@ class AuthRepositoryImpl implements IAuthRepository {
           .get();
 
       if (!doc.exists) {
-        return Left(AuthFailure(message: 'User profile not found. Contact admin.'));
+        return Left(
+          AuthFailure(message: 'User profile not found. Contact admin.'),
+        );
       }
 
       final user = UserModel.fromMap(doc.data()!, uid);
@@ -34,9 +39,11 @@ class AuthRepositoryImpl implements IAuthRepository {
       // SRS-32: Check account status
       if (user.isDeactivated) {
         await _auth.signOut();
-        return Left(AuthFailure(
-          message: 'Your Account Has Been Deactivated. Please Contact Admin.',
-        ));
+        return Left(
+          AuthFailure(
+            message: 'Your Account Has Been Deactivated. Please Contact Admin.',
+          ),
+        );
       }
 
       return Right(user);
@@ -94,10 +101,9 @@ class AuthRepositoryImpl implements IAuthRepository {
       await user.updatePassword(newPassword);
 
       // Mark isFirstLogin = false in Firestore (SRS-96)
-      await _firestore
-          .collection(FirebaseConstants.users)
-          .doc(user.uid)
-          .update({'isFirstLogin': false});
+      await _firestore.collection(FirebaseConstants.users).doc(user.uid).update(
+        {'isFirstLogin': false},
+      );
 
       return const Right(null);
     } on FirebaseAuthException catch (e) {
@@ -137,10 +143,9 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Future<Either<Failure, void>> updateFcmToken(String uid, String token) async {
     try {
-      await _firestore
-          .collection(FirebaseConstants.users)
-          .doc(uid)
-          .update({'fcmToken': token});
+      await _firestore.collection(FirebaseConstants.users).doc(uid).update({
+        'fcmToken': token,
+      });
       return const Right(null);
     } catch (e) {
       return Left(FirestoreFailure(message: 'Failed to update FCM token.'));
@@ -157,18 +162,19 @@ class AuthRepositoryImpl implements IAuthRepository {
   // ─── Firebase Error Code Mapper ───────────────────────────────────────────
   String _mapAuthError(String code) {
     return switch (code) {
-      'user-not-found'           => 'No account found for this email.',
-      'wrong-password'           => 'Invalid email or password.',
-      'invalid-credential'       => 'Invalid email or password.',
-      'user-disabled'            => 'Your Account Has Been Deactivated. Please Contact Admin.',
-      'email-already-in-use'    => 'An account already exists with this email.',
-      'weak-password'            => 'Password is too weak.',
-      'invalid-email'            => 'The email address is badly formatted.',
-      'network-request-failed'   => 'No internet connection.',
-      'too-many-requests'        => 'Too many login attempts. Try again later.',
-      'requires-recent-login'    => 'Please sign in again before changing your password.',
-      'wrong-password' || 'invalid-credential' => 'Current password is incorrect.',
-      _                          => 'An unexpected error occurred.',
+      'user-not-found' => 'No account found for this email.',
+      'invalid-credential' => 'Invalid email or password.',
+      'user-disabled' =>
+        'Your Account Has Been Deactivated. Please Contact Admin.',
+      'email-already-in-use' => 'An account already exists with this email.',
+      'weak-password' => 'Password is too weak.',
+      'invalid-email' => 'The email address is badly formatted.',
+      'network-request-failed' => 'No internet connection.',
+      'too-many-requests' => 'Too many login attempts. Try again later.',
+      'requires-recent-login' =>
+        'Please sign in again before changing your password.',
+      'wrong-password' => 'Current password is incorrect.',
+      _ => 'An unexpected error occurred.',
     };
   }
 }

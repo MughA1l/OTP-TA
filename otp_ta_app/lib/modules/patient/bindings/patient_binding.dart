@@ -8,7 +8,9 @@ class PatientBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<IPatientRepository>(() => PatientRepositoryImpl());
     Get.lazyPut<PatientManagementController>(
-      () => PatientManagementController(patientRepository: Get.find<IPatientRepository>()),
+      () => PatientManagementController(
+        patientRepository: Get.find<IPatientRepository>(),
+      ),
     );
   }
 }

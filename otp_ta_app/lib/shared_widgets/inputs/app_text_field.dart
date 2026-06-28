@@ -52,8 +52,12 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary),
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+        labelStyle: AppTextStyles.labelMedium.copyWith(
+          color: AppColors.textSecondary,
+        ),
+        hintStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textTertiary,
+        ),
         prefixIcon: prefixIcon != null
             ? Icon(prefixIcon, color: AppColors.textSecondary, size: 20)
             : null,
@@ -66,15 +70,24 @@ class AppTextField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.borderDefault,
+            width: 1,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.borderDefault,
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderFocused, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.borderFocused,
+            width: 1.5,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -82,9 +95,14 @@ class AppTextField extends StatelessWidget {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderError, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.borderError,
+            width: 1.5,
+          ),
         ),
-        errorStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.errorLight),
+        errorStyle: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.errorLight,
+        ),
       ),
     );
   }

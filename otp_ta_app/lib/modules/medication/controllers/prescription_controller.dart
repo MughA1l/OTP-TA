@@ -7,12 +7,13 @@ import '../../../data/repositories/medication_repository.dart';
 class PrescriptionController extends GetxController {
   final IMedicationRepository _medicationRepository;
 
-  PrescriptionController({
-    required IMedicationRepository medicationRepository,
-  }) : _medicationRepository = medicationRepository;
+  PrescriptionController({required IMedicationRepository medicationRepository})
+    : _medicationRepository = medicationRepository;
 
   final RxBool isLoading = false.obs;
-  final Rx<PrescriptionModel?> selectedPrescription = Rx<PrescriptionModel?>(null);
+  final Rx<PrescriptionModel?> selectedPrescription = Rx<PrescriptionModel?>(
+    null,
+  );
   final RxList<PrescriptionModel> prescriptionList = <PrescriptionModel>[].obs;
 
   /// Creates a new prescription record (SRS-82, SRS-83)
@@ -22,7 +23,10 @@ class PrescriptionController extends GetxController {
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (docId) {
-        SnackbarHelper.showSuccess('Success', 'Prescription Added Successfully');
+        SnackbarHelper.showSuccess(
+          'Success',
+          'Prescription Added Successfully',
+        );
         Get.back(); // Navigate back to detail view
       },
     );
@@ -37,7 +41,8 @@ class PrescriptionController extends GetxController {
     required String newDosage,
   }) async {
     isLoading.value = true;
-    final currentUserId = Get.find<AuthController>().currentUser.value?.uid ?? 'Doctor';
+    final currentUserId =
+        Get.find<AuthController>().currentUser.value?.uid ?? 'Doctor';
 
     final auditLog = PrescriptionAuditLogModel(
       timestamp: DateTime.now(),
@@ -46,11 +51,18 @@ class PrescriptionController extends GetxController {
       changedBy: currentUserId,
     );
 
-    final result = await _medicationRepository.updatePrescription(prescriptionId, medicines, auditLog);
+    final result = await _medicationRepository.updatePrescription(
+      prescriptionId,
+      medicines,
+      auditLog,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Success', 'Prescription Dosage Updated Successfully');
+        SnackbarHelper.showSuccess(
+          'Success',
+          'Prescription Dosage Updated Successfully',
+        );
         Get.back();
       },
     );
@@ -60,7 +72,9 @@ class PrescriptionController extends GetxController {
   /// Fetches the prescription matching an operation
   Future<void> fetchPrescriptionForOperation(String operationId) async {
     isLoading.value = true;
-    final result = await _medicationRepository.fetchPrescriptionByOperation(operationId);
+    final result = await _medicationRepository.fetchPrescriptionByOperation(
+      operationId,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (presc) {

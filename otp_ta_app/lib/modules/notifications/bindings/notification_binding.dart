@@ -6,9 +6,14 @@ import '../controllers/notification_controller.dart';
 class NotificationBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<INotificationRepository>(() => NotificationRepositoryImpl(), fenix: true);
+    Get.lazyPut<INotificationRepository>(
+      () => NotificationRepositoryImpl(),
+      fenix: true,
+    );
     Get.lazyPut<NotificationController>(
-      () => NotificationController(notificationRepository: Get.find<INotificationRepository>()),
+      () => NotificationController(
+        notificationRepository: Get.find<INotificationRepository>(),
+      ),
       fenix: true,
     );
   }

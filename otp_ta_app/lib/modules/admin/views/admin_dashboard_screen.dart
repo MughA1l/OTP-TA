@@ -31,7 +31,9 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         return SingleChildScrollView(
@@ -111,7 +113,10 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
               FadeInUp(
                 duration: const Duration(milliseconds: 400),
                 delay: const Duration(milliseconds: 200),
-                child: Text('Doctor Workload Tracking (Today)', style: AppTextStyles.titleLarge),
+                child: Text(
+                  'Doctor Workload Tracking (Today)',
+                  style: AppTextStyles.titleLarge,
+                ),
               ),
               const SizedBox(height: AppDimensions.paddingM),
               FadeInUp(
@@ -128,32 +133,53 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.doctors.length,
-                    separatorBuilder: (_, __) => const Divider(color: AppColors.glassBorder, height: 1),
+                    separatorBuilder: (_, _) =>
+                        const Divider(color: AppColors.glassBorder, height: 1),
                     itemBuilder: (context, index) {
                       final doc = controller.doctors[index];
-                      final workload = controller.getDoctorWorkloadToday(doc.doctorId);
-                      
+                      final workload = controller.getDoctorWorkloadToday(
+                        doc.doctorId,
+                      );
+
                       // SRS-49: Warning badge if > 25 patients/day
                       final isOverloaded = workload > 25;
 
                       return ListTile(
-                        contentPadding: const EdgeInsets.all(AppDimensions.paddingM),
+                        contentPadding: const EdgeInsets.all(
+                          AppDimensions.paddingM,
+                        ),
                         leading: CircleAvatar(
                           backgroundColor: AppColors.primaryContainer,
                           child: Text(
-                            doc.name.isNotEmpty ? doc.name[0].toUpperCase() : 'D',
-                            style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+                            doc.name.isNotEmpty
+                                ? doc.name[0].toUpperCase()
+                                : 'D',
+                            style: AppTextStyles.titleLarge.copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                         title: Text(doc.name, style: AppTextStyles.titleLarge),
-                        subtitle: Text(doc.specializations.join(', '), style: AppTextStyles.bodyMedium),
+                        subtitle: Text(
+                          doc.specializations.join(', '),
+                          style: AppTextStyles.bodyMedium,
+                        ),
                         trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
-                            color: isOverloaded ? AppColors.warning.withOpacity(0.15) : AppColors.surfaceOverlay,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                            color: isOverloaded
+                                ? AppColors.warning.withValues(alpha: 0.15)
+                                : AppColors.surfaceOverlay,
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusXL,
+                            ),
                             border: Border.all(
-                              color: isOverloaded ? AppColors.warning : AppColors.glassBorder,
+                              color: isOverloaded
+                                  ? AppColors.warning
+                                  : AppColors.glassBorder,
                             ),
                           ),
                           child: Row(
@@ -162,12 +188,18 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
                               Text(
                                 '$workload Patients',
                                 style: AppTextStyles.labelLarge.copyWith(
-                                  color: isOverloaded ? AppColors.warning : AppColors.textPrimary,
+                                  color: isOverloaded
+                                      ? AppColors.warning
+                                      : AppColors.textPrimary,
                                 ),
                               ),
                               if (isOverloaded) ...[
                                 const SizedBox(width: 4),
-                                const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 16),
+                                const Icon(
+                                  Icons.warning_amber_rounded,
+                                  color: AppColors.warning,
+                                  size: 16,
+                                ),
                               ],
                             ],
                           ),
@@ -214,12 +246,20 @@ class _StatCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+              Text(
+                title,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
               Icon(icon, color: color, size: 20),
             ],
           ),
           const SizedBox(height: AppDimensions.paddingM),
-          Text(value, style: AppTextStyles.headlineLarge.copyWith(color: color)),
+          Text(
+            value,
+            style: AppTextStyles.headlineLarge.copyWith(color: color),
+          ),
         ],
       ),
     );
@@ -231,7 +271,11 @@ class _QuickActionBtn extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _QuickActionBtn({required this.label, required this.icon, required this.onTap});
+  const _QuickActionBtn({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -239,18 +283,26 @@ class _QuickActionBtn extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingM),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.paddingL,
+          vertical: AppDimensions.paddingM,
+        ),
         decoration: BoxDecoration(
-          color: AppColors.primaryContainer.withOpacity(0.3),
+          color: AppColors.primaryContainer.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, color: AppColors.primary, size: 18),
             const SizedBox(width: 8),
-            Text(label, style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary)),
+            Text(
+              label,
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
           ],
         ),
       ),

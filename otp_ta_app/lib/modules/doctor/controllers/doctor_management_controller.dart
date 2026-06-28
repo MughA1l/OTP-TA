@@ -7,12 +7,12 @@ class DoctorManagementController extends GetxController {
   final IDoctorRepository _doctorRepository;
 
   DoctorManagementController({required IDoctorRepository doctorRepository})
-      : _doctorRepository = doctorRepository;
+    : _doctorRepository = doctorRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<DoctorModel> doctorList = <DoctorModel>[].obs;
   final RxList<DoctorModel> filteredDoctorList = <DoctorModel>[].obs;
-  
+
   final Rx<DoctorModel?> currentDoctor = Rx<DoctorModel?>(null);
 
   @override
@@ -38,12 +38,14 @@ class DoctorManagementController extends GetxController {
       filteredDoctorList.value = doctorList;
       return;
     }
-    
+
     final lowerQuery = query.toLowerCase();
     filteredDoctorList.value = doctorList.where((doctor) {
       return doctor.name.toLowerCase().contains(lowerQuery) ||
-             doctor.specializations.any((spec) => spec.toLowerCase().contains(lowerQuery)) ||
-             doctor.pmdc.toLowerCase().contains(lowerQuery);
+          doctor.specializations.any(
+            (spec) => spec.toLowerCase().contains(lowerQuery),
+          ) ||
+          doctor.pmdc.toLowerCase().contains(lowerQuery);
     }).toList();
   }
 
@@ -63,13 +65,16 @@ class DoctorManagementController extends GetxController {
       // Mocking Firebase Auth User creation
       final mockUid = 'doc_${DateTime.now().millisecondsSinceEpoch}';
       final newDoctor = doctor.copyWith(doctorId: mockUid);
-      
+
       final result = await _doctorRepository.createDoctor(newDoctor);
-      
+
       result.fold(
         (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Success', 'Doctor Profile Created Successfully');
+          SnackbarHelper.showSuccess(
+            'Success',
+            'Doctor Profile Created Successfully',
+          );
           Get.back();
         },
       );
@@ -83,7 +88,7 @@ class DoctorManagementController extends GetxController {
   Future<void> updateDoctor(DoctorModel doctor) async {
     isLoading.value = true;
     final result = await _doctorRepository.updateDoctor(doctor);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
@@ -99,10 +104,13 @@ class DoctorManagementController extends GetxController {
   Future<void> updateAccountStatus(String uid, String status) async {
     isLoading.value = true;
     final result = await _doctorRepository.updateAccountStatus(uid, status);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) => SnackbarHelper.showSuccess('Success', 'Doctor Account Status Updated to $status'),
+      (_) => SnackbarHelper.showSuccess(
+        'Success',
+        'Doctor Account Status Updated to $status',
+      ),
     );
     isLoading.value = false;
   }
@@ -115,10 +123,11 @@ class DoctorManagementController extends GetxController {
         SnackbarHelper.showError('Error', 'Slot already exists');
         return;
       }
-      
-      final updatedSlots = List<String>.from(doctor.availabilitySlots)..add(slot);
+
+      final updatedSlots = List<String>.from(doctor.availabilitySlots)
+        ..add(slot);
       final updatedDoctor = doctor.copyWith(availabilitySlots: updatedSlots);
-      
+
       // Optimitistic update
       currentDoctor.value = updatedDoctor;
       updateDoctor(updatedDoctor);
@@ -128,9 +137,10 @@ class DoctorManagementController extends GetxController {
   void removeAvailabilitySlot(String doctorId, String slot) {
     final doctor = currentDoctor.value;
     if (doctor != null && doctor.doctorId == doctorId) {
-      final updatedSlots = List<String>.from(doctor.availabilitySlots)..remove(slot);
+      final updatedSlots = List<String>.from(doctor.availabilitySlots)
+        ..remove(slot);
       final updatedDoctor = doctor.copyWith(availabilitySlots: updatedSlots);
-      
+
       // Optimitistic update
       currentDoctor.value = updatedDoctor;
       updateDoctor(updatedDoctor);
@@ -140,23 +150,37 @@ class DoctorManagementController extends GetxController {
   // ── Availability (SRS-41) ────────────────────────────────────────────────
 
   /// Saves a clean list of slots after conflict detection
-  Future<void> saveAvailabilitySlots(String doctorId, List<String> newSlots) async {
+  Future<void> saveAvailabilitySlots(
+    String doctorId,
+    List<String> newSlots,
+  ) async {
     // Conflict detection: duplicates within the list
     final uniqueSlots = newSlots.toSet().toList();
     if (uniqueSlots.length != newSlots.length) {
-      SnackbarHelper.showError('Error', 'Conflict Detected: Duplicate time slot found. (SRS-41)');
+      SnackbarHelper.showError(
+        'Error',
+        'Conflict Detected: Duplicate time slot found. (SRS-41)',
+      );
       return;
     }
 
     isLoading.value = true;
-    final result = await _doctorRepository.updateAvailability(doctorId, uniqueSlots);
+    final result = await _doctorRepository.updateAvailability(
+      doctorId,
+      uniqueSlots,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Success', 'Availability Updated Successfully');
+        SnackbarHelper.showSuccess(
+          'Success',
+          'Availability Updated Successfully',
+        );
         // Refresh local doctor
         if (currentDoctor.value?.doctorId == doctorId) {
-          currentDoctor.value = currentDoctor.value!.copyWith(availabilitySlots: uniqueSlots);
+          currentDoctor.value = currentDoctor.value!.copyWith(
+            availabilitySlots: uniqueSlots,
+          );
         }
       },
     );
@@ -179,7 +203,10 @@ class DoctorManagementController extends GetxController {
 
   Future<void> markOnLeave(String doctorId, String isoDate) async {
     if (leaveDates.contains(isoDate)) {
-      SnackbarHelper.showError('Error', 'Already marked as on leave for this date.');
+      SnackbarHelper.showError(
+        'Error',
+        'Already marked as on leave for this date.',
+      );
       return;
     }
     final updated = List<String>.from(leaveDates)..add(isoDate);

@@ -9,6 +9,7 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../data/models/appointment_model.dart';
 import '../../../data/models/doctor_model.dart';
 import '../../../shared_widgets/inputs/app_text_field.dart';
+import '../../../shared_widgets/misc/empty_state_widget.dart';
 import '../controllers/check_up_history_controller.dart';
 
 class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
@@ -20,7 +21,8 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
 
     // Listen to scroll position for infinite pagination (SRS-80)
     scrollController.addListener(() {
-      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 100) {
         controller.loadMore();
       }
     });
@@ -31,13 +33,19 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
         backgroundColor: AppColors.surfaceOverlay,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Check-up History', style: AppTextStyles.headlineMedium),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_alt_off_outlined, color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.filter_alt_off_outlined,
+              color: AppColors.textSecondary,
+            ),
             onPressed: () {
               controller.clearFilters();
               Get.snackbar(
@@ -66,7 +74,11 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
               final list = controller.paginatedAppointments;
 
               if (list.isEmpty) {
-                return _buildEmptyState();
+                return EmptyStateWidget(
+                  icon: Icons.history_rounded,
+                  title: 'No history found',
+                  message: 'No past check-ups match your filter criteria.',
+                );
               }
 
               return ListView.builder(
@@ -87,7 +99,8 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                     child: _AppointmentHistoryCard(
                       appointment: appt,
                       doctor: doc,
-                      onTap: () => _showAppointmentDetailBottomSheet(context, appt, doc),
+                      onTap: () =>
+                          _showAppointmentDetailBottomSheet(context, appt, doc),
                     ),
                   );
                 },
@@ -101,7 +114,7 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
 
   Widget _buildFilterBar(BuildContext context) {
     final searchFieldController = TextEditingController();
-    
+
     // Sync external query changes (e.g. clearFilters)
     ever(controller.searchQuery, (val) {
       if (val.isEmpty && searchFieldController.text.isNotEmpty) {
@@ -136,17 +149,29 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                   final start = controller.startDate.value;
                   return OutlinedButton.icon(
                     onPressed: () => _selectDate(context, isStart: true),
-                    icon: const Icon(Icons.date_range_rounded, size: 16, color: AppColors.primary),
+                    icon: const Icon(
+                      Icons.date_range_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
                     label: Text(
-                      start != null ? '${start.day}/${start.month}/${start.year}' : 'Start Date',
+                      start != null
+                          ? '${start.day}/${start.month}/${start.year}'
+                          : 'Start Date',
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: start != null ? AppColors.textPrimary : AppColors.textSecondary,
+                        color: start != null
+                            ? AppColors.textPrimary
+                            : AppColors.textSecondary,
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.glassBorder),
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusM,
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -157,17 +182,29 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                   final end = controller.endDate.value;
                   return OutlinedButton.icon(
                     onPressed: () => _selectDate(context, isStart: false),
-                    icon: const Icon(Icons.date_range_rounded, size: 16, color: AppColors.primary),
+                    icon: const Icon(
+                      Icons.date_range_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
                     label: Text(
-                      end != null ? '${end.day}/${end.month}/${end.year}' : 'End Date',
+                      end != null
+                          ? '${end.day}/${end.month}/${end.year}'
+                          : 'End Date',
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: end != null ? AppColors.textPrimary : AppColors.textSecondary,
+                        color: end != null
+                            ? AppColors.textPrimary
+                            : AppColors.textSecondary,
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.glassBorder),
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusM,
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -179,9 +216,12 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context, {required bool isStart}) async {
-    final initialDate = isStart 
-        ? (controller.startDate.value ?? DateTime.now()) 
+  Future<void> _selectDate(
+    BuildContext context, {
+    required bool isStart,
+  }) async {
+    final initialDate = isStart
+        ? (controller.startDate.value ?? DateTime.now())
         : (controller.endDate.value ?? DateTime.now());
     final picked = await showDatePicker(
       context: context,
@@ -247,28 +287,11 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: FadeIn(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.history_rounded, size: 64, color: AppColors.textTertiary),
-            const SizedBox(height: AppDimensions.paddingM),
-            Text('No history found', style: AppTextStyles.titleLarge.copyWith(color: AppColors.textSecondary)),
-            const SizedBox(height: 8),
-            Text(
-              'No past check-ups match your filter criteria.',
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showAppointmentDetailBottomSheet(BuildContext context, AppointmentModel appt, DoctorModel? doc) {
+  void _showAppointmentDetailBottomSheet(
+    BuildContext context,
+    AppointmentModel appt,
+    DoctorModel? doc,
+  ) {
     Get.bottomSheet(
       ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -297,9 +320,11 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                     child: Container(
                       width: 40,
                       height: 4,
-                      margin: const EdgeInsets.only(bottom: AppDimensions.paddingL),
+                      margin: const EdgeInsets.only(
+                        bottom: AppDimensions.paddingL,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppColors.textTertiary.withOpacity(0.5),
+                        color: AppColors.textTertiary.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -311,11 +336,20 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                       CircleAvatar(
                         radius: 28,
                         backgroundColor: AppColors.primaryContainer,
-                        backgroundImage: doc?.profilePicUrl != null && doc!.profilePicUrl!.isNotEmpty
+                        backgroundImage:
+                            doc?.profilePicUrl != null &&
+                                doc!.profilePicUrl!.isNotEmpty
                             ? NetworkImage(doc.profilePicUrl!)
                             : null,
-                        child: doc?.profilePicUrl == null || doc!.profilePicUrl!.isEmpty
-                            ? Text(doc?.name[0].toUpperCase() ?? 'D', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary))
+                        child:
+                            doc?.profilePicUrl == null ||
+                                doc!.profilePicUrl!.isEmpty
+                            ? Text(
+                                doc?.name[0].toUpperCase() ?? 'D',
+                                style: AppTextStyles.headlineMedium.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              )
                             : null,
                       ),
                       const SizedBox(width: AppDimensions.paddingM),
@@ -323,10 +357,17 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(doc != null ? 'Dr. ${doc.name}' : 'Unknown Doctor', style: AppTextStyles.headlineMedium),
+                            Text(
+                              doc != null
+                                  ? 'Dr. ${doc.name}'
+                                  : 'Unknown Doctor',
+                              style: AppTextStyles.headlineMedium,
+                            ),
                             Text(
                               doc?.specializations.join(', ') ?? 'Specialist',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -344,7 +385,12 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Date & Time', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                          Text(
+                            'Date & Time',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
                           const SizedBox(height: 4),
                           Text(
                             '${appt.dateTime.day}/${appt.dateTime.month}/${appt.dateTime.year} @ ${appt.dateTime.hour.toString().padLeft(2, '0')}:${appt.dateTime.minute.toString().padLeft(2, '0')}',
@@ -358,13 +404,20 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                   const SizedBox(height: AppDimensions.paddingL),
 
                   // Doctor Notes (SRS-62)
-                  Text('Doctor Diagnosis & Notes', style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary)),
+                  Text(
+                    'Doctor Diagnosis & Notes',
+                    style: AppTextStyles.titleLarge.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.all(AppDimensions.paddingM),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceOverlay,
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusM,
+                      ),
                       border: Border.all(color: AppColors.glassBorder),
                     ),
                     child: Text(
@@ -377,7 +430,12 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                   const SizedBox(height: AppDimensions.paddingL),
 
                   // Prescriptions (SRS-62)
-                  Text('Prescribed Medications', style: AppTextStyles.titleLarge.copyWith(color: AppColors.secondary)),
+                  Text(
+                    'Prescribed Medications',
+                    style: AppTextStyles.titleLarge.copyWith(
+                      color: AppColors.secondary,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   _buildPrescriptionsWidget(appt),
 
@@ -405,15 +463,25 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
         ),
         child: Text(
           'No prescriptions issued for incomplete or cancelled sessions.',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.textTertiary,
+          ),
         ),
       );
     }
 
     // Mock prescriptions
     final List<Map<String, String>> mockMedications = [
-      {'name': 'Paracetamol 500mg', 'dosage': '1 tablet — Twice a day (After meals)', 'duration': '5 days'},
-      {'name': 'Amoxicillin 250mg', 'dosage': '1 capsule — Thrice a day (Before meals)', 'duration': '7 days'},
+      {
+        'name': 'Paracetamol 500mg',
+        'dosage': '1 tablet — Twice a day (After meals)',
+        'duration': '5 days',
+      },
+      {
+        'name': 'Amoxicillin 250mg',
+        'dosage': '1 capsule — Thrice a day (Before meals)',
+        'duration': '7 days',
+      },
     ];
 
     return Column(
@@ -429,7 +497,11 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.medication_liquid_outlined, color: AppColors.secondary, size: 24),
+              const Icon(
+                Icons.medication_liquid_outlined,
+                color: AppColors.secondary,
+                size: 24,
+              ),
               const SizedBox(width: AppDimensions.paddingM),
               Expanded(
                 child: Column(
@@ -437,13 +509,20 @@ class CheckUpHistoryScreen extends GetView<CheckUpHistoryController> {
                   children: [
                     Text(med['name']!, style: AppTextStyles.titleLarge),
                     const SizedBox(height: 4),
-                    Text(med['dosage']!, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                    Text(
+                      med['dosage']!,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                   ],
                 ),
               ),
               Text(
                 med['duration']!,
-                style: AppTextStyles.labelMedium.copyWith(color: AppColors.secondary),
+                style: AppTextStyles.labelMedium.copyWith(
+                  color: AppColors.secondary,
+                ),
               ),
             ],
           ),
@@ -484,20 +563,28 @@ class _AppointmentHistoryCard extends StatelessWidget {
                 width: 52,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryContainer.withOpacity(0.4),
+                  color: AppColors.primaryContainer.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       appointment.dateTime.day.toString(),
-                      style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold),
+                      style: AppTextStyles.titleLarge.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       _getMonthName(appointment.dateTime.month),
-                      style: AppTextStyles.labelMedium.copyWith(color: AppColors.primaryLight, fontSize: 10),
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.primaryLight,
+                        fontSize: 10,
+                      ),
                     ),
                   ],
                 ),
@@ -517,14 +604,16 @@ class _AppointmentHistoryCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       doctor?.specializations.join(', ') ?? 'Specialist',
-                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: AppDimensions.paddingS),
-              
+
               // Status Chip
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -533,7 +622,9 @@ class _AppointmentHistoryCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     '${appointment.dateTime.hour.toString().padLeft(2, '0')}:${appointment.dateTime.minute.toString().padLeft(2, '0')}',
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
                   ),
                 ],
               ),
@@ -545,7 +636,20 @@ class _AppointmentHistoryCard extends StatelessWidget {
   }
 
   String _getMonthName(int month) {
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    const months = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC',
+    ];
     return months[month - 1];
   }
 }
@@ -582,9 +686,9 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         label,

@@ -111,12 +111,18 @@ class PrescriptionModel {
       operationId: map['operationId'] as String? ?? '',
       patientId: map['patientId'] as String? ?? '',
       doctorId: map['doctorId'] as String? ?? '',
-      medicines: (map['medicines'] as List?)
+      medicines:
+          (map['medicines'] as List?)
               ?.map((m) => MedicineModel.fromMap(Map<String, dynamic>.from(m)))
               .toList() ??
           [],
-      auditLog: (map['auditLog'] as List?)
-              ?.map((l) => PrescriptionAuditLogModel.fromMap(Map<String, dynamic>.from(l)))
+      auditLog:
+          (map['auditLog'] as List?)
+              ?.map(
+                (l) => PrescriptionAuditLogModel.fromMap(
+                  Map<String, dynamic>.from(l),
+                ),
+              )
               .toList() ??
           [],
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),

@@ -12,6 +12,9 @@ import '../../../core/utils/responsive_helper.dart';
 import '../../../shared_widgets/buttons/primary_button.dart';
 import '../../../data/models/operation_model.dart';
 import '../../../core/utils/pdf_generator.dart';
+import '../../../core/utils/secure_upload_validator.dart';
+import '../../../core/services/security_hardening_service.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../controllers/operation_controller.dart';
 import '../../auth/controllers/auth_controller.dart';
 
@@ -36,11 +39,15 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
   }
 
   void _fetchFreshOperation(String operationId) {
-    FirebaseFirestore.instance.collection('operations').doc(operationId).snapshots().listen((doc) {
-      if (doc.exists) {
-        operation.value = OperationModel.fromMap(doc.data()!, doc.id);
-      }
-    });
+    FirebaseFirestore.instance
+        .collection('operations')
+        .doc(operationId)
+        .snapshots()
+        .listen((doc) {
+          if (doc.exists) {
+            operation.value = OperationModel.fromMap(doc.data()!, doc.id);
+          }
+        });
   }
 
   Future<void> _pickAndUploadReport() async {
@@ -48,8 +55,30 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
+      final validation = SecureUploadValidator.validateFile(
+        file,
+        allowedExtensions: {'pdf', 'jpg', 'jpeg', 'png'},
+        maxSizeBytes: 5 * 1024 * 1024,
+      );
+
+      if (!validation.isValid) {
+        SnackbarHelper.showError(
+          'Upload blocked',
+          validation.message ?? 'File is not allowed.',
+        );
+        return;
+      }
+
       final op = operation.value;
       if (op != null) {
+        await SecurityHardeningService.logSecurityEvent(
+          eventName: 'medical_report_upload',
+          payload: {
+            'operationId': op.operationId,
+            'filePath': file.path,
+            'sizeBytes': file.lengthSync(),
+          },
+        );
         await controller.uploadMedicalReport(file, op.operationId);
       }
     }
@@ -68,7 +97,10 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Operation Details', style: AppTextStyles.headlineMedium),
@@ -77,7 +109,10 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
             final op = operation.value;
             if (op == null) return const SizedBox.shrink();
             return IconButton(
-              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              icon: const Icon(
+                Icons.picture_as_pdf_rounded,
+                color: AppColors.primaryLight,
+              ),
               onPressed: () => PdfGenerator.generateOperationSummaryPdf(op),
               tooltip: 'Export PDF',
             );
@@ -90,7 +125,9 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           Obx(() {
             final op = operation.value;
             if (op == null) {
-              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              );
             }
 
             return Center(
@@ -104,9 +141,12 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Header Card
-                      FadeInDown(
-                        duration: const Duration(milliseconds: 400),
-                        child: _buildHeaderCard(op),
+                      Hero(
+                        tag: 'operation-${op.operationId}',
+                        child: FadeInDown(
+                          duration: const Duration(milliseconds: 400),
+                          child: _buildHeaderCard(op),
+                        ),
                       ),
                       const SizedBox(height: AppDimensions.paddingL),
 
@@ -153,7 +193,7 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           Obx(() {
             if (controller.isLoading.value) {
               return Container(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AppDimensions.radiusL),
@@ -161,7 +201,7 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
                       width: 250,
                       height: 180,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceOverlay.withOpacity(0.8),
+                        color: AppColors.surfaceOverlay.withValues(alpha: 0.8),
                         border: Border.all(color: AppColors.glassBorder),
                       ),
                       child: Column(
@@ -213,16 +253,23 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
               Expanded(
                 child: Text(
                   op.surgeryType,
-                  style: AppTextStyles.displayMedium.copyWith(color: AppColors.primaryLight),
+                  style: AppTextStyles.displayMedium.copyWith(
+                    color: AppColors.primaryLight,
+                  ),
                 ),
               ),
               // Status Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(op.status).withOpacity(0.15),
+                  color: _getStatusColor(op.status).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-                  border: Border.all(color: _getStatusColor(op.status).withOpacity(0.5)),
+                  border: Border.all(
+                    color: _getStatusColor(op.status).withValues(alpha: 0.5),
+                  ),
                 ),
                 child: Text(
                   op.status.name.toUpperCase(),
@@ -239,7 +286,8 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           _InfoRow(label: 'OT Room', value: op.otRoom),
           _InfoRow(
             label: 'Scheduled',
-            value: '${DateFormat('EEEE, MMMM d, yyyy').format(op.scheduledDate)} at ${op.scheduledTime}',
+            value:
+                '${DateFormat('EEEE, MMMM d, yyyy').format(op.scheduledDate)} at ${op.scheduledTime}',
           ),
         ],
       ),
@@ -268,16 +316,28 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           const Divider(color: AppColors.glassBorder),
           const SizedBox(height: 8),
           Obx(() {
-            final leadDoc = controller.doctorList.firstWhereOrNull((d) => d.doctorId == op.surgicalTeam.primaryDoctorId);
-            final anaDoc = controller.doctorList.firstWhereOrNull((d) => d.doctorId == op.surgicalTeam.anaesthesiologistId);
+            final leadDoc = controller.doctorList.firstWhereOrNull(
+              (d) => d.doctorId == op.surgicalTeam.primaryDoctorId,
+            );
+            final anaDoc = controller.doctorList.firstWhereOrNull(
+              (d) => d.doctorId == op.surgicalTeam.anaesthesiologistId,
+            );
 
             return Column(
               children: [
-                _InfoRow(label: 'Lead Surgeon', value: leadDoc != null ? leadDoc.name : 'Not Assigned'),
-                _InfoRow(label: 'Anaesthesiologist', value: anaDoc != null ? anaDoc.name : 'Not Assigned'),
+                _InfoRow(
+                  label: 'Lead Surgeon',
+                  value: leadDoc != null ? leadDoc.name : 'Not Assigned',
+                ),
+                _InfoRow(
+                  label: 'Anaesthesiologist',
+                  value: anaDoc != null ? anaDoc.name : 'Not Assigned',
+                ),
                 _InfoRow(
                   label: 'Nursing Staff',
-                  value: op.surgicalTeam.nursingStaff.isNotEmpty ? op.surgicalTeam.nursingStaff.join(', ') : 'None Assigned',
+                  value: op.surgicalTeam.nursingStaff.isNotEmpty
+                      ? op.surgicalTeam.nursingStaff.join(', ')
+                      : 'None Assigned',
                 ),
               ],
             );
@@ -300,7 +360,10 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.description_outlined, color: AppColors.secondary),
+              const Icon(
+                Icons.description_outlined,
+                color: AppColors.secondary,
+              ),
               const SizedBox(width: 8),
               Text('Surgery Outcome', style: AppTextStyles.titleLarge),
             ],
@@ -336,14 +399,20 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.picture_as_pdf_outlined, color: AppColors.errorLight),
+                  const Icon(
+                    Icons.picture_as_pdf_outlined,
+                    color: AppColors.errorLight,
+                  ),
                   const SizedBox(width: 8),
                   Text('Medical Reports', style: AppTextStyles.titleLarge),
                 ],
               ),
               if (isMedicalStaff)
                 IconButton(
-                  icon: const Icon(Icons.upload_file_outlined, color: AppColors.primaryLight),
+                  icon: const Icon(
+                    Icons.upload_file_outlined,
+                    color: AppColors.primaryLight,
+                  ),
                   onPressed: _pickAndUploadReport,
                   tooltip: 'Upload New Report',
                 ),
@@ -357,7 +426,9 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 'No reports uploaded yet.',
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             )
           else
@@ -365,28 +436,35 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: op.reportUrls.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final url = op.reportUrls[index];
                 return InkWell(
                   onTap: () {
                     // Open URL in browser
-                    Get.to(() => Scaffold(
-                          appBar: AppBar(title: const Text('Medical Report')),
-                          body: Center(
-                            child: Image.network(
-                              url,
-                              errorBuilder: (_, __, ___) => const Text('Could not load image preview.'),
-                            ),
+                    Get.to(
+                      () => Scaffold(
+                        appBar: AppBar(title: const Text('Medical Report')),
+                        body: Center(
+                          child: Image.network(
+                            url,
+                            errorBuilder: (_, _, _) =>
+                                const Text('Could not load image preview.'),
                           ),
-                        ));
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(AppDimensions.paddingM),
                     decoration: BoxDecoration(
-                      color: AppColors.surface.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                      border: Border.all(color: AppColors.glassBorder.withOpacity(0.5)),
+                      color: AppColors.surface.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusM,
+                      ),
+                      border: Border.all(
+                        color: AppColors.glassBorder.withValues(alpha: 0.5),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -394,10 +472,16 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
                         Expanded(
                           child: Text(
                             'Report_${index + 1}.jpg',
-                            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryLight),
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.primaryLight,
+                            ),
                           ),
                         ),
-                        const Icon(Icons.open_in_new, size: 16, color: AppColors.textSecondary),
+                        const Icon(
+                          Icons.open_in_new,
+                          size: 16,
+                          color: AppColors.textSecondary,
+                        ),
                       ],
                     ),
                   ),
@@ -412,11 +496,14 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
   Widget _buildActionButtons(OperationModel op, String role) {
     return Column(
       children: [
-        if (op.status != OperationStatus.completed && op.outcome == null && role == 'doctor') ...[
+        if (op.status != OperationStatus.completed &&
+            op.outcome == null &&
+            role == 'doctor') ...[
           PrimaryButton(
             label: 'Record Outcome',
             icon: Icons.assignment_turned_in_outlined,
-            onPressed: () => Get.toNamed('/record-outcome', arguments: op.operationId),
+            onPressed: () =>
+                Get.toNamed('/record-outcome', arguments: op.operationId),
           ),
           const SizedBox(height: 12),
         ],
@@ -424,7 +511,8 @@ class _OperationDetailScreenState extends State<OperationDetailScreen> {
           PrimaryButton(
             label: 'Update Surgical Team',
             icon: Icons.edit_attributes_outlined,
-            onPressed: () => Get.toNamed('/assign-team', arguments: op.operationId),
+            onPressed: () =>
+                Get.toNamed('/assign-team', arguments: op.operationId),
           ),
       ],
     );
@@ -462,11 +550,14 @@ class _InfoRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 130,
-            child: Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              label,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
-          Expanded(
-            child: Text(value, style: AppTextStyles.bodyLarge),
-          ),
+          Expanded(child: Text(value, style: AppTextStyles.bodyLarge)),
         ],
       ),
     );

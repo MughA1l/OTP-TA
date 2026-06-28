@@ -6,9 +6,13 @@ import '../controllers/role_permission_controller.dart';
 class RolePermissionBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<IRolePermissionRepository>(() => RolePermissionRepositoryImpl());
+    Get.lazyPut<IRolePermissionRepository>(
+      () => RolePermissionRepositoryImpl(),
+    );
     Get.lazyPut<RolePermissionController>(
-      () => RolePermissionController(repository: Get.find<IRolePermissionRepository>()),
+      () => RolePermissionController(
+        repository: Get.find<IRolePermissionRepository>(),
+      ),
     );
   }
 }

@@ -51,8 +51,13 @@ class DoctorDashboardScreen extends StatelessWidget {
                         radius: 30,
                         backgroundColor: AppColors.primary,
                         child: Text(
-                          currentUser?.displayName != null && currentUser!.displayName!.isNotEmpty ? currentUser.displayName![0].toUpperCase() : 'D',
-                          style: AppTextStyles.headlineLarge.copyWith(color: AppColors.onPrimary),
+                          currentUser?.displayName != null &&
+                                  currentUser!.displayName!.isNotEmpty
+                              ? currentUser.displayName![0].toUpperCase()
+                              : 'D',
+                          style: AppTextStyles.headlineLarge.copyWith(
+                            color: AppColors.onPrimary,
+                          ),
                         ),
                       ),
                       const SizedBox(width: AppDimensions.paddingM),
@@ -67,7 +72,9 @@ class DoctorDashboardScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Text(
                               'Role: Surgeon / Care Specialist',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -83,10 +90,13 @@ class DoctorDashboardScreen extends StatelessWidget {
             FadeInUp(
               duration: const Duration(milliseconds: 400),
               delay: const Duration(milliseconds: 100),
-              child: Text('Dashboard Quick Actions', style: AppTextStyles.titleLarge),
+              child: Text(
+                'Dashboard Quick Actions',
+                style: AppTextStyles.titleLarge,
+              ),
             ),
             const SizedBox(height: AppDimensions.paddingM),
-            
+
             FadeInUp(
               duration: const Duration(milliseconds: 400),
               delay: const Duration(milliseconds: 150),
@@ -165,7 +175,9 @@ class _DashboardBtn extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 label,
-                style: AppTextStyles.labelLarge.copyWith(fontWeight: FontWeight.w600),
+                style: AppTextStyles.labelLarge.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],

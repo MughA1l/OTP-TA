@@ -16,7 +16,8 @@ class ChatListScreen extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUserId = Get.find<AuthController>().currentUser.value?.uid ?? '';
+    final currentUserId =
+        Get.find<AuthController>().currentUser.value?.uid ?? '';
     final isWeb = ResponsiveHelper.isDesktop(context);
 
     return Scaffold(
@@ -25,10 +26,16 @@ class ChatListScreen extends GetView<ChatController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: Text('Active Conversations', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'Active Conversations',
+          style: AppTextStyles.headlineMedium,
+        ),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -37,7 +44,9 @@ class ChatListScreen extends GetView<ChatController> {
             stream: controller.watchUserRooms(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                );
               }
 
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -45,11 +54,18 @@ class ChatListScreen extends GetView<ChatController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.chat_bubble_outline_rounded, size: 72, color: AppColors.textTertiary),
+                      const Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        size: 72,
+                        color: AppColors.textTertiary,
+                      ),
                       const SizedBox(height: 16),
                       Text('No Active Chats', style: AppTextStyles.titleLarge),
                       const SizedBox(height: 8),
-                      Text('Your inbox is completely clear.', style: AppTextStyles.bodyMedium),
+                      Text(
+                        'Your inbox is completely clear.',
+                        style: AppTextStyles.bodyMedium,
+                      ),
                     ],
                   ),
                 );
@@ -60,10 +76,11 @@ class ChatListScreen extends GetView<ChatController> {
               return ListView.separated(
                 padding: const EdgeInsets.all(AppDimensions.paddingL),
                 itemCount: rooms.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppDimensions.paddingM),
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: AppDimensions.paddingM),
                 itemBuilder: (context, index) {
                   final room = rooms[index];
-                  
+
                   // Identify the other participant
                   final otherUserId = room.participants.firstWhere(
                     (id) => id != currentUserId,
@@ -73,10 +90,7 @@ class ChatListScreen extends GetView<ChatController> {
                   return FadeInUp(
                     duration: const Duration(milliseconds: 300),
                     delay: Duration(milliseconds: index * 50),
-                    child: _ChatRoomTile(
-                      room: room,
-                      otherUserId: otherUserId,
-                    ),
+                    child: _ChatRoomTile(room: room, otherUserId: otherUserId),
                   );
                 },
               );
@@ -96,7 +110,10 @@ class _ChatRoomTile extends StatelessWidget {
 
   Future<Map<String, dynamic>> _fetchUserDetails() async {
     try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(otherUserId).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(otherUserId)
+          .get();
       if (doc.exists && doc.data() != null) {
         return doc.data()!;
       }
@@ -110,9 +127,10 @@ class _ChatRoomTile extends StatelessWidget {
       future: _fetchUserDetails(),
       builder: (context, snapshot) {
         final userData = snapshot.data ?? {};
-        final displayName = userData['displayName'] ?? userData['email'] ?? 'Unknown User';
+        final displayName =
+            userData['displayName'] ?? userData['email'] ?? 'Unknown User';
         final role = userData['role'] ?? 'Patient';
-        
+
         final bool isEmergency = room.hasEmergency;
         final timeString = DateFormat('h:mm a').format(room.lastMessageTime);
 
@@ -129,11 +147,14 @@ class _ChatRoomTile extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(AppDimensions.radiusL),
             onTap: () {
-              Get.toNamed('/chat-room', arguments: {
-                'roomId': room.roomId,
-                'otherUserId': otherUserId,
-                'otherUserName': displayName,
-              });
+              Get.toNamed(
+                '/chat-room',
+                arguments: {
+                  'roomId': room.roomId,
+                  'otherUserId': otherUserId,
+                  'otherUserName': displayName,
+                },
+              );
             },
             child: Padding(
               padding: const EdgeInsets.all(AppDimensions.paddingL),
@@ -144,14 +165,20 @@ class _ChatRoomTile extends StatelessWidget {
                     width: 56,
                     height: 56,
                     decoration: BoxDecoration(
-                      color: isEmergency ? AppColors.errorLight.withOpacity(0.2) : AppColors.primary.withOpacity(0.15),
+                      color: isEmergency
+                          ? AppColors.errorLight.withValues(alpha: 0.2)
+                          : AppColors.primary.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: Text(
-                        displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
+                        displayName.isNotEmpty
+                            ? displayName[0].toUpperCase()
+                            : '?',
                         style: AppTextStyles.headlineSmall.copyWith(
-                          color: isEmergency ? AppColors.errorLight : AppColors.primaryLight,
+                          color: isEmergency
+                              ? AppColors.errorLight
+                              : AppColors.primaryLight,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -171,7 +198,9 @@ class _ChatRoomTile extends StatelessWidget {
                               child: Text(
                                 displayName,
                                 style: AppTextStyles.titleLarge.copyWith(
-                                  color: isEmergency ? AppColors.errorLight : AppColors.textPrimary,
+                                  color: isEmergency
+                                      ? AppColors.errorLight
+                                      : AppColors.textPrimary,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -180,7 +209,9 @@ class _ChatRoomTile extends StatelessWidget {
                             Text(
                               timeString,
                               style: AppTextStyles.bodySmall.copyWith(
-                                color: isEmergency ? AppColors.errorLight : AppColors.textTertiary,
+                                color: isEmergency
+                                    ? AppColors.errorLight
+                                    : AppColors.textTertiary,
                               ),
                             ),
                           ],
@@ -189,21 +220,30 @@ class _ChatRoomTile extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceOverlay,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
                                 role.toString().toUpperCase(),
-                                style: AppTextStyles.labelSmall.copyWith(color: AppColors.secondaryLight),
+                                style: AppTextStyles.labelSmall.copyWith(
+                                  color: AppColors.secondaryLight,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                room.lastMessage.isEmpty ? 'No messages yet' : room.lastMessage,
-                                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                                room.lastMessage.isEmpty
+                                    ? 'No messages yet'
+                                    : room.lastMessage,
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),

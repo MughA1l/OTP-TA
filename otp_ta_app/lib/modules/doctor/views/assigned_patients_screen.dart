@@ -23,7 +23,10 @@ class AssignedPatientsScreen extends GetView<AssignedPatientsController> {
         title: Text('My Patients', style: AppTextStyles.headlineMedium),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month_outlined, color: AppColors.primary),
+            icon: const Icon(
+              Icons.calendar_month_outlined,
+              color: AppColors.primary,
+            ),
             onPressed: () async {
               final picked = await showDatePicker(
                 context: context,
@@ -61,12 +64,19 @@ class AssignedPatientsScreen extends GetView<AssignedPatientsController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Appointments For:', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                    Text(
+                      'Appointments For:',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                     Obx(() {
                       final d = controller.selectedDate.value;
                       return Text(
                         '${d.day}/${d.month}/${d.year}',
-                        style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+                        style: AppTextStyles.titleLarge.copyWith(
+                          color: AppColors.primary,
+                        ),
                       );
                     }),
                   ],
@@ -82,7 +92,7 @@ class AssignedPatientsScreen extends GetView<AssignedPatientsController> {
               ],
             ),
           ),
-          
+
           // ── List ────────────────────────────────────────────────────────
           Expanded(
             child: Obx(() {
@@ -91,9 +101,18 @@ class AssignedPatientsScreen extends GetView<AssignedPatientsController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.person_off_outlined, size: 64, color: AppColors.textSecondary),
+                      Icon(
+                        Icons.person_off_outlined,
+                        size: 64,
+                        color: AppColors.textSecondary,
+                      ),
                       const SizedBox(height: AppDimensions.paddingM),
-                      Text('No patients assigned for this date.', style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary)),
+                      Text(
+                        'No patients assigned for this date.',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -130,12 +149,15 @@ class _PatientAppointmentCard extends GetView<AssignedPatientsController> {
       onTap: () {
         final patient = controller.getPatientDetails(appointment.patientId);
         if (patient != null) {
-          Get.toNamed(AppRoutes.patientDetail, arguments: {
-            'patient': patient,
-            'appointment': appointment,
-          });
+          Get.toNamed(
+            AppRoutes.patientDetail,
+            arguments: {'patient': patient, 'appointment': appointment},
+          );
         } else {
-          SnackbarHelper.showError('Info', 'Loading patient details, please wait...');
+          SnackbarHelper.showError(
+            'Info',
+            'Loading patient details, please wait...',
+          );
         }
       },
       child: Container(
@@ -154,7 +176,9 @@ class _PatientAppointmentCard extends GetView<AssignedPatientsController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Obx(() {
-                    final patient = controller.getPatientDetails(appointment.patientId);
+                    final patient = controller.getPatientDetails(
+                      appointment.patientId,
+                    );
                     return Expanded(
                       child: Text(
                         patient?.name ?? 'Loading...',
@@ -167,15 +191,26 @@ class _PatientAppointmentCard extends GetView<AssignedPatientsController> {
                 ],
               ),
               const SizedBox(height: 4),
-              Text('ID: ${appointment.patientId}', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+              Text(
+                'ID: ${appointment.patientId}',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
               const SizedBox(height: AppDimensions.paddingS),
               Row(
                 children: [
-                  const Icon(Icons.access_time_rounded, color: AppColors.primary, size: 16),
+                  const Icon(
+                    Icons.access_time_rounded,
+                    color: AppColors.primary,
+                    size: 16,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     appointment.notes ?? 'Scheduled Slot',
-                    style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
+                    style: AppTextStyles.labelLarge.copyWith(
+                      color: AppColors.primary,
+                    ),
                   ),
                 ],
               ),
@@ -217,11 +252,14 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
-      child: Text(label, style: AppTextStyles.labelMedium.copyWith(color: color)),
+      child: Text(
+        label,
+        style: AppTextStyles.labelMedium.copyWith(color: color),
+      ),
     );
   }
 }

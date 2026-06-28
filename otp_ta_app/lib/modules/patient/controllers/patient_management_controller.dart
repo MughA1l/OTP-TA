@@ -7,12 +7,12 @@ class PatientManagementController extends GetxController {
   final IPatientRepository _patientRepository;
 
   PatientManagementController({required IPatientRepository patientRepository})
-      : _patientRepository = patientRepository;
+    : _patientRepository = patientRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<PatientModel> patientList = <PatientModel>[].obs;
   final RxList<PatientModel> filteredPatientList = <PatientModel>[].obs;
-  
+
   // For the mobile view
   final Rx<PatientModel?> currentPatient = Rx<PatientModel?>(null);
 
@@ -39,28 +39,34 @@ class PatientManagementController extends GetxController {
       filteredPatientList.value = patientList;
       return;
     }
-    
+
     final lowerQuery = query.toLowerCase();
     filteredPatientList.value = patientList.where((patient) {
       return patient.name.toLowerCase().contains(lowerQuery) ||
-             patient.patientId.toLowerCase().contains(lowerQuery) ||
-             patient.phone.contains(lowerQuery);
+          patient.patientId.toLowerCase().contains(lowerQuery) ||
+          patient.phone.contains(lowerQuery);
     }).toList();
   }
 
-  Future<void> createPatient(PatientModel patient, String initialPassword) async {
+  Future<void> createPatient(
+    PatientModel patient,
+    String initialPassword,
+  ) async {
     isLoading.value = true;
     try {
       // Mocking Firebase Auth User creation
       final mockUid = 'pat_${DateTime.now().millisecondsSinceEpoch}';
       final newPatient = patient.copyWith(uid: mockUid);
-      
+
       final result = await _patientRepository.createPatient(newPatient);
-      
+
       result.fold(
         (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Success', 'Patient Profile Created Successfully'); // SRS-27
+          SnackbarHelper.showSuccess(
+            'Success',
+            'Patient Profile Created Successfully',
+          ); // SRS-27
           Get.back();
         },
       );
@@ -74,7 +80,7 @@ class PatientManagementController extends GetxController {
   Future<void> updatePatient(PatientModel patient) async {
     isLoading.value = true;
     final result = await _patientRepository.updatePatient(patient);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
@@ -100,10 +106,13 @@ class PatientManagementController extends GetxController {
   Future<void> updateAccountStatus(String uid, String status) async {
     isLoading.value = true;
     final result = await _patientRepository.updateAccountStatus(uid, status);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) => SnackbarHelper.showSuccess('Success', 'Patient Account Status Updated to $status'),
+      (_) => SnackbarHelper.showSuccess(
+        'Success',
+        'Patient Account Status Updated to $status',
+      ),
     );
     isLoading.value = false;
   }

@@ -41,20 +41,24 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
   }
 
   void _fetchFreshOperation(String operationId) {
-    FirebaseFirestore.instance.collection('operations').doc(operationId).snapshots().listen((doc) {
-      if (doc.exists) {
-        final op = OperationModel.fromMap(doc.data()!, doc.id);
-        operation.value = op;
-        controller.selectedOperation.value = op;
+    FirebaseFirestore.instance
+        .collection('operations')
+        .doc(operationId)
+        .snapshots()
+        .listen((doc) {
+          if (doc.exists) {
+            final op = OperationModel.fromMap(doc.data()!, doc.id);
+            operation.value = op;
+            controller.selectedOperation.value = op;
 
-        // Prepopulate if outcome already exists
-        if (op.outcome != null) {
-          selectedOutcome.value = op.outcome!.patientCondition;
-          complicationsCtrl.text = op.outcome!.complications;
-          recoveryNotesCtrl.text = op.outcome!.notes;
-        }
-      }
-    });
+            // Prepopulate if outcome already exists
+            if (op.outcome != null) {
+              selectedOutcome.value = op.outcome!.patientCondition;
+              complicationsCtrl.text = op.outcome!.complications;
+              recoveryNotesCtrl.text = op.outcome!.notes;
+            }
+          }
+        });
   }
 
   Future<void> submitOutcome() async {
@@ -62,7 +66,8 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
     if (op == null) return;
 
     if (formKey.currentState!.validate() && selectedOutcome.value != null) {
-      final currentUserId = Get.find<AuthController>().currentUser.value?.uid ?? 'Doctor';
+      final currentUserId =
+          Get.find<AuthController>().currentUser.value?.uid ?? 'Doctor';
 
       final outcomeModel = OperationOutcomeModel(
         notes: recoveryNotesCtrl.text.trim(),
@@ -93,7 +98,10 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Record Outcome', style: AppTextStyles.headlineMedium),
@@ -101,7 +109,9 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
       body: Obx(() {
         final op = operation.value;
         if (op == null) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         return Center(
@@ -123,7 +133,9 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                         padding: const EdgeInsets.all(AppDimensions.paddingL),
                         decoration: BoxDecoration(
                           color: AppColors.surfaceElevated,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusL,
+                          ),
                           border: Border.all(color: AppColors.glassBorder),
                         ),
                         child: Column(
@@ -131,16 +143,26 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                           children: [
                             Text(
                               op.surgeryType,
-                              style: AppTextStyles.titleLarge.copyWith(color: AppColors.primaryLight),
+                              style: AppTextStyles.titleLarge.copyWith(
+                                color: AppColors.primaryLight,
+                              ),
                             ),
                             const SizedBox(height: 8),
-                            Text('Patient: ${op.patientName}', style: AppTextStyles.bodyLarge),
+                            Text(
+                              'Patient: ${op.patientName}',
+                              style: AppTextStyles.bodyLarge,
+                            ),
                             const SizedBox(height: 4),
-                            Text('OT Room: ${op.otRoom}', style: AppTextStyles.bodyMedium),
+                            Text(
+                              'OT Room: ${op.otRoom}',
+                              style: AppTextStyles.bodyMedium,
+                            ),
                             const SizedBox(height: 4),
                             Text(
                               'Date: ${DateFormat('MMMM d, yyyy').format(op.scheduledDate)} at ${op.scheduledTime}',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -157,17 +179,18 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                         label: 'Operation Outcome Status',
                         hint: 'Select Outcome',
                         prefixIcon: Icons.poll_outlined,
-                        items: [
-                          'Successful',
-                          'Unsuccessful',
-                          'Minor Complications',
-                          'Major Complications',
-                        ].map((outcome) {
-                          return DropdownMenuItem<String>(
-                            value: outcome,
-                            child: Text(outcome),
-                          );
-                        }).toList(),
+                        items:
+                            [
+                              'Successful',
+                              'Unsuccessful',
+                              'Minor Complications',
+                              'Major Complications',
+                            ].map((outcome) {
+                              return DropdownMenuItem<String>(
+                                value: outcome,
+                                child: Text(outcome),
+                              );
+                            }).toList(),
                         onChanged: (val) => selectedOutcome.value = val,
                       ),
                     ),
@@ -183,7 +206,10 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                         hint: 'Describe any complications or type "None"...',
                         prefixIcon: Icons.warning_amber_outlined,
                         maxLines: 3,
-                        validator: (val) => Validators.validateRequired(val, fieldName: 'Complications Notes'),
+                        validator: (val) => Validators.validateRequired(
+                          val,
+                          fieldName: 'Complications Notes',
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.paddingL),
@@ -195,10 +221,14 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                       child: AppTextField(
                         controller: recoveryNotesCtrl,
                         label: 'Postoperative Instructions',
-                        hint: 'Describe recovery instructions, dietary care, etc...',
+                        hint:
+                            'Describe recovery instructions, dietary care, etc...',
                         prefixIcon: Icons.healing_outlined,
                         maxLines: 4,
-                        validator: (val) => Validators.validateRequired(val, fieldName: 'Postoperative Instructions'),
+                        validator: (val) => Validators.validateRequired(
+                          val,
+                          fieldName: 'Postoperative Instructions',
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.paddingXXL),
@@ -208,7 +238,9 @@ class _RecordOutcomeScreenState extends State<RecordOutcomeScreen> {
                       duration: const Duration(milliseconds: 400),
                       delay: const Duration(milliseconds: 250),
                       child: PrimaryButton(
-                        onPressed: controller.isLoading.value ? null : submitOutcome,
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : submitOutcome,
                         label: 'Submit Outcome',
                         isLoading: controller.isLoading.value,
                       ),

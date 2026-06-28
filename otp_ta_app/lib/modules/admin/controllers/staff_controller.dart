@@ -7,7 +7,7 @@ class StaffController extends GetxController {
   final IStaffRepository _staffRepository;
 
   StaffController({required IStaffRepository staffRepository})
-      : _staffRepository = staffRepository;
+    : _staffRepository = staffRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<StaffModel> staffList = <StaffModel>[].obs;
@@ -36,12 +36,12 @@ class StaffController extends GetxController {
       filteredStaffList.value = staffList;
       return;
     }
-    
+
     final lowerQuery = query.toLowerCase();
     filteredStaffList.value = staffList.where((staff) {
       return staff.name.toLowerCase().contains(lowerQuery) ||
-             staff.email.toLowerCase().contains(lowerQuery) ||
-             staff.role.toLowerCase().contains(lowerQuery);
+          staff.email.toLowerCase().contains(lowerQuery) ||
+          staff.role.toLowerCase().contains(lowerQuery);
     }).toList();
   }
 
@@ -52,17 +52,20 @@ class StaffController extends GetxController {
       // or a secondary Firebase App instance, as FirebaseAuth.instance.createUserWithEmailAndPassword
       // signs out the current admin. For the scope of this UI-focused assignment,
       // we'll mock the FirebaseAuth creation to avoid breaking the admin session.
-      
+
       // MOCK START
       final mockUid = 'staff_${DateTime.now().millisecondsSinceEpoch}';
       // MOCK END
-      
+
       final result = await _staffRepository.createStaff(staff, mockUid);
-      
+
       result.fold(
         (failure) => SnackbarHelper.showError('Error', failure.message),
         (_) {
-          SnackbarHelper.showSuccess('Success', 'Staff Profile Created Successfully');
+          SnackbarHelper.showSuccess(
+            'Success',
+            'Staff Profile Created Successfully',
+          );
           Get.back(); // Go back to list
         },
       );
@@ -76,7 +79,7 @@ class StaffController extends GetxController {
   Future<void> updateStaff(StaffModel staff) async {
     isLoading.value = true;
     final result = await _staffRepository.updateStaff(staff);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
@@ -90,16 +93,18 @@ class StaffController extends GetxController {
   Future<void> updateAccountStatus(String uid, String status) async {
     isLoading.value = true;
     final result = await _staffRepository.updateAccountStatus(uid, status);
-    
-    result.fold(
-      (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) {
-        SnackbarHelper.showSuccess('Success', 'Account Status Updated to $status');
-        // The watchAllStaff stream will auto-update the list if the user was in it,
-        // but note that our watchAllStaff stream doesn't fetch 'status'. 
-        // For a full admin view, it would. 
-      },
-    );
+
+    result.fold((failure) => SnackbarHelper.showError('Error', failure.message), (
+      _,
+    ) {
+      SnackbarHelper.showSuccess(
+        'Success',
+        'Account Status Updated to $status',
+      );
+      // The watchAllStaff stream will auto-update the list if the user was in it,
+      // but note that our watchAllStaff stream doesn't fetch 'status'.
+      // For a full admin view, it would.
+    });
     isLoading.value = false;
   }
 }

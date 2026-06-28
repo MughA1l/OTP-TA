@@ -11,7 +11,7 @@ class AuthController extends GetxController {
   final IAuthRepository _authRepository;
 
   AuthController({required IAuthRepository authRepository})
-      : _authRepository = authRepository;
+    : _authRepository = authRepository;
 
   // ─── Observable State ─────────────────────────────────────────────────────
   final RxBool isLoading = false.obs;
@@ -33,13 +33,10 @@ class AuthController extends GetxController {
     } else {
       // Fetch fresh user data from Firestore on state restore
       final result = await _authRepository.fetchCurrentUserData();
-      result.fold(
-        (failure) => currentUser.value = null,
-        (userData) {
-          currentUser.value = userData;
-          _updateFcmToken(user.uid);
-        },
-      );
+      result.fold((failure) => currentUser.value = null, (userData) {
+        currentUser.value = userData;
+        _updateFcmToken(user.uid);
+      });
     }
   }
 

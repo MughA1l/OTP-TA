@@ -12,9 +12,11 @@ class DoctorRepositoryImpl implements IDoctorRepository {
   Future<Either<Failure, void>> createDoctor(DoctorModel doctor) async {
     try {
       final batch = _firestore.batch();
-      
+
       // Store user record
-      final userRef = _firestore.collection(FirebaseConstants.users).doc(doctor.doctorId);
+      final userRef = _firestore
+          .collection(FirebaseConstants.users)
+          .doc(doctor.doctorId);
       batch.set(userRef, {
         'email': doctor.email,
         'role': 'doctor',
@@ -22,7 +24,7 @@ class DoctorRepositoryImpl implements IDoctorRepository {
         'displayName': doctor.name,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      
+
       // Store doctor record
       final doctorRef = _firestore.collection('doctors').doc(doctor.doctorId);
       batch.set(doctorRef, doctor.toMap());
@@ -30,7 +32,9 @@ class DoctorRepositoryImpl implements IDoctorRepository {
       await batch.commit();
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to create doctor.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to create doctor.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -45,7 +49,9 @@ class DoctorRepositoryImpl implements IDoctorRepository {
           .update(doctor.toMap());
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update doctor.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to update doctor.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -60,7 +66,9 @@ class DoctorRepositoryImpl implements IDoctorRepository {
       }
       return Right(DoctorModel.fromMap(doc.data()!, doc.id));
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to fetch doctor.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to fetch doctor.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -68,48 +76,69 @@ class DoctorRepositoryImpl implements IDoctorRepository {
 
   @override
   Stream<List<DoctorModel>> watchAllDoctors() {
-    return _firestore
-        .collection('doctors')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) => DoctorModel.fromMap(doc.data(), doc.id)).toList();
+    return _firestore.collection('doctors').snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => DoctorModel.fromMap(doc.data(), doc.id))
+          .toList();
     });
   }
 
   @override
-  Future<Either<Failure, void>> updateAccountStatus(String uid, String status) async {
+  Future<Either<Failure, void>> updateAccountStatus(
+    String uid,
+    String status,
+  ) async {
     try {
-      await _firestore
-          .collection(FirebaseConstants.users)
-          .doc(uid)
-          .update({'status': status});
+      await _firestore.collection(FirebaseConstants.users).doc(uid).update({
+        'status': status,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update account status.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to update account status.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> updateAvailability(String doctorId, List<String> slots) async {
+  Future<Either<Failure, void>> updateAvailability(
+    String doctorId,
+    List<String> slots,
+  ) async {
     try {
-      await _firestore.collection('doctors').doc(doctorId).update({'availabilitySlots': slots});
+      await _firestore.collection('doctors').doc(doctorId).update({
+        'availabilitySlots': slots,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update availability.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to update availability.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> updateLeaveDates(String doctorId, List<String> leaveDates) async {
+  Future<Either<Failure, void>> updateLeaveDates(
+    String doctorId,
+    List<String> leaveDates,
+  ) async {
     try {
-      await _firestore.collection('doctors').doc(doctorId).update({'leaveDates': leaveDates});
+      await _firestore.collection('doctors').doc(doctorId).update({
+        'leaveDates': leaveDates,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update leave dates.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to update leave dates.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -123,7 +152,9 @@ class DoctorRepositoryImpl implements IDoctorRepository {
       final leaveDates = List<String>.from(data?['leaveDates'] ?? []);
       return Right(leaveDates);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to fetch leave dates.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to fetch leave dates.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }

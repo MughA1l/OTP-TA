@@ -32,7 +32,9 @@ class PatientModel {
       phone: map['phone'] as String? ?? '',
       address: map['address'] as String? ?? '',
       medicalHistory: Map<String, dynamic>.from(map['medicalHistory'] ?? {}),
-      emergencyContact: Map<String, dynamic>.from(map['emergencyContact'] ?? {}),
+      emergencyContact: Map<String, dynamic>.from(
+        map['emergencyContact'] ?? {},
+      ),
       profilePicUrl: map['profilePicUrl'] as String?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -82,9 +84,11 @@ class PatientModel {
     if (rawAge is String) return int.tryParse(rawAge) ?? 0;
     return 0;
   }
-  
+
   String get gender => (medicalHistory['gender'] as String?) ?? 'Not Specified';
   String? get guardianName => emergencyContact['name'] as String?;
-  String get bloodGroup => (medicalHistory['bloodGroup'] as String?) ?? 'Not Specified';
-  List<String> get medicalConditions => List<String>.from(medicalHistory['conditions'] ?? []);
+  String get bloodGroup =>
+      (medicalHistory['bloodGroup'] as String?) ?? 'Not Specified';
+  List<String> get medicalConditions =>
+      List<String>.from(medicalHistory['conditions'] ?? []);
 }

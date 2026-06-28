@@ -18,14 +18,19 @@ class OperationStatusScreen extends GetView<OperationTrackingController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Live OT Tracking', style: AppTextStyles.headlineMedium),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         final operation = controller.currentOperation.value;
@@ -33,7 +38,9 @@ class OperationStatusScreen extends GetView<OperationTrackingController> {
           return Center(
             child: Text(
               'No active operation found.',
-              style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
           );
         }
@@ -57,15 +64,25 @@ class OperationStatusScreen extends GetView<OperationTrackingController> {
                   ),
                   child: Column(
                     children: [
-                      Text('Operation ID', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+                      Text(
+                        'Operation ID',
+                        style: AppTextStyles.labelLarge.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      Text(operation.operationId.toUpperCase(), style: AppTextStyles.titleLarge),
+                      Text(
+                        operation.operationId.toUpperCase(),
+                        style: AppTextStyles.titleLarge,
+                      ),
                       const SizedBox(height: AppDimensions.paddingM),
                       const Divider(color: AppColors.glassBorder),
                       const SizedBox(height: AppDimensions.paddingM),
                       Text(
                         'Last Updated: ${operation.updatedAt.hour.toString().padLeft(2, '0')}:${operation.updatedAt.minute.toString().padLeft(2, '0')}',
-                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -115,32 +132,45 @@ class OperationStatusScreen extends GetView<OperationTrackingController> {
               ),
 
               // SRS-59: Download Report Button
-              if (operation.reportUrl != null && operation.reportUrl!.isNotEmpty) ...[
+              if (operation.reportUrl != null &&
+                  operation.reportUrl!.isNotEmpty) ...[
                 const SizedBox(height: AppDimensions.paddingXXL),
                 FadeInUp(
                   duration: const Duration(milliseconds: 400),
-                  child: Obx(() => ElevatedButton.icon(
-                    onPressed: controller.isDownloading.value
-                        ? null
-                        : () => controller.downloadReport(operation.reportUrl!),
-                    icon: controller.isDownloading.value
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.onPrimary),
-                          )
-                        : const Icon(Icons.picture_as_pdf_outlined),
-                    label: Text(
-                      controller.isDownloading.value ? 'Downloading...' : 'Download Report',
-                      style: AppTextStyles.labelLarge,
+                  child: Obx(
+                    () => ElevatedButton.icon(
+                      onPressed: controller.isDownloading.value
+                          ? null
+                          : () =>
+                                controller.downloadReport(operation.reportUrl!),
+                      icon: controller.isDownloading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.onPrimary,
+                              ),
+                            )
+                          : const Icon(Icons.picture_as_pdf_outlined),
+                      label: Text(
+                        controller.isDownloading.value
+                            ? 'Downloading...'
+                            : 'Download Report',
+                        style: AppTextStyles.labelLarge,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.onPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusM,
+                          ),
+                        ),
+                      ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
-                    ),
-                  )),
+                  ),
                 ),
               ],
             ],
@@ -175,7 +205,7 @@ class _StepperItem extends StatelessWidget {
     final isFuture = index > activeIndex;
 
     Color nodeColor = isFuture ? AppColors.glassBorder : chipColor;
-    
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -190,24 +220,35 @@ class _StepperItem extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isActive ? nodeColor : (isCompleted ? nodeColor : AppColors.surfaceOverlay),
+                  color: isActive
+                      ? nodeColor
+                      : (isCompleted ? nodeColor : AppColors.surfaceOverlay),
                   border: Border.all(
                     color: nodeColor,
                     width: isActive || isCompleted ? 0 : 2,
                   ),
-                  boxShadow: isActive && index == 1 // In Surgery pulse (SRS-53)
+                  boxShadow:
+                      isActive &&
+                          index ==
+                              1 // In Surgery pulse (SRS-53)
                       ? [
                           BoxShadow(
-                            color: AppColors.secondary.withOpacity(0.5),
+                            color: AppColors.secondary.withValues(alpha: 0.5),
                             blurRadius: 12,
                             spreadRadius: 4,
-                          )
+                          ),
                         ]
                       : [],
                 ),
                 child: isCompleted
-                    ? const Icon(Icons.check, size: 14, color: AppColors.onPrimary)
-                    : (isActive ? _PulsingInnerCircle(color: AppColors.onPrimary) : null),
+                    ? const Icon(
+                        Icons.check,
+                        size: 14,
+                        color: AppColors.onPrimary,
+                      )
+                    : (isActive
+                          ? _PulsingInnerCircle(color: AppColors.onPrimary)
+                          : null),
               ),
               // Line
               if (!isLast)
@@ -221,7 +262,7 @@ class _StepperItem extends StatelessWidget {
             ],
           ),
           const SizedBox(width: AppDimensions.paddingL),
-          
+
           // Content
           Expanded(
             child: Padding(
@@ -234,19 +275,23 @@ class _StepperItem extends StatelessWidget {
                       Text(
                         title,
                         style: AppTextStyles.titleLarge.copyWith(
-                          color: isFuture ? AppColors.textSecondary : AppColors.textPrimary,
+                          color: isFuture
+                              ? AppColors.textSecondary
+                              : AppColors.textPrimary,
                         ),
                       ),
                       if (isActive) ...[
                         const SizedBox(width: AppDimensions.paddingM),
                         StatusChip(label: 'Live', color: chipColor),
-                      ]
+                      ],
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -266,14 +311,17 @@ class _PulsingInnerCircle extends StatefulWidget {
   _PulsingInnerCircleState createState() => _PulsingInnerCircleState();
 }
 
-class _PulsingInnerCircleState extends State<_PulsingInnerCircle> with SingleTickerProviderStateMixin {
+class _PulsingInnerCircleState extends State<_PulsingInnerCircle>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
-      ..repeat(reverse: true);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
   }
 
   @override
@@ -290,7 +338,10 @@ class _PulsingInnerCircleState extends State<_PulsingInnerCircle> with SingleTic
         child: Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: widget.color),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.color,
+          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../data/models/role_permission_model.dart';
 import '../../../shared_widgets/buttons/primary_button.dart';
 import '../controllers/role_permission_controller.dart';
 
@@ -22,7 +23,9 @@ class RolePermissionsScreen extends GetView<RolePermissionController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value && controller.rolePermissions.isEmpty) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         if (controller.rolePermissions.isEmpty) {
@@ -47,9 +50,11 @@ class RolePermissionsScreen extends GetView<RolePermissionController> {
     );
   }
 
-  Widget _buildRoleCard(rolePerm, BuildContext context) {
+  Widget _buildRoleCard(RolePermissionModel rolePerm, BuildContext context) {
     // Local state for the expansion tile checkboxes
-    final RxList<String> currentAllowed = List<String>.from(rolePerm.allowedModules).obs;
+    final RxList<String> currentAllowed = List<String>.from(
+      rolePerm.allowedModules,
+    ).obs;
 
     return Container(
       margin: const EdgeInsets.only(bottom: AppDimensions.paddingL),
@@ -67,12 +72,16 @@ class RolePermissionsScreen extends GetView<RolePermissionController> {
             iconColor: AppColors.primary,
             title: Text(
               rolePerm.role.toUpperCase(),
-              style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+              style: AppTextStyles.titleLarge.copyWith(
+                color: AppColors.primary,
+              ),
             ),
-            subtitle: Obx(() => Text(
-              '${currentAllowed.length} modules allowed',
-              style: AppTextStyles.bodyMedium,
-            )),
+            subtitle: Obx(
+              () => Text(
+                '${currentAllowed.length} modules allowed',
+                style: AppTextStyles.bodyMedium,
+              ),
+            ),
             children: [
               Container(
                 padding: const EdgeInsets.all(AppDimensions.paddingM),
@@ -89,7 +98,9 @@ class RolePermissionsScreen extends GetView<RolePermissionController> {
                           value: isAllowed,
                           activeColor: AppColors.primary,
                           checkColor: AppColors.onPrimary,
-                          side: const BorderSide(color: AppColors.textSecondary),
+                          side: const BorderSide(
+                            color: AppColors.textSecondary,
+                          ),
                           onChanged: (val) {
                             if (val == true) {
                               currentAllowed.add(module);
@@ -101,14 +112,19 @@ class RolePermissionsScreen extends GetView<RolePermissionController> {
                       });
                     }),
                     const SizedBox(height: AppDimensions.paddingL),
-                    Obx(() => PrimaryButton(
-                      label: 'Save Permissions',
-                      icon: Icons.security_rounded,
-                      isLoading: controller.isLoading.value,
-                      onPressed: () {
-                        controller.savePermissions(rolePerm.role, currentAllowed.toList());
-                      },
-                    )),
+                    Obx(
+                      () => PrimaryButton(
+                        label: 'Save Permissions',
+                        icon: Icons.security_rounded,
+                        isLoading: controller.isLoading.value,
+                        onPressed: () {
+                          controller.savePermissions(
+                            rolePerm.role,
+                            currentAllowed.toList(),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

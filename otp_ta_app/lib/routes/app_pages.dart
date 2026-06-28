@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'app_routes.dart';
 import '../modules/splash/views/splash_screen.dart';
 import '../modules/splash/bindings/splash_binding.dart';

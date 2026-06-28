@@ -22,18 +22,25 @@ class NotificationCenterScreen extends GetView<NotificationController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Notifications', style: AppTextStyles.headlineMedium),
         actions: [
           Obx(() {
-            if (controller.notifications.isEmpty) return const SizedBox.shrink();
+            if (controller.notifications.isEmpty) {
+              return const SizedBox.shrink();
+            }
             return TextButton(
               onPressed: () => controller.clearAll(),
               child: Text(
                 'Clear All',
-                style: AppTextStyles.bodyLarge.copyWith(color: AppColors.errorLight),
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.errorLight,
+                ),
               ),
             );
           }),
@@ -45,7 +52,9 @@ class NotificationCenterScreen extends GetView<NotificationController> {
           constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
           child: Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              );
             }
 
             if (controller.notifications.isEmpty) {
@@ -53,11 +62,18 @@ class NotificationCenterScreen extends GetView<NotificationController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.notifications_off_outlined, size: 72, color: AppColors.textTertiary),
+                    const Icon(
+                      Icons.notifications_off_outlined,
+                      size: 72,
+                      color: AppColors.textTertiary,
+                    ),
                     const SizedBox(height: 16),
                     Text('All Caught Up!', style: AppTextStyles.titleLarge),
                     const SizedBox(height: 8),
-                    Text('You have no new notifications.', style: AppTextStyles.bodyMedium),
+                    Text(
+                      'You have no new notifications.',
+                      style: AppTextStyles.bodyMedium,
+                    ),
                   ],
                 ),
               );
@@ -66,7 +82,8 @@ class NotificationCenterScreen extends GetView<NotificationController> {
             return ListView.separated(
               padding: const EdgeInsets.all(AppDimensions.paddingL),
               itemCount: controller.notifications.length,
-              separatorBuilder: (_, __) => const SizedBox(height: AppDimensions.paddingM),
+              separatorBuilder: (_, _) =>
+                  const SizedBox(height: AppDimensions.paddingM),
               itemBuilder: (context, index) {
                 final notification = controller.notifications[index];
 
@@ -99,7 +116,9 @@ class _NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isUnread = !notification.isRead;
-    final timeString = DateFormat('MMM d, h:mm a').format(notification.timestamp);
+    final timeString = DateFormat(
+      'MMM d, h:mm a',
+    ).format(notification.timestamp);
     final isCheckup = notification.type == 'checkup_reminder';
 
     IconData iconData = Icons.notifications_rounded;
@@ -122,7 +141,9 @@ class _NotificationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         side: BorderSide(
-          color: isUnread ? AppColors.primary.withOpacity(0.5) : AppColors.glassBorder,
+          color: isUnread
+              ? AppColors.primary.withValues(alpha: 0.5)
+              : AppColors.glassBorder,
           width: 1.0,
         ),
       ),
@@ -145,13 +166,13 @@ class _NotificationCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-              
+
               // Icon Container
               Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.15),
+                  color: iconColor.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(iconData, color: iconColor, size: 22),
@@ -169,12 +190,16 @@ class _NotificationCard extends StatelessWidget {
                         Text(
                           notification.title,
                           style: AppTextStyles.titleLarge.copyWith(
-                            fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isUnread
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         Text(
                           timeString,
-                          style: AppTextStyles.bodySmall.copyWith(color: AppColors.textTertiary),
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.textTertiary,
+                          ),
                         ),
                       ],
                     ),
@@ -182,7 +207,9 @@ class _NotificationCard extends StatelessWidget {
                     Text(
                       notification.body,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: isUnread ? AppColors.textPrimary : AppColors.textSecondary,
+                        color: isUnread
+                            ? AppColors.textPrimary
+                            : AppColors.textSecondary,
                       ),
                     ),
                     if (isCheckup) ...[
@@ -198,23 +225,41 @@ class _NotificationCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                             Row(
+                            Row(
                               children: [
-                                const Icon(Icons.person_rounded, size: 14, color: AppColors.primaryLight),
+                                const Icon(
+                                  Icons.person_rounded,
+                                  size: 14,
+                                  color: AppColors.primaryLight,
+                                ),
                                 const SizedBox(width: 4),
-                                Text('Doctor', style: AppTextStyles.labelMedium),
+                                Text(
+                                  'Doctor',
+                                  style: AppTextStyles.labelMedium,
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Icon(Icons.access_time_rounded, size: 14, color: AppColors.secondaryLight),
+                                const Icon(
+                                  Icons.access_time_rounded,
+                                  size: 14,
+                                  color: AppColors.secondaryLight,
+                                ),
                                 const SizedBox(width: 4),
-                                Text('Scheduled', style: AppTextStyles.labelMedium),
+                                Text(
+                                  'Scheduled',
+                                  style: AppTextStyles.labelMedium,
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Icon(Icons.meeting_room_rounded, size: 14, color: Colors.amberAccent),
+                                const Icon(
+                                  Icons.meeting_room_rounded,
+                                  size: 14,
+                                  color: Colors.amberAccent,
+                                ),
                                 const SizedBox(width: 4),
                                 Text('Room', style: AppTextStyles.labelMedium),
                               ],

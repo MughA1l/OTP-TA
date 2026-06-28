@@ -14,9 +14,9 @@ class CheckUpHistoryController extends GetxController {
     required IAppointmentRepository appointmentRepository,
     required IDoctorRepository doctorRepository,
     required AuthController authController,
-  })  : _appointmentRepository = appointmentRepository,
-        _doctorRepository = doctorRepository,
-        _authController = authController;
+  }) : _appointmentRepository = appointmentRepository,
+       _doctorRepository = doctorRepository,
+       _authController = authController;
 
   final RxList<AppointmentModel> _allAppointments = <AppointmentModel>[].obs;
   final RxMap<String, DoctorModel> doctorCache = <String, DoctorModel>{}.obs;
@@ -33,8 +33,10 @@ class CheckUpHistoryController extends GetxController {
   final Rx<DateTime?> endDate = Rx<DateTime?>(null);
 
   // Final lists
-  final RxList<AppointmentModel> filteredAppointments = <AppointmentModel>[].obs;
-  final RxList<AppointmentModel> paginatedAppointments = <AppointmentModel>[].obs;
+  final RxList<AppointmentModel> filteredAppointments =
+      <AppointmentModel>[].obs;
+  final RxList<AppointmentModel> paginatedAppointments =
+      <AppointmentModel>[].obs;
 
   @override
   void onInit() {
@@ -58,13 +60,18 @@ class CheckUpHistoryController extends GetxController {
     });
 
     // Listen to patient's appointments
-    _appointmentRepository.watchPatientAppointments(uid).listen((appts) {
-      _allAppointments.value = appts;
-      _applyFiltersAndPagination();
-      isLoading.value = false;
-    }, onError: (_) {
-      isLoading.value = false;
-    });
+    _appointmentRepository
+        .watchPatientAppointments(uid)
+        .listen(
+          (appts) {
+            _allAppointments.value = appts;
+            _applyFiltersAndPagination();
+            isLoading.value = false;
+          },
+          onError: (_) {
+            isLoading.value = false;
+          },
+        );
 
     // React to filter changes
     ever(searchQuery, (_) => _resetAndApplyFilters());
@@ -87,9 +94,10 @@ class CheckUpHistoryController extends GetxController {
     // Past appointments = status is completed/noShow, or scheduled but date has passed
     final now = DateTime.now();
     final pastAppts = _allAppointments.where((appt) {
-      final isPastStatus = appt.status == AppointmentStatus.completed || 
-                           appt.status == AppointmentStatus.noShow ||
-                           appt.status == AppointmentStatus.cancelled;
+      final isPastStatus =
+          appt.status == AppointmentStatus.completed ||
+          appt.status == AppointmentStatus.noShow ||
+          appt.status == AppointmentStatus.cancelled;
       final isPastTime = appt.dateTime.isBefore(now);
       return isPastStatus || isPastTime;
     }).toList();
@@ -115,7 +123,11 @@ class CheckUpHistoryController extends GetxController {
       // Date range search
       if (start != null) {
         // Normalize to start of day
-        final apptDate = DateTime(appt.dateTime.year, appt.dateTime.month, appt.dateTime.day);
+        final apptDate = DateTime(
+          appt.dateTime.year,
+          appt.dateTime.month,
+          appt.dateTime.day,
+        );
         final filterStart = DateTime(start.year, start.month, start.day);
         if (apptDate.isBefore(filterStart)) {
           return false;
@@ -123,7 +135,11 @@ class CheckUpHistoryController extends GetxController {
       }
 
       if (end != null) {
-        final apptDate = DateTime(appt.dateTime.year, appt.dateTime.month, appt.dateTime.day);
+        final apptDate = DateTime(
+          appt.dateTime.year,
+          appt.dateTime.month,
+          appt.dateTime.day,
+        );
         final filterEnd = DateTime(end.year, end.month, end.day);
         if (apptDate.isAfter(filterEnd)) {
           return false;
@@ -150,7 +166,7 @@ class CheckUpHistoryController extends GetxController {
   void loadMore() {
     if (isLoadingMore.value || !hasMore.value) return;
     isLoadingMore.value = true;
-    
+
     // Simulate network delay for premium feel / shimmer
     Future.delayed(const Duration(milliseconds: 600), () {
       currentLimit.value += 10;

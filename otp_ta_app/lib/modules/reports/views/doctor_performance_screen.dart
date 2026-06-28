@@ -26,9 +26,15 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
       appBar: AppBar(
         backgroundColor: AppColors.surfaceElevated,
         elevation: 1,
-        title: Text('Doctor Performance Metrics', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'Doctor Performance Metrics',
+          style: AppTextStyles.headlineMedium,
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         actions: [
@@ -36,7 +42,10 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
             final stats = controller.doctorPerformance.value;
             if (stats == null) return const SizedBox.shrink();
             return IconButton(
-              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              icon: const Icon(
+                Icons.picture_as_pdf_rounded,
+                color: AppColors.primaryLight,
+              ),
               onPressed: () => PdfGenerator.generateDoctorPerformancePdf(stats),
               tooltip: 'Export PDF',
             );
@@ -64,22 +73,32 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
                 Obx(() {
                   final stats = controller.doctorPerformance.value;
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    );
                   }
 
                   if (stats == null) {
                     return Card(
                       color: AppColors.surfaceElevated,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusL,
+                        ),
                         side: const BorderSide(color: AppColors.glassBorder),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(AppDimensions.paddingXL),
                         child: Center(
                           child: Text(
-                            isAdmin ? 'Select a doctor to view metrics' : 'No performance metrics available.',
-                            style: AppTextStyles.titleLarge.copyWith(color: AppColors.textSecondary),
+                            isAdmin
+                                ? 'Select a doctor to view metrics'
+                                : 'No performance metrics available.',
+                            style: AppTextStyles.titleLarge.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ),
                       ),
@@ -141,19 +160,30 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
                         child: Card(
                           color: AppColors.surfaceElevated,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-                            side: const BorderSide(color: AppColors.glassBorder),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusL,
+                            ),
+                            side: const BorderSide(
+                              color: AppColors.glassBorder,
+                            ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(AppDimensions.paddingL),
+                            padding: const EdgeInsets.all(
+                              AppDimensions.paddingL,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Operations Executed Per Week', style: AppTextStyles.titleLarge),
+                                Text(
+                                  'Operations Executed Per Week',
+                                  style: AppTextStyles.titleLarge,
+                                ),
                                 const SizedBox(height: 16),
                                 SizedBox(
                                   height: 300,
-                                  child: _WeeklyOpsBarChart(opsCount: completed),
+                                  child: _WeeklyOpsBarChart(
+                                    opsCount: completed,
+                                  ),
                                 ),
                               ],
                             ),
@@ -182,19 +212,30 @@ class DoctorPerformanceScreen extends GetView<ReportController> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            const Icon(Icons.psychology_outlined, color: AppColors.primaryLight),
+            const Icon(
+              Icons.psychology_outlined,
+              color: AppColors.primaryLight,
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Obx(() {
                 return DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     dropdownColor: AppColors.surfaceElevated,
-                    hint: Text('Select Doctor', style: AppTextStyles.bodyMedium),
-                    value: controller.selectedDoctorId.value.isEmpty ? null : controller.selectedDoctorId.value,
+                    hint: Text(
+                      'Select Doctor',
+                      style: AppTextStyles.bodyMedium,
+                    ),
+                    value: controller.selectedDoctorId.value.isEmpty
+                        ? null
+                        : controller.selectedDoctorId.value,
                     items: controller.doctorsList.map((doc) {
                       return DropdownMenuItem<String>(
                         value: doc.uid,
-                        child: Text('Dr. ${doc.displayName ?? 'Doctor'}', style: AppTextStyles.bodyLarge),
+                        child: Text(
+                          'Dr. ${doc.displayName ?? 'Doctor'}',
+                          style: AppTextStyles.bodyLarge,
+                        ),
                       );
                     }).toList(),
                     onChanged: (val) {
@@ -244,7 +285,7 @@ class _StatCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: Icon(icon, color: color, size: 28),
@@ -257,7 +298,9 @@ class _StatCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.labelMedium.copyWith(color: AppColors.textTertiary),
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -286,7 +329,8 @@ class _WeeklyOpsBarChart extends StatefulWidget {
   State<_WeeklyOpsBarChart> createState() => _WeeklyOpsBarChartState();
 }
 
-class _WeeklyOpsBarChartState extends State<_WeeklyOpsBarChart> with SingleTickerProviderStateMixin {
+class _WeeklyOpsBarChartState extends State<_WeeklyOpsBarChart>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _scaleAnimation;
 
@@ -372,8 +416,12 @@ class _WeeklyOpsBarChartState extends State<_WeeklyOpsBarChart> with SingleTicke
             barGroups: animatedGroups,
             titlesData: FlTitlesData(
               show: true,
-              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,

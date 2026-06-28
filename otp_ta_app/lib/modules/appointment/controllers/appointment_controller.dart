@@ -12,8 +12,8 @@ class AppointmentController extends GetxController {
   AppointmentController({
     required IAppointmentRepository appointmentRepository,
     required IDoctorRepository doctorRepository,
-  })  : _appointmentRepository = appointmentRepository,
-        _doctorRepository = doctorRepository;
+  }) : _appointmentRepository = appointmentRepository,
+       _doctorRepository = doctorRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<AppointmentModel> allAppointments = <AppointmentModel>[].obs;
@@ -35,7 +35,8 @@ class AppointmentController extends GetxController {
   void _watchAppointments() {
     _appointmentRepository.watchAllAppointments().listen(
       (list) => allAppointments.value = list,
-      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load appointments'),
+      onError: (_) =>
+          SnackbarHelper.showError('Error', 'Failed to load appointments'),
     );
   }
 
@@ -64,10 +65,12 @@ class AppointmentController extends GetxController {
 
     // Remove slots already booked at the same date+slot
     final bookedSlots = allAppointments
-        .where((a) =>
-            a.doctorId == doctor.doctorId &&
-            a.status != AppointmentStatus.cancelled &&
-            _isSameDate(a.dateTime, date))
+        .where(
+          (a) =>
+              a.doctorId == doctor.doctorId &&
+              a.status != AppointmentStatus.cancelled &&
+              _isSameDate(a.dateTime, date),
+        )
         .map((a) => a.notes ?? '') // notes field used as slot label
         .toSet();
 
@@ -87,10 +90,10 @@ class AppointmentController extends GetxController {
     // 1. Check if the day of week matches doctor's availability
     // Format weekday short name, e.g. "Mon"
     final dayName = _dayName(date.weekday);
-    
+
     // Format check string, e.g., "Mon|Morning (8am–12pm)"
     final checkString = '$dayName|$slot';
-    
+
     if (!doctor.availabilitySlots.contains(checkString)) {
       return false;
     }
@@ -99,11 +102,12 @@ class AppointmentController extends GetxController {
     final hasConflict = allAppointments.any((appt) {
       if (appt.doctorId != doctor.doctorId) return false;
       if (appt.status == AppointmentStatus.cancelled) return false;
-      
-      final isSameDate = appt.dateTime.year == date.year &&
-                         appt.dateTime.month == date.month &&
-                         appt.dateTime.day == date.day;
-      
+
+      final isSameDate =
+          appt.dateTime.year == date.year &&
+          appt.dateTime.month == date.month &&
+          appt.dateTime.day == date.day;
+
       // Slot name is stored in notes field
       final isSameSlot = appt.notes == slot;
 
@@ -119,7 +123,10 @@ class AppointmentController extends GetxController {
     final slot = selectedSlot.value;
 
     if (doctor == null || date == null || slot == null || patientId.isEmpty) {
-      SnackbarHelper.showError('Error', 'Please fill all fields before booking.');
+      SnackbarHelper.showError(
+        'Error',
+        'Please fill all fields before booking.',
+      );
       return;
     }
 
@@ -137,7 +144,10 @@ class AppointmentController extends GetxController {
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) {
-        SnackbarHelper.showSuccess('Success', 'Appointment Booked Successfully');
+        SnackbarHelper.showSuccess(
+          'Success',
+          'Appointment Booked Successfully',
+        );
         _resetForm();
         Get.back();
       },
@@ -154,7 +164,10 @@ class AppointmentController extends GetxController {
 
   Future<void> reschedule(String appointmentId, DateTime newDateTime) async {
     isLoading.value = true;
-    final result = await _appointmentRepository.reschedule(appointmentId, newDateTime);
+    final result = await _appointmentRepository.reschedule(
+      appointmentId,
+      newDateTime,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
       (_) => SnackbarHelper.showSuccess('Success', 'Appointment Rescheduled'),
@@ -167,17 +180,29 @@ class AppointmentController extends GetxController {
     final result = await _appointmentRepository.cancel(appointmentId);
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) => SnackbarHelper.showSuccess('Success', 'Appointment Cancelled'), // SRS-44
+      (_) => SnackbarHelper.showSuccess(
+        'Success',
+        'Appointment Cancelled',
+      ), // SRS-44
     );
     isLoading.value = false;
   }
 
-  Future<void> updateStatus(String appointmentId, AppointmentStatus status) async {
+  Future<void> updateStatus(
+    String appointmentId,
+    AppointmentStatus status,
+  ) async {
     isLoading.value = true;
-    final result = await _appointmentRepository.updateStatus(appointmentId, status);
+    final result = await _appointmentRepository.updateStatus(
+      appointmentId,
+      status,
+    );
     result.fold(
       (failure) => SnackbarHelper.showError('Error', failure.message),
-      (_) => SnackbarHelper.showSuccess('Success', 'Status updated to ${status.name}'),
+      (_) => SnackbarHelper.showSuccess(
+        'Success',
+        'Status updated to ${status.name}',
+      ),
     );
     isLoading.value = false;
   }

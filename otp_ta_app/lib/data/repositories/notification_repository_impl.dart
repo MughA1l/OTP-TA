@@ -14,21 +14,26 @@ class NotificationRepositoryImpl implements INotificationRepository {
         .where('userId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => NotificationModel.fromMap(doc.data(), doc.id))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => NotificationModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
   }
 
   @override
   Future<Either<Failure, void>> markAsRead(String notificationId) async {
     try {
-      await _firestore
-          .collection('notifications')
-          .doc(notificationId)
-          .update({'isRead': true});
+      await _firestore.collection('notifications').doc(notificationId).update({
+        'isRead': true,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to mark notification as read.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to mark notification as read.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -54,7 +59,11 @@ class NotificationRepositoryImpl implements INotificationRepository {
 
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to clear notifications.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to clear notifications.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }

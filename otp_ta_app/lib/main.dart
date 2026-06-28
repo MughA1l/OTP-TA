@@ -6,12 +6,13 @@ import 'package:device_preview/device_preview.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_strings.dart';
+import 'core/services/security_hardening_service.dart';
 import 'routes/app_routes.dart';
 import 'routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Safe Firebase Initialization to prevent black screen on launch failure
   try {
     await Firebase.initializeApp(
@@ -20,16 +21,13 @@ void main() async {
   } catch (e) {
     debugPrint("Firebase initialization failed: $e");
   }
-  
+
   // Initialize GetStorage for session persistence
   await GetStorage.init();
-  
-  runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => const MyApp(),
-    ),
-  );
+  await SecurityHardeningService.initializeAppCheck();
+
+  // runApp(DevicePreview(enabled: true, builder: (context) => const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

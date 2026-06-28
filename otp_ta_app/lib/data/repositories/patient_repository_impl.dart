@@ -12,17 +12,20 @@ class PatientRepositoryImpl implements IPatientRepository {
   Future<Either<Failure, void>> createPatient(PatientModel patient) async {
     try {
       final batch = _firestore.batch();
-      
+
       // Store user record
-      final userRef = _firestore.collection(FirebaseConstants.users).doc(patient.uid);
+      final userRef = _firestore
+          .collection(FirebaseConstants.users)
+          .doc(patient.uid);
       batch.set(userRef, {
-        'email': '${patient.patientId.toLowerCase()}@hospital.com', // mock email
+        'email':
+            '${patient.patientId.toLowerCase()}@hospital.com', // mock email
         'role': 'patient',
         'status': 'active',
         'displayName': patient.name,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      
+
       // Store patient record
       final patientRef = _firestore.collection('patients').doc(patient.uid);
       batch.set(patientRef, patient.toMap());
@@ -30,7 +33,9 @@ class PatientRepositoryImpl implements IPatientRepository {
       await batch.commit();
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to create patient.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to create patient.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -45,7 +50,9 @@ class PatientRepositoryImpl implements IPatientRepository {
           .update(patient.toMap());
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update patient.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to update patient.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -60,7 +67,9 @@ class PatientRepositoryImpl implements IPatientRepository {
       }
       return Right(PatientModel.fromMap(doc.data()!, doc.id));
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to fetch patient.'));
+      return Left(
+        FirestoreFailure(message: e.message ?? 'Failed to fetch patient.'),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }
@@ -68,24 +77,29 @@ class PatientRepositoryImpl implements IPatientRepository {
 
   @override
   Stream<List<PatientModel>> watchAllPatients() {
-    return _firestore
-        .collection('patients')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) => PatientModel.fromMap(doc.data(), doc.id)).toList();
+    return _firestore.collection('patients').snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => PatientModel.fromMap(doc.data(), doc.id))
+          .toList();
     });
   }
 
   @override
-  Future<Either<Failure, void>> updateAccountStatus(String uid, String status) async {
+  Future<Either<Failure, void>> updateAccountStatus(
+    String uid,
+    String status,
+  ) async {
     try {
-      await _firestore
-          .collection(FirebaseConstants.users)
-          .doc(uid)
-          .update({'status': status});
+      await _firestore.collection(FirebaseConstants.users).doc(uid).update({
+        'status': status,
+      });
       return const Right(null);
     } on FirebaseException catch (e) {
-      return Left(FirestoreFailure(message: e.message ?? 'Failed to update account status.'));
+      return Left(
+        FirestoreFailure(
+          message: e.message ?? 'Failed to update account status.',
+        ),
+      );
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }

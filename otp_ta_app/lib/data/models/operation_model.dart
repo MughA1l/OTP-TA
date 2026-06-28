@@ -6,7 +6,7 @@ enum OperationStatus {
   inSurgery,
   recovery,
   completed,
-  cancelled
+  cancelled,
 }
 
 class SurgicalTeamModel {
@@ -69,7 +69,8 @@ class OperationOutcomeModel {
       notes: map['notes'] as String? ?? '',
       complications: map['complications'] as String? ?? '',
       patientCondition: map['patientCondition'] as String? ?? '',
-      submittedAt: (map['submittedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      submittedAt:
+          (map['submittedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       submittedBy: map['submittedBy'] as String? ?? '',
     );
   }
@@ -223,20 +224,30 @@ class OperationModel {
       patientName: map['patientName'] as String? ?? '',
       surgeryType: map['surgeryType'] as String? ?? '',
       otRoom: map['otRoom'] as String? ?? '',
-      scheduledDate: (map['scheduledDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      scheduledDate:
+          (map['scheduledDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       scheduledTime: map['scheduledTime'] as String? ?? '',
       status: OperationStatus.values.firstWhere(
-        (e) => e.name.toLowerCase() == (map['status'] as String? ?? 'scheduled').toLowerCase(),
+        (e) =>
+            e.name.toLowerCase() ==
+            (map['status'] as String? ?? 'scheduled').toLowerCase(),
         orElse: () => OperationStatus.scheduled,
       ),
-      surgicalTeam: SurgicalTeamModel.fromMap(map['surgicalTeam'] as Map<String, dynamic>? ?? {}),
+      surgicalTeam: SurgicalTeamModel.fromMap(
+        map['surgicalTeam'] as Map<String, dynamic>? ?? {},
+      ),
       outcome: map['outcome'] != null
-          ? OperationOutcomeModel.fromMap(map['outcome'] as Map<String, dynamic>)
+          ? OperationOutcomeModel.fromMap(
+              map['outcome'] as Map<String, dynamic>,
+            )
           : null,
       credentialsGenerated: map['credentialsGenerated'] as bool? ?? false,
       reportUrls: List<String>.from(map['reportUrls'] ?? []),
-      auditLog: (map['auditLog'] as List?)
-              ?.map((e) => AuditLogEntryModel.fromMap(e as Map<String, dynamic>))
+      auditLog:
+          (map['auditLog'] as List?)
+              ?.map(
+                (e) => AuditLogEntryModel.fromMap(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),

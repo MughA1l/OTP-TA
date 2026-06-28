@@ -26,7 +26,10 @@ class ForgotPasswordScreen extends GetView<AuthController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
       ),
@@ -38,10 +41,7 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                 gradient: RadialGradient(
                   center: Alignment(0, -0.6),
                   radius: 1.0,
-                  colors: [
-                    AppColors.primaryContainer,
-                    AppColors.background,
-                  ],
+                  colors: [AppColors.primaryContainer, AppColors.background],
                 ),
               ),
             ),
@@ -67,14 +67,21 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                           duration: const Duration(milliseconds: 600),
                           child: Center(
                             child: Container(
-                              padding: const EdgeInsets.all(AppDimensions.paddingL),
+                              padding: const EdgeInsets.all(
+                                AppDimensions.paddingL,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceOverlay,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.glassBorder, width: 1.5),
+                                border: Border.all(
+                                  color: AppColors.glassBorder,
+                                  width: 1.5,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primary.withOpacity(0.2),
+                                    color: AppColors.primary.withValues(
+                                      alpha: 0.2,
+                                    ),
                                     blurRadius: 30,
                                     spreadRadius: 2,
                                   ),
@@ -93,21 +100,33 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                           duration: const Duration(milliseconds: 500),
                           delay: const Duration(milliseconds: 100),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusXL,
+                            ),
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                               child: Container(
-                                padding: const EdgeInsets.all(AppDimensions.paddingXL),
+                                padding: const EdgeInsets.all(
+                                  AppDimensions.paddingXL,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppColors.glassBackground,
-                                  borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-                                  border: Border.all(color: AppColors.glassBorder, width: 1),
+                                  borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusXL,
+                                  ),
+                                  border: Border.all(
+                                    color: AppColors.glassBorder,
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     FadeInUp(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       delay: const Duration(milliseconds: 200),
                                       child: Text(
                                         'Reset Password',
@@ -115,9 +134,13 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
-                                    const SizedBox(height: AppDimensions.paddingXS),
+                                    const SizedBox(
+                                      height: AppDimensions.paddingXS,
+                                    ),
                                     FadeInUp(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       delay: const Duration(milliseconds: 250),
                                       child: Text(
                                         'Enter your email address and we will send you a link to reset your password.',
@@ -125,28 +148,40 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
-                                    const SizedBox(height: AppDimensions.paddingXL),
+                                    const SizedBox(
+                                      height: AppDimensions.paddingXL,
+                                    ),
                                     FadeInUp(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       delay: const Duration(milliseconds: 300),
                                       child: AppTextField(
                                         controller: emailCtrl,
                                         label: 'Email Address',
                                         hint: 'doctor@hospital.com',
                                         prefixIcon: Icons.email_outlined,
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         textInputAction: TextInputAction.done,
                                         validator: Validators.validateEmail,
                                         onFieldSubmitted: (_) {
-                                          if (formKey.currentState!.validate()) {
-                                            controller.sendPasswordResetEmail(emailCtrl.text);
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            controller.sendPasswordResetEmail(
+                                              emailCtrl.text,
+                                            );
                                           }
                                         },
                                       ),
                                     ),
-                                    const SizedBox(height: AppDimensions.paddingXXL),
+                                    const SizedBox(
+                                      height: AppDimensions.paddingXXL,
+                                    ),
                                     FadeInUp(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       delay: const Duration(milliseconds: 400),
                                       child: Obx(
                                         () => PrimaryButton(
@@ -154,8 +189,11 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                                           isLoading: controller.isLoading.value,
                                           icon: Icons.send_rounded,
                                           onPressed: () {
-                                            if (formKey.currentState!.validate()) {
-                                              controller.sendPasswordResetEmail(emailCtrl.text);
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              controller.sendPasswordResetEmail(
+                                                emailCtrl.text,
+                                              );
                                             }
                                           },
                                         ),

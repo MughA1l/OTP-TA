@@ -53,22 +53,27 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
   void _fetchFreshOperation(String operationId) {
     controller.watchPatientOperation('').listen((_) {}); // trigger listener
     // Query doc directly
-    FirebaseFirestore.instance.collection('operations').doc(operationId).snapshots().listen((doc) {
-      if (doc.exists) {
-        final op = OperationModel.fromMap(doc.data()!, doc.id);
-        operation.value = op;
-        controller.selectedOperation.value = op;
+    FirebaseFirestore.instance
+        .collection('operations')
+        .doc(operationId)
+        .snapshots()
+        .listen((doc) {
+          if (doc.exists) {
+            final op = OperationModel.fromMap(doc.data()!, doc.id);
+            operation.value = op;
+            controller.selectedOperation.value = op;
 
-        // Populate initial values if already assigned (Update Flow)
-        if (op.surgicalTeam.primaryDoctorId.isNotEmpty) {
-          isUpdateFlow = true;
-          selectedPrimaryDoctorId.value = op.surgicalTeam.primaryDoctorId;
-          selectedAnaesthesiologistId.value = op.surgicalTeam.anaesthesiologistId;
-          selectedNurses.assignAll(op.surgicalTeam.nursingStaff);
-          _validateAvailability();
-        }
-      }
-    });
+            // Populate initial values if already assigned (Update Flow)
+            if (op.surgicalTeam.primaryDoctorId.isNotEmpty) {
+              isUpdateFlow = true;
+              selectedPrimaryDoctorId.value = op.surgicalTeam.primaryDoctorId;
+              selectedAnaesthesiologistId.value =
+                  op.surgicalTeam.anaesthesiologistId;
+              selectedNurses.assignAll(op.surgicalTeam.nursingStaff);
+              _validateAvailability();
+            }
+          }
+        });
   }
 
   void _validateAvailability() {
@@ -77,12 +82,19 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
 
     // 1. Primary Doctor Validation
     if (selectedPrimaryDoctorId.value.isNotEmpty) {
-      final doc = controller.doctorList.firstWhereOrNull((d) => d.doctorId == selectedPrimaryDoctorId.value);
+      final doc = controller.doctorList.firstWhereOrNull(
+        (d) => d.doctorId == selectedPrimaryDoctorId.value,
+      );
       if (doc != null) {
         if (!controller.isDoctorScheduledSlotValid(doc, op.scheduledDate)) {
-          doctorConflictMsg.value = 'Warning: This day is outside the surgeon\'s availability slots.';
-        } else if (!controller.isDoctorAvailable(doc.doctorId, op.scheduledDate)) {
-          doctorConflictMsg.value = 'Conflict: Surgeon has another overlapping active surgery at this time.';
+          doctorConflictMsg.value =
+              'Warning: This day is outside the surgeon\'s availability slots.';
+        } else if (!controller.isDoctorAvailable(
+          doc.doctorId,
+          op.scheduledDate,
+        )) {
+          doctorConflictMsg.value =
+              'Conflict: Surgeon has another overlapping active surgery at this time.';
         } else {
           doctorConflictMsg.value = '';
         }
@@ -93,12 +105,20 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
 
     // 2. Anaesthesiologist Validation
     if (selectedAnaesthesiologistId.value.isNotEmpty) {
-      final doc = controller.doctorList.firstWhereOrNull((d) => d.doctorId == selectedAnaesthesiologistId.value);
+      final doc = controller.doctorList.firstWhereOrNull(
+        (d) => d.doctorId == selectedAnaesthesiologistId.value,
+      );
       if (doc != null) {
-        if (selectedAnaesthesiologistId.value == selectedPrimaryDoctorId.value) {
-          anaesthesiologistConflictMsg.value = 'Conflict: Anaesthesiologist cannot be the same as Primary Surgeon.';
-        } else if (!controller.isDoctorAvailable(doc.doctorId, op.scheduledDate)) {
-          anaesthesiologistConflictMsg.value = 'Conflict: Doctor has another overlapping active surgery at this time.';
+        if (selectedAnaesthesiologistId.value ==
+            selectedPrimaryDoctorId.value) {
+          anaesthesiologistConflictMsg.value =
+              'Conflict: Anaesthesiologist cannot be the same as Primary Surgeon.';
+        } else if (!controller.isDoctorAvailable(
+          doc.doctorId,
+          op.scheduledDate,
+        )) {
+          anaesthesiologistConflictMsg.value =
+              'Conflict: Doctor has another overlapping active surgery at this time.';
         } else {
           anaesthesiologistConflictMsg.value = '';
         }
@@ -115,7 +135,6 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
     if (formKey.currentState!.validate() &&
         selectedPrimaryDoctorId.value.isNotEmpty &&
         selectedAnaesthesiologistId.value.isNotEmpty) {
-      
       // Ensure no blocking conflicts
       if (doctorConflictMsg.value.contains('Conflict') ||
           anaesthesiologistConflictMsg.value.contains('Conflict')) {
@@ -144,7 +163,11 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
           );
           return;
         }
-        await controller.updateSurgicalTeam(op.operationId, team, auditChangesCtrl.text.trim());
+        await controller.updateSurgicalTeam(
+          op.operationId,
+          team,
+          auditChangesCtrl.text.trim(),
+        );
       } else {
         await controller.assignSurgicalTeam(op.operationId, team);
       }
@@ -161,21 +184,31 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: Text(isUpdateFlow ? 'Update Surgical Team' : 'Assign Surgical Team', style: AppTextStyles.headlineMedium),
+        title: Text(
+          isUpdateFlow ? 'Update Surgical Team' : 'Assign Surgical Team',
+          style: AppTextStyles.headlineMedium,
+        ),
       ),
       body: Obx(() {
         final op = operation.value;
         if (op == null) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
 
         final filteredNurses = controller.staffList
-            .where((staff) =>
-                staff.role.toLowerCase().contains('nurse') ||
-                staff.role.toLowerCase().contains('nursing'))
+            .where(
+              (staff) =>
+                  staff.role.toLowerCase().contains('nurse') ||
+                  staff.role.toLowerCase().contains('nursing'),
+            )
             .toList();
 
         return Center(
@@ -197,7 +230,9 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                         padding: const EdgeInsets.all(AppDimensions.paddingL),
                         decoration: BoxDecoration(
                           color: AppColors.surfaceElevated,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusL,
+                          ),
                           border: Border.all(color: AppColors.glassBorder),
                         ),
                         child: Column(
@@ -205,16 +240,26 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                           children: [
                             Text(
                               'Operation: ${op.surgeryType}',
-                              style: AppTextStyles.titleLarge.copyWith(color: AppColors.primaryLight),
+                              style: AppTextStyles.titleLarge.copyWith(
+                                color: AppColors.primaryLight,
+                              ),
                             ),
                             const SizedBox(height: 8),
-                            Text('Patient: ${op.patientName}', style: AppTextStyles.bodyLarge),
+                            Text(
+                              'Patient: ${op.patientName}',
+                              style: AppTextStyles.bodyLarge,
+                            ),
                             const SizedBox(height: 4),
-                            Text('OT Room: ${op.otRoom}', style: AppTextStyles.bodyMedium),
+                            Text(
+                              'OT Room: ${op.otRoom}',
+                              style: AppTextStyles.bodyMedium,
+                            ),
                             const SizedBox(height: 4),
                             Text(
                               'Scheduled: ${DateFormat('EEEE, MMM d, yyyy').format(op.scheduledDate)} at ${op.scheduledTime}',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -230,14 +275,18 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppDropdown<String>(
-                            value: selectedPrimaryDoctorId.value.isEmpty ? null : selectedPrimaryDoctorId.value,
+                            value: selectedPrimaryDoctorId.value.isEmpty
+                                ? null
+                                : selectedPrimaryDoctorId.value,
                             label: 'Primary Surgeon',
                             hint: 'Choose Surgeon',
                             prefixIcon: Icons.healing_outlined,
                             items: controller.doctorList.map((doc) {
                               return DropdownMenuItem<String>(
                                 value: doc.doctorId,
-                                child: Text('${doc.name} — ${doc.specializations.join(', ')}'),
+                                child: Text(
+                                  '${doc.name} — ${doc.specializations.join(', ')}',
+                                ),
                               );
                             }).toList(),
                             onChanged: (id) {
@@ -250,7 +299,12 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                             Text(
                               doctorConflictMsg.value,
                               style: AppTextStyles.bodySmall.copyWith(
-                                color: doctorConflictMsg.value.startsWith('Conflict') ? AppColors.error : AppColors.warning,
+                                color:
+                                    doctorConflictMsg.value.startsWith(
+                                      'Conflict',
+                                    )
+                                    ? AppColors.error
+                                    : AppColors.warning,
                               ),
                             ),
                           ],
@@ -267,7 +321,9 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppDropdown<String>(
-                            value: selectedAnaesthesiologistId.value.isEmpty ? null : selectedAnaesthesiologistId.value,
+                            value: selectedAnaesthesiologistId.value.isEmpty
+                                ? null
+                                : selectedAnaesthesiologistId.value,
                             label: 'Anaesthesiologist',
                             hint: 'Choose Anaesthesiologist',
                             prefixIcon: Icons.opacity_outlined,
@@ -282,11 +338,15 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                               _validateAvailability();
                             },
                           ),
-                          if (anaesthesiologistConflictMsg.value.isNotEmpty) ...[
+                          if (anaesthesiologistConflictMsg
+                              .value
+                              .isNotEmpty) ...[
                             const SizedBox(height: 4),
                             Text(
                               anaesthesiologistConflictMsg.value,
-                              style: AppTextStyles.bodySmall.copyWith(color: AppColors.error),
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.error,
+                              ),
                             ),
                           ],
                         ],
@@ -301,19 +361,26 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Select Nursing Staff', style: AppTextStyles.labelLarge),
+                          Text(
+                            'Select Nursing Staff',
+                            style: AppTextStyles.labelLarge,
+                          ),
                           const SizedBox(height: 8),
                           if (filteredNurses.isEmpty)
                             Text(
                               'No nursing staff found in staff directory.',
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textTertiary,
+                              ),
                             )
                           else
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
                               children: filteredNurses.map((nurse) {
-                                final isSelected = selectedNurses.contains(nurse.name);
+                                final isSelected = selectedNurses.contains(
+                                  nurse.name,
+                                );
                                 return FilterChip(
                                   label: Text(nurse.name),
                                   selected: isSelected,
@@ -321,12 +388,18 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                                   checkmarkColor: AppColors.primaryLight,
                                   backgroundColor: AppColors.surfaceElevated,
                                   labelStyle: AppTextStyles.bodyMedium.copyWith(
-                                    color: isSelected ? AppColors.primaryLight : AppColors.textSecondary,
+                                    color: isSelected
+                                        ? AppColors.primaryLight
+                                        : AppColors.textSecondary,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusS,
+                                    ),
                                     side: BorderSide(
-                                      color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.glassBorder,
                                     ),
                                   ),
                                   onSelected: (selected) {
@@ -355,7 +428,10 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                           hint: 'Describe reason for team modification...',
                           prefixIcon: Icons.edit_note_outlined,
                           maxLines: 2,
-                          validator: (val) => Validators.validateRequired(val, fieldName: 'Changes Description'),
+                          validator: (val) => Validators.validateRequired(
+                            val,
+                            fieldName: 'Changes Description',
+                          ),
                         ),
                       ),
                       const SizedBox(height: AppDimensions.paddingXL),
@@ -366,7 +442,9 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                       duration: const Duration(milliseconds: 400),
                       delay: const Duration(milliseconds: 300),
                       child: PrimaryButton(
-                        onPressed: controller.isLoading.value ? null : submitAssignment,
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : submitAssignment,
                         label: isUpdateFlow ? 'Update Team' : 'Assign Team',
                         isLoading: controller.isLoading.value,
                       ),
@@ -383,45 +461,71 @@ class _AssignTeamScreenState extends State<AssignTeamScreen> {
                           children: [
                             const Divider(color: AppColors.glassBorder),
                             const SizedBox(height: AppDimensions.paddingM),
-                            Text('Audit Log Modification History', style: AppTextStyles.labelLarge),
+                            Text(
+                              'Audit Log Modification History',
+                              style: AppTextStyles.labelLarge,
+                            ),
                             const SizedBox(height: AppDimensions.paddingM),
                             ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: op.auditLog.length,
-                              separatorBuilder: (_, __) => const SizedBox(height: 8),
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 8),
                               itemBuilder: (context, index) {
                                 final log = op.auditLog[index];
                                 return Container(
-                                  padding: const EdgeInsets.all(AppDimensions.paddingM),
+                                  padding: const EdgeInsets.all(
+                                    AppDimensions.paddingM,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.surface.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                                    border: Border.all(color: AppColors.glassBorder.withOpacity(0.5)),
+                                    color: AppColors.surface.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusM,
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.glassBorder.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                    ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Action: ${log.action}',
-                                            style: AppTextStyles.bodyMedium.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.secondaryLight,
-                                            ),
+                                            style: AppTextStyles.bodyMedium
+                                                .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      AppColors.secondaryLight,
+                                                ),
                                           ),
                                           Text(
-                                            DateFormat('MMM d, yyyy HH:mm').format(log.timestamp),
+                                            DateFormat(
+                                              'MMM d, yyyy HH:mm',
+                                            ).format(log.timestamp),
                                             style: AppTextStyles.bodySmall,
                                           ),
                                         ],
                                       ),
                                       const SizedBox(height: 4),
-                                      Text('Modified By: ${log.changedBy}', style: AppTextStyles.bodySmall),
+                                      Text(
+                                        'Modified By: ${log.changedBy}',
+                                        style: AppTextStyles.bodySmall,
+                                      ),
                                       const SizedBox(height: 2),
-                                      Text('Details: ${log.changes}', style: AppTextStyles.bodyMedium),
+                                      Text(
+                                        'Details: ${log.changes}',
+                                        style: AppTextStyles.bodyMedium,
+                                      ),
                                     ],
                                   ),
                                 );

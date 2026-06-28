@@ -9,6 +9,7 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../shared_widgets/inputs/app_text_field.dart';
 import '../../../shared_widgets/inputs/app_dropdown.dart';
+import '../../../shared_widgets/misc/empty_state_widget.dart';
 import '../../../data/models/operation_model.dart';
 import '../controllers/operation_controller.dart';
 
@@ -44,7 +45,8 @@ class _OperationListScreenState extends State<OperationListScreen> {
   }
 
   void _scrollListener() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       controller.fetchHistory(filters: _getFilterMap());
     }
   }
@@ -53,11 +55,12 @@ class _OperationListScreenState extends State<OperationListScreen> {
     return {
       if (selectedStatus.value != null) 'status': selectedStatus.value,
       if (selectedDoctorId.value != null) 'doctorId': selectedDoctorId.value,
-      if (patientIdCtrl.text.trim().isNotEmpty) 'patientId': patientIdCtrl.text.trim(),
+      if (patientIdCtrl.text.trim().isNotEmpty)
+        'patientId': patientIdCtrl.text.trim(),
       if (selectedDateRange.value != null) ...{
         'dateRangeStart': selectedDateRange.value!.start,
         'dateRangeEnd': selectedDateRange.value!.end,
-      }
+      },
     };
   }
 
@@ -108,14 +111,23 @@ class _OperationListScreenState extends State<OperationListScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: Text('Operation Records Directory', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'Operation Records Directory',
+          style: AppTextStyles.headlineMedium,
+        ),
         actions: [
           // Clear Filters button
           IconButton(
-            icon: const Icon(Icons.filter_alt_off_outlined, color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.filter_alt_off_outlined,
+              color: AppColors.textSecondary,
+            ),
             onPressed: _clearFilters,
             tooltip: 'Clear Filters',
           ),
@@ -125,10 +137,11 @@ class _OperationListScreenState extends State<OperationListScreen> {
         children: [
           // Filter Panel at the top
           _buildFilterPanel(context, isWeb),
-          
+
           Expanded(
             child: Obx(() {
-              if (controller.isLoading.value && controller.operationsList.isEmpty) {
+              if (controller.isLoading.value &&
+                  controller.operationsList.isEmpty) {
                 return Padding(
                   padding: const EdgeInsets.all(AppDimensions.paddingL),
                   child: _buildShimmerSkeleton(),
@@ -136,16 +149,18 @@ class _OperationListScreenState extends State<OperationListScreen> {
               }
 
               if (controller.operationsList.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.assignment_late_outlined, size: 64, color: AppColors.textTertiary),
-                      const SizedBox(height: 16),
-                      Text('No operations matches filters.', style: AppTextStyles.titleLarge),
-                      const SizedBox(height: 8),
-                      Text('Try adjusting or clearing your filters.', style: AppTextStyles.bodyMedium),
-                    ],
+                return EmptyStateWidget(
+                  icon: Icons.assignment_late_outlined,
+                  title: 'No operations match your filters',
+                  message: 'Try adjusting or clearing the search filters.',
+                  action: OutlinedButton.icon(
+                    onPressed: _clearFilters,
+                    icon: const Icon(Icons.filter_alt_off_outlined),
+                    label: const Text('Clear Filters'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primaryLight,
+                      side: const BorderSide(color: AppColors.borderDefault),
+                    ),
                   ),
                 );
               }
@@ -156,13 +171,17 @@ class _OperationListScreenState extends State<OperationListScreen> {
                 child: ListView.builder(
                   controller: scrollController,
                   padding: const EdgeInsets.all(AppDimensions.paddingL),
-                  itemCount: controller.operationsList.length + (controller.hasMore.value ? 1 : 0),
+                  itemCount:
+                      controller.operationsList.length +
+                      (controller.hasMore.value ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == controller.operationsList.length) {
                       return const Center(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(color: AppColors.primary),
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
                         ),
                       );
                     }
@@ -170,7 +189,10 @@ class _OperationListScreenState extends State<OperationListScreen> {
                     final op = controller.operationsList[index];
                     return FadeInUp(
                       duration: const Duration(milliseconds: 300),
-                      child: _buildOperationCard(op),
+                      child: Hero(
+                        tag: 'operation-${op.operationId}',
+                        child: _buildOperationCard(op),
+                      ),
                     );
                   },
                 ),
@@ -184,7 +206,10 @@ class _OperationListScreenState extends State<OperationListScreen> {
 
   Widget _buildFilterPanel(BuildContext context, bool isWeb) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingS),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.paddingL,
+        vertical: AppDimensions.paddingS,
+      ),
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
@@ -196,7 +221,11 @@ class _OperationListScreenState extends State<OperationListScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.filter_list_rounded, color: AppColors.primary, size: 20),
+              const Icon(
+                Icons.filter_list_rounded,
+                color: AppColors.primary,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text('Search Filters', style: AppTextStyles.labelLarge),
             ],
@@ -266,7 +295,10 @@ class _OperationListScreenState extends State<OperationListScreen> {
                 height: 56,
                 child: OutlinedButton.icon(
                   onPressed: () => _selectDateRange(context),
-                  icon: const Icon(Icons.calendar_month_outlined, color: AppColors.textPrimary),
+                  icon: const Icon(
+                    Icons.calendar_month_outlined,
+                    color: AppColors.textPrimary,
+                  ),
                   label: Text(
                     selectedDateRange.value == null
                         ? 'Date Range'
@@ -275,7 +307,11 @@ class _OperationListScreenState extends State<OperationListScreen> {
                   ),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: AppColors.borderDefault),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusM,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -287,7 +323,9 @@ class _OperationListScreenState extends State<OperationListScreen> {
   }
 
   Widget _buildOperationCard(OperationModel op) {
-    final leadDoc = controller.doctorList.firstWhereOrNull((d) => d.doctorId == op.surgicalTeam.primaryDoctorId);
+    final leadDoc = controller.doctorList.firstWhereOrNull(
+      (d) => d.doctorId == op.surgicalTeam.primaryDoctorId,
+    );
 
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimensions.paddingM),
@@ -297,7 +335,8 @@ class _OperationListScreenState extends State<OperationListScreen> {
         side: const BorderSide(color: AppColors.glassBorder),
       ),
       child: InkWell(
-        onTap: () => Get.toNamed('/operation-detail', arguments: op.operationId),
+        onTap: () =>
+            Get.toNamed('/operation-detail', arguments: op.operationId),
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         child: Padding(
           padding: const EdgeInsets.all(AppDimensions.paddingL),
@@ -310,7 +349,9 @@ class _OperationListScreenState extends State<OperationListScreen> {
                   Expanded(
                     child: Text(
                       op.surgeryType,
-                      style: AppTextStyles.titleLarge.copyWith(color: AppColors.primaryLight),
+                      style: AppTextStyles.titleLarge.copyWith(
+                        color: AppColors.primaryLight,
+                      ),
                     ),
                   ),
                   // Status chip
@@ -318,11 +359,16 @@ class _OperationListScreenState extends State<OperationListScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              Text('Patient: ${op.patientName}', style: AppTextStyles.bodyLarge),
+              Text(
+                'Patient: ${op.patientName}',
+                style: AppTextStyles.bodyLarge,
+              ),
               const SizedBox(height: 4),
               Text(
                 'Surgeon: ${leadDoc != null ? leadDoc.name : 'Not Assigned'}',
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(height: 4),
               Row(
@@ -330,9 +376,15 @@ class _OperationListScreenState extends State<OperationListScreen> {
                 children: [
                   Text(
                     'Scheduled: ${DateFormat('MMM d, yyyy').format(op.scheduledDate)} at ${op.scheduledTime}',
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.textTertiary),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textSecondary),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 14,
+                    color: AppColors.textSecondary,
+                  ),
                 ],
               ),
             ],
@@ -368,9 +420,9 @@ class _OperationListScreenState extends State<OperationListScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         status.name.toUpperCase(),

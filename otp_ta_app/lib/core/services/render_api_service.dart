@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import '../constants/app_config.dart';
 
@@ -31,7 +32,11 @@ class RenderApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('RenderApiService.sendOperationStatusNotification Error: $e');
+      developer.log(
+        'RenderApiService.sendOperationStatusNotification Error',
+        error: e,
+        name: 'RenderApiService',
+      );
       return false;
     }
   }
@@ -57,7 +62,11 @@ class RenderApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('RenderApiService.sendPatientCredentials Error: $e');
+      developer.log(
+        'RenderApiService.sendPatientCredentials Error',
+        error: e,
+        name: 'RenderApiService',
+      );
       return false;
     }
   }
@@ -81,7 +90,11 @@ class RenderApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('RenderApiService.sendEmergencyAlert Error: $e');
+      developer.log(
+        'RenderApiService.sendEmergencyAlert Error',
+        error: e,
+        name: 'RenderApiService',
+      );
       return false;
     }
   }

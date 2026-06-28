@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart';
 
@@ -8,7 +9,8 @@ import 'package:googleapis_auth/auth_io.dart';
 class FcmClientService {
   // TODO: Replace with your actual Firebase Project ID
   static const String _projectId = 'otpta-app';
-  static const String _fcmUrl = 'https://fcm.googleapis.com/v1/projects/$_projectId/messages:send';
+  static const String _fcmUrl =
+      'https://fcm.googleapis.com/v1/projects/$_projectId/messages:send';
 
   // TODO: Paste the contents of your downloaded Service Account JSON here.
   // DO NOT commit this file to public repositories.
@@ -22,21 +24,35 @@ class FcmClientService {
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "YOUR_CERT_URL"
+    "client_x509_cert_url": "YOUR_CERT_URL",
   };
 
   static final _scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
 
+  static bool get hasConfig => !_serviceAccountJson.values.any(
+    (value) => value is String && value.contains('YOUR_'),
+  );
+
   /// Generates an OAuth2 token using the embedded service account
   static Future<String?> _getAccessToken() async {
+    if (!hasConfig) {
+      return null;
+    }
+
     try {
-      final accountCredentials = ServiceAccountCredentials.fromJson(_serviceAccountJson);
+      final accountCredentials = ServiceAccountCredentials.fromJson(
+        _serviceAccountJson,
+      );
       final client = await clientViaServiceAccount(accountCredentials, _scopes);
       final accessToken = client.credentials.accessToken.data;
       client.close();
       return accessToken;
     } catch (e) {
-      print('Error getting FCM Access Token: $e');
+      developer.log(
+        'Error getting FCM Access Token',
+        error: e,
+        name: 'FcmClientService',
+      );
       return null;
     }
   }
@@ -48,6 +64,12 @@ class FcmClientService {
     required String body,
     Map<String, String>? data,
   }) async {
+    if (targetFcmToken.trim().isEmpty ||
+        title.trim().isEmpty ||
+        body.trim().isEmpty) {
+      return false;
+    }
+
     try {
       final token = await _getAccessToken();
       if (token == null) return false;
@@ -61,27 +83,26 @@ class FcmClientService {
         body: jsonEncode({
           'message': {
             'token': targetFcmToken,
-            'notification': {
-              'title': title,
-              'body': body,
-            },
-            if (data != null) 'data': data,
-            'android': {
-              'priority': 'high',
-            },
+            'notification': {'title': title, 'body': body},
+            'data': ?data,
+            'android': {'priority': 'high'},
           },
         }),
       );
 
       if (response.statusCode == 200) {
-        print('FCM Sent successfully');
+        developer.log('FCM Sent successfully', name: 'FcmClientService');
         return true;
       } else {
-        print('FCM Error: ${response.body}');
+        developer.log(
+          'FCM Error',
+          error: response.body,
+          name: 'FcmClientService',
+        );
         return false;
       }
     } catch (e) {
-      print('FCM Exception: $e');
+      developer.log('FCM Exception', error: e, name: 'FcmClientService');
       return false;
     }
   }

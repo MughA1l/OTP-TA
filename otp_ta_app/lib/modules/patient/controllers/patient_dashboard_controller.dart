@@ -18,10 +18,10 @@ class PatientDashboardController extends GetxController {
     required IPatientRepository patientRepository,
     required IAppointmentRepository appointmentRepository,
     required IDoctorRepository doctorRepository,
-  })  : _authController = authController,
-        _patientRepository = patientRepository,
-        _appointmentRepository = appointmentRepository,
-        _doctorRepository = doctorRepository;
+  }) : _authController = authController,
+       _patientRepository = patientRepository,
+       _appointmentRepository = appointmentRepository,
+       _doctorRepository = doctorRepository;
 
   final Rx<PatientModel?> currentPatient = Rx<PatientModel?>(null);
   final RxList<AppointmentModel> myAppointments = <AppointmentModel>[].obs;
@@ -44,10 +44,7 @@ class PatientDashboardController extends GetxController {
 
     // Fetch current patient profile once
     final result = await _patientRepository.fetchPatient(uid);
-    result.fold(
-      (l) => null,
-      (patient) => currentPatient.value = patient,
-    );
+    result.fold((l) => null, (patient) => currentPatient.value = patient);
 
     // Watch real-time appointments for this patient
     _appointmentRepository.watchPatientAppointments(uid).listen((appointments) {
@@ -61,10 +58,7 @@ class PatientDashboardController extends GetxController {
     for (final appt in appointments) {
       if (!doctorCache.containsKey(appt.doctorId)) {
         final result = await _doctorRepository.fetchDoctor(appt.doctorId);
-        result.fold(
-          (l) => null,
-          (doc) => doctorCache[appt.doctorId] = doc,
-        );
+        result.fold((l) => null, (doc) => doctorCache[appt.doctorId] = doc);
       }
     }
   }
@@ -72,7 +66,11 @@ class PatientDashboardController extends GetxController {
   /// Returns the upcoming scheduled appointment, if any
   AppointmentModel? get upcomingAppointment {
     final scheduled = myAppointments
-        .where((a) => a.status == AppointmentStatus.scheduled && a.dateTime.isAfter(DateTime.now()))
+        .where(
+          (a) =>
+              a.status == AppointmentStatus.scheduled &&
+              a.dateTime.isAfter(DateTime.now()),
+        )
         .toList();
     if (scheduled.isEmpty) return null;
     scheduled.sort((a, b) => a.dateTime.compareTo(b.dateTime));

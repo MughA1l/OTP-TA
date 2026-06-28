@@ -19,7 +19,8 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
     final isWeb = ResponsiveHelper.isDesktop(context);
 
     // Watch prescription streams for the patient
-    final Stream<List<PrescriptionModel>> scheduleStream = controller.watchPatientMedications(patientId);
+    final Stream<List<PrescriptionModel>> scheduleStream = controller
+        .watchPatientMedications(patientId);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -27,16 +28,24 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: Text('Medication Timetable', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'Medication Timetable',
+          style: AppTextStyles.headlineMedium,
+        ),
       ),
       body: StreamBuilder<List<PrescriptionModel>>(
         stream: scheduleStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -44,11 +53,21 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.medication_liquid_rounded, size: 72, color: AppColors.textTertiary),
+                  const Icon(
+                    Icons.medication_liquid_rounded,
+                    size: 72,
+                    color: AppColors.textTertiary,
+                  ),
                   const SizedBox(height: 16),
-                  Text('No Medication Plans Found', style: AppTextStyles.titleLarge),
+                  Text(
+                    'No Medication Plans Found',
+                    style: AppTextStyles.titleLarge,
+                  ),
                   const SizedBox(height: 8),
-                  Text('Your doctor hasn\'t posted any prescriptions yet.', style: AppTextStyles.bodyMedium),
+                  Text(
+                    'Your doctor hasn\'t posted any prescriptions yet.',
+                    style: AppTextStyles.bodyMedium,
+                  ),
                 ],
               ),
             );
@@ -74,11 +93,21 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.check_circle_outline_rounded, size: 72, color: AppColors.successLight),
+                  const Icon(
+                    Icons.check_circle_outline_rounded,
+                    size: 72,
+                    color: AppColors.successLight,
+                  ),
                   const SizedBox(height: 16),
-                  Text('No Active Medications Today', style: AppTextStyles.titleLarge),
+                  Text(
+                    'No Active Medications Today',
+                    style: AppTextStyles.titleLarge,
+                  ),
                   const SizedBox(height: 8),
-                  Text('You are all caught up on your recovery medicine!', style: AppTextStyles.bodyMedium),
+                  Text(
+                    'You are all caught up on your recovery medicine!',
+                    style: AppTextStyles.bodyMedium,
+                  ),
                 ],
               ),
             );
@@ -92,20 +121,38 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
 
           for (var med in allActiveMedicines) {
             final freq = med.frequency.toLowerCase();
-            if (freq.contains('morning') || freq.contains('breakfast') || freq.contains('once') || freq.contains('1x')) {
+            if (freq.contains('morning') ||
+                freq.contains('breakfast') ||
+                freq.contains('once') ||
+                freq.contains('1x')) {
               morningList.add(med);
             }
-            if (freq.contains('noon') || freq.contains('lunch') || freq.contains('afternoon') || freq.contains('twice') || freq.contains('2x')) {
+            if (freq.contains('noon') ||
+                freq.contains('lunch') ||
+                freq.contains('afternoon') ||
+                freq.contains('twice') ||
+                freq.contains('2x')) {
               afternoonList.add(med);
             }
-            if (freq.contains('evening') || freq.contains('dinner') || freq.contains('twice') || freq.contains('thrice') || freq.contains('3x')) {
+            if (freq.contains('evening') ||
+                freq.contains('dinner') ||
+                freq.contains('twice') ||
+                freq.contains('thrice') ||
+                freq.contains('3x')) {
               eveningList.add(med);
             }
-            if (freq.contains('night') || freq.contains('bedtime') || freq.contains('sleep') || freq.contains('thrice') || freq.contains('twice')) {
+            if (freq.contains('night') ||
+                freq.contains('bedtime') ||
+                freq.contains('sleep') ||
+                freq.contains('thrice') ||
+                freq.contains('twice')) {
               nightList.add(med);
             }
             // Fallback for custom or empty frequencies - put in Morning
-            if (morningList.isEmpty && afternoonList.isEmpty && eveningList.isEmpty && nightList.isEmpty) {
+            if (morningList.isEmpty &&
+                afternoonList.isEmpty &&
+                eveningList.isEmpty &&
+                nightList.isEmpty) {
               morningList.add(med);
             }
           }
@@ -124,26 +171,48 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
                       duration: const Duration(milliseconds: 400),
                       child: Text(
                         'Daily Timetable schedule',
-                        style: AppTextStyles.headlineSmall.copyWith(color: AppColors.primaryLight),
+                        style: AppTextStyles.headlineSmall.copyWith(
+                          color: AppColors.primaryLight,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     const SizedBox(height: AppDimensions.paddingXXL),
 
                     // Morning Timeline Slot
-                    _buildTimelineSlot('Morning Slot', Icons.wb_sunny_outlined, AppColors.warningLight, morningList),
+                    _buildTimelineSlot(
+                      'Morning Slot',
+                      Icons.wb_sunny_outlined,
+                      AppColors.warningLight,
+                      morningList,
+                    ),
                     const SizedBox(height: AppDimensions.paddingL),
 
                     // Afternoon Timeline Slot
-                    _buildTimelineSlot('Afternoon Slot', Icons.sunny, AppColors.warning, afternoonList),
+                    _buildTimelineSlot(
+                      'Afternoon Slot',
+                      Icons.sunny,
+                      AppColors.warning,
+                      afternoonList,
+                    ),
                     const SizedBox(height: AppDimensions.paddingL),
 
                     // Evening Timeline Slot
-                    _buildTimelineSlot('Evening Slot', Icons.wb_twilight_outlined, AppColors.secondary, eveningList),
+                    _buildTimelineSlot(
+                      'Evening Slot',
+                      Icons.wb_twilight_outlined,
+                      AppColors.secondary,
+                      eveningList,
+                    ),
                     const SizedBox(height: AppDimensions.paddingL),
 
                     // Night Timeline Slot
-                    _buildTimelineSlot('Night Slot', Icons.nights_stay_outlined, AppColors.primary, nightList),
+                    _buildTimelineSlot(
+                      'Night Slot',
+                      Icons.nights_stay_outlined,
+                      AppColors.primary,
+                      nightList,
+                    ),
                   ],
                 ),
               ),
@@ -154,7 +223,12 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
     );
   }
 
-  Widget _buildTimelineSlot(String title, IconData icon, Color iconColor, List<MedicineModel> medicines) {
+  Widget _buildTimelineSlot(
+    String title,
+    IconData icon,
+    Color iconColor,
+    List<MedicineModel> medicines,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -164,18 +238,23 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
             const SizedBox(width: 12),
             Text(
               title,
-              style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTextStyles.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusS),
               ),
               child: Text(
                 '${medicines.length}',
-                style: AppTextStyles.bodySmall.copyWith(color: iconColor, fontWeight: FontWeight.bold),
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: iconColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -185,13 +264,17 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
           Container(
             padding: const EdgeInsets.all(AppDimensions.paddingM),
             decoration: BoxDecoration(
-              color: AppColors.surface.withOpacity(0.4),
+              color: AppColors.surface.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-              border: Border.all(color: AppColors.glassBorder.withOpacity(0.5)),
+              border: Border.all(
+                color: AppColors.glassBorder.withValues(alpha: 0.5),
+              ),
             ),
             child: Text(
               'No medicines scheduled for this slot.',
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
             ),
           )
         else
@@ -199,7 +282,7 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: medicines.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final med = medicines[index];
               return FadeInLeft(
@@ -228,7 +311,7 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: themeColor.withOpacity(0.1),
+                color: themeColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.medical_services_outlined, color: themeColor),
@@ -238,25 +321,36 @@ class MedicationScheduleScreen extends GetView<PrescriptionController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(med.name, style: AppTextStyles.titleLarge.copyWith(color: AppColors.textPrimary)),
+                  Text(
+                    med.name,
+                    style: AppTextStyles.titleLarge.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
                         'Dosage: ${med.dosage}',
-                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Text(
                         '|   ${med.frequency}',
-                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.textTertiary),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textTertiary,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Ends: ${DateFormat('MMMM d, yyyy').format(med.endDate)}',
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.errorLight),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.errorLight,
+                    ),
                   ),
                 ],
               ),

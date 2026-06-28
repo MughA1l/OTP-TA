@@ -8,7 +8,9 @@ class MedicationBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<IMedicationRepository>(() => MedicationRepositoryImpl());
     Get.lazyPut<PrescriptionController>(
-      () => PrescriptionController(medicationRepository: Get.find<IMedicationRepository>()),
+      () => PrescriptionController(
+        medicationRepository: Get.find<IMedicationRepository>(),
+      ),
     );
   }
 }

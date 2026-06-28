@@ -23,9 +23,15 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
       appBar: AppBar(
         backgroundColor: AppColors.surfaceElevated,
         elevation: 1,
-        title: Text('OT Analytics & Reports', style: AppTextStyles.headlineMedium),
+        title: Text(
+          'OT Analytics & Reports',
+          style: AppTextStyles.headlineMedium,
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         actions: [
@@ -33,14 +39,24 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
             final cache = controller.analytics.value;
             if (cache == null) return const SizedBox.shrink();
             return IconButton(
-              icon: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primaryLight),
+              icon: const Icon(
+                Icons.picture_as_pdf_rounded,
+                color: AppColors.primaryLight,
+              ),
               onPressed: () => PdfGenerator.generateAnalyticsSummaryPdf(cache),
               tooltip: 'Export PDF',
             );
           }),
           TextButton.icon(
-            icon: const Icon(Icons.healing_rounded, color: AppColors.secondaryLight, size: 20),
-            label: Text('Patient Recovery', style: TextStyle(color: AppColors.secondaryLight)),
+            icon: const Icon(
+              Icons.healing_rounded,
+              color: AppColors.secondaryLight,
+              size: 20,
+            ),
+            label: Text(
+              'Patient Recovery',
+              style: TextStyle(color: AppColors.secondaryLight),
+            ),
             onPressed: () => Get.toNamed(AppRoutes.patientRecovery),
           ),
           const SizedBox(width: AppDimensions.paddingM),
@@ -117,7 +133,9 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
                     return const Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 60),
-                        child: CircularProgressIndicator(color: AppColors.primary),
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
                       ),
                     );
                   }
@@ -132,12 +150,16 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
                     children: [
                       FadeInUp(
                         duration: const Duration(milliseconds: 500),
-                        child: _SurgeryTypePieChart(typeData: data.operationsBySurgeryType),
+                        child: _SurgeryTypePieChart(
+                          typeData: data.operationsBySurgeryType,
+                        ),
                       ),
                       FadeInUp(
                         duration: const Duration(milliseconds: 500),
                         delay: const Duration(milliseconds: 100),
-                        child: _DailyOpsBarChart(dateData: data.operationsByDate),
+                        child: _DailyOpsBarChart(
+                          dateData: data.operationsByDate,
+                        ),
                       ),
                     ],
                   );
@@ -177,20 +199,39 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
 
             // Custom date picker buttons (visible when timeframe is custom)
             Obx(() {
-              if (controller.selectedTimeframe.value != 'custom') return const SizedBox.shrink();
-              final startStr = controller.startDate.value != null ? DateFormat('MM/dd/yyyy').format(controller.startDate.value!) : 'Start';
-              final endStr = controller.endDate.value != null ? DateFormat('MM/dd/yyyy').format(controller.endDate.value!) : 'End';
+              if (controller.selectedTimeframe.value != 'custom') {
+                return const SizedBox.shrink();
+              }
+              final startStr = controller.startDate.value != null
+                  ? DateFormat('MM/dd/yyyy').format(controller.startDate.value!)
+                  : 'Start';
+              final endStr = controller.endDate.value != null
+                  ? DateFormat('MM/dd/yyyy').format(controller.endDate.value!)
+                  : 'End';
 
               return TextButton.icon(
-                icon: const Icon(Icons.date_range_rounded, color: AppColors.primaryLight),
-                label: Text('$startStr - $endStr', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryLight)),
+                icon: const Icon(
+                  Icons.date_range_rounded,
+                  color: AppColors.primaryLight,
+                ),
+                label: Text(
+                  '$startStr - $endStr',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.primaryLight,
+                  ),
+                ),
                 onPressed: () async {
                   final picked = await showDateRangePicker(
                     context: context,
                     firstDate: DateTime(2025),
                     lastDate: DateTime.now().add(const Duration(days: 305)),
-                    initialDateRange: controller.startDate.value != null && controller.endDate.value != null
-                        ? DateTimeRange(start: controller.startDate.value!, end: controller.endDate.value!)
+                    initialDateRange:
+                        controller.startDate.value != null &&
+                            controller.endDate.value != null
+                        ? DateTimeRange(
+                            start: controller.startDate.value!,
+                            end: controller.endDate.value!,
+                          )
                         : null,
                     builder: (context, child) {
                       return Theme(
@@ -231,13 +272,15 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
               controller.changeTimeframe(value);
             }
           },
-          selectedColor: AppColors.primary.withOpacity(0.3),
+          selectedColor: AppColors.primary.withValues(alpha: 0.3),
           backgroundColor: Colors.transparent,
           side: BorderSide(
             color: isSelected ? AppColors.primaryLight : AppColors.glassBorder,
           ),
           labelStyle: AppTextStyles.labelMedium.copyWith(
-            color: isSelected ? AppColors.primaryLight : AppColors.textSecondary,
+            color: isSelected
+                ? AppColors.primaryLight
+                : AppColors.textSecondary,
           ),
         ),
       );
@@ -275,7 +318,7 @@ class _KpiStatCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: Icon(icon, color: color, size: 28),
@@ -288,7 +331,9 @@ class _KpiStatCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.labelMedium.copyWith(color: AppColors.textTertiary),
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   // Animate stat text value
@@ -339,7 +384,7 @@ class _SurgeryTypePieChart extends StatelessWidget {
     typeData.forEach((type, count) {
       final color = colors[index % colors.length];
       final percentage = total > 0 ? (count / total) * 100 : 0.0;
-      
+
       sections.add(
         PieChartSectionData(
           color: color,
@@ -406,7 +451,7 @@ class _SurgeryTypePieChart extends StatelessWidget {
                                   value: 1,
                                   title: 'N/A',
                                   radius: 60,
-                                )
+                                ),
                               ]
                             : sections,
                         centerSpaceRadius: 40,
@@ -417,10 +462,7 @@ class _SurgeryTypePieChart extends StatelessWidget {
                   const SizedBox(width: 16),
                   Expanded(
                     flex: 2,
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: legends,
-                    ),
+                    child: ListView(shrinkWrap: true, children: legends),
                   ),
                 ],
               ),
@@ -441,7 +483,8 @@ class _DailyOpsBarChart extends StatefulWidget {
   State<_DailyOpsBarChart> createState() => _DailyOpsBarChartState();
 }
 
-class _DailyOpsBarChartState extends State<_DailyOpsBarChart> with SingleTickerProviderStateMixin {
+class _DailyOpsBarChartState extends State<_DailyOpsBarChart>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _scaleAnimation;
 
@@ -476,13 +519,15 @@ class _DailyOpsBarChartState extends State<_DailyOpsBarChart> with SingleTickerP
   Widget build(BuildContext context) {
     // Sort dates chronologically
     final sortedKeys = widget.dateData.keys.toList()..sort();
-    
+
     // Take last 7 data points
-    final displayKeys = sortedKeys.length > 7 ? sortedKeys.sublist(sortedKeys.length - 7) : sortedKeys;
+    final displayKeys = sortedKeys.length > 7
+        ? sortedKeys.sublist(sortedKeys.length - 7)
+        : sortedKeys;
 
     final List<BarChartGroupData> barGroups = [];
     int xIndex = 0;
-    
+
     for (var key in displayKeys) {
       final count = widget.dateData[key] ?? 0;
       barGroups.add(
@@ -547,8 +592,12 @@ class _DailyOpsBarChartState extends State<_DailyOpsBarChart> with SingleTickerP
                       barGroups: animatedGroups,
                       titlesData: FlTitlesData(
                         show: true,
-                        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
@@ -556,7 +605,9 @@ class _DailyOpsBarChartState extends State<_DailyOpsBarChart> with SingleTickerP
                             getTitlesWidget: (val, meta) {
                               return Text(
                                 val.toInt().toString(),
-                                style: AppTextStyles.bodySmall.copyWith(fontSize: 10),
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  fontSize: 10,
+                                ),
                               );
                             },
                           ),
@@ -574,7 +625,9 @@ class _DailyOpsBarChartState extends State<_DailyOpsBarChart> with SingleTickerP
                                     padding: const EdgeInsets.only(top: 8),
                                     child: Text(
                                       '${parts[1]}/${parts[2]}',
-                                      style: AppTextStyles.bodySmall.copyWith(fontSize: 10),
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                        fontSize: 10,
+                                      ),
                                     ),
                                   );
                                 }

@@ -27,9 +27,10 @@ class AddPatientScreen extends GetView<PatientManagementController> {
     final emergencyNameCtrl = TextEditingController();
     final emergencyPhoneCtrl = TextEditingController();
     final passwordCtrl = TextEditingController();
-    
+
     // Auto-generate Unique Patient ID (SRS-25)
-    final String generatedId = 'PT-${Random().nextInt(9999).toString().padLeft(4, '0')}';
+    final String generatedId =
+        'PT-${Random().nextInt(9999).toString().padLeft(4, '0')}';
 
     final isWeb = ResponsiveHelper.isDesktop(context);
 
@@ -39,7 +40,10 @@ class AddPatientScreen extends GetView<PatientManagementController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Register Patient', style: AppTextStyles.headlineMedium),
@@ -52,10 +56,7 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                 gradient: RadialGradient(
                   center: Alignment(0, -0.6),
                   radius: 1.0,
-                  colors: [
-                    AppColors.primaryContainer,
-                    AppColors.background,
-                  ],
+                  colors: [AppColors.primaryContainer, AppColors.background],
                 ),
               ),
             ),
@@ -76,8 +77,13 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                         padding: const EdgeInsets.all(AppDimensions.paddingXL),
                         decoration: BoxDecoration(
                           color: AppColors.glassBackground,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-                          border: Border.all(color: AppColors.glassBorder, width: 1),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusXL,
+                          ),
+                          border: Border.all(
+                            color: AppColors.glassBorder,
+                            width: 1,
+                          ),
                         ),
                         child: Form(
                           key: formKey,
@@ -88,31 +94,51 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 child: Container(
-                                  padding: const EdgeInsets.all(AppDimensions.paddingM),
+                                  padding: const EdgeInsets.all(
+                                    AppDimensions.paddingM,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.primaryContainer.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                                    border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+                                    color: AppColors.primaryContainer
+                                        .withValues(alpha: 0.5),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusM,
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                    ),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Auto-generated Patient ID:', style: AppTextStyles.labelLarge),
-                                      Text(generatedId, style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+                                      Text(
+                                        'Auto-generated Patient ID:',
+                                        style: AppTextStyles.labelLarge,
+                                      ),
+                                      Text(
+                                        generatedId,
+                                        style: AppTextStyles.headlineMedium
+                                            .copyWith(color: AppColors.primary),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                               const SizedBox(height: AppDimensions.paddingL),
-                              
+
                               // Section: Personal Data
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 100),
-                                child: Text('Personal Information', style: AppTextStyles.titleLarge),
+                                child: Text(
+                                  'Personal Information',
+                                  style: AppTextStyles.titleLarge,
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
-                              
+
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 150),
@@ -153,7 +179,10 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 300),
-                                child: Text('Medical Info', style: AppTextStyles.titleLarge),
+                                child: Text(
+                                  'Medical Info',
+                                  style: AppTextStyles.titleLarge,
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
 
@@ -174,7 +203,10 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 400),
-                                child: Text('Emergency Contact', style: AppTextStyles.titleLarge),
+                                child: Text(
+                                  'Emergency Contact',
+                                  style: AppTextStyles.titleLarge,
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
 
@@ -206,7 +238,10 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 550),
-                                child: Text('Account Setup', style: AppTextStyles.titleLarge),
+                                child: Text(
+                                  'Account Setup',
+                                  style: AppTextStyles.titleLarge,
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.paddingM),
 
@@ -219,35 +254,42 @@ class AddPatientScreen extends GetView<PatientManagementController> {
                                   validator: Validators.validatePassword,
                                 ),
                               ),
-                              
+
                               const SizedBox(height: AppDimensions.paddingXXL),
 
                               FadeInUp(
                                 duration: const Duration(milliseconds: 400),
                                 delay: const Duration(milliseconds: 650),
-                                child: Obx(() => PrimaryButton(
-                                  label: 'Register Patient',
-                                  isLoading: controller.isLoading.value,
-                                  icon: Icons.how_to_reg_rounded,
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      final newPatient = PatientModel(
-                                        patientId: generatedId,
-                                        uid: '', // Set by controller
-                                        name: nameCtrl.text,
-                                        phone: phoneCtrl.text,
-                                        address: addressCtrl.text,
-                                        medicalHistory: {'notes': medicalHistoryCtrl.text},
-                                        emergencyContact: {
-                                          'name': emergencyNameCtrl.text,
-                                          'phone': emergencyPhoneCtrl.text,
-                                        },
-                                        createdAt: DateTime.now(),
-                                      );
-                                      controller.createPatient(newPatient, passwordCtrl.text);
-                                    }
-                                  },
-                                )),
+                                child: Obx(
+                                  () => PrimaryButton(
+                                    label: 'Register Patient',
+                                    isLoading: controller.isLoading.value,
+                                    icon: Icons.how_to_reg_rounded,
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        final newPatient = PatientModel(
+                                          patientId: generatedId,
+                                          uid: '', // Set by controller
+                                          name: nameCtrl.text,
+                                          phone: phoneCtrl.text,
+                                          address: addressCtrl.text,
+                                          medicalHistory: {
+                                            'notes': medicalHistoryCtrl.text,
+                                          },
+                                          emergencyContact: {
+                                            'name': emergencyNameCtrl.text,
+                                            'phone': emergencyPhoneCtrl.text,
+                                          },
+                                          createdAt: DateTime.now(),
+                                        );
+                                        controller.createPatient(
+                                          newPatient,
+                                          passwordCtrl.text,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
                               ),
                             ],
                           ),

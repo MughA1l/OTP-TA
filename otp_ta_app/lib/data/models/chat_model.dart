@@ -95,7 +95,8 @@ class ChatRoomModel {
       roomId: docId,
       participants: List<String>.from(map['participants'] as List? ?? []),
       lastMessage: map['lastMessage'] as String? ?? '',
-      lastMessageTime: (map['lastMessageTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      lastMessageTime:
+          (map['lastMessageTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       hasEmergency: map['hasEmergency'] as bool? ?? false,
       emergencyTriggeredBy: map['emergencyTriggeredBy'] as String?,
       emergencyAcknowledged: map['emergencyAcknowledged'] as bool?,
@@ -108,8 +109,10 @@ class ChatRoomModel {
       'lastMessage': lastMessage,
       'lastMessageTime': Timestamp.fromDate(lastMessageTime),
       'hasEmergency': hasEmergency,
-      if (emergencyTriggeredBy != null) 'emergencyTriggeredBy': emergencyTriggeredBy,
-      if (emergencyAcknowledged != null) 'emergencyAcknowledged': emergencyAcknowledged,
+      if (emergencyTriggeredBy != null)
+        'emergencyTriggeredBy': emergencyTriggeredBy,
+      if (emergencyAcknowledged != null)
+        'emergencyAcknowledged': emergencyAcknowledged,
     };
   }
 
@@ -129,7 +132,8 @@ class ChatRoomModel {
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       hasEmergency: hasEmergency ?? this.hasEmergency,
       emergencyTriggeredBy: emergencyTriggeredBy ?? this.emergencyTriggeredBy,
-      emergencyAcknowledged: emergencyAcknowledged ?? this.emergencyAcknowledged,
+      emergencyAcknowledged:
+          emergencyAcknowledged ?? this.emergencyAcknowledged,
     );
   }
 }

@@ -10,12 +10,14 @@ import '../../auth/controllers/auth_controller.dart';
 class ReportController extends GetxController {
   final IReportRepository _reportRepository;
 
-  ReportController({required IReportRepository reportRepository}) : _reportRepository = reportRepository;
+  ReportController({required IReportRepository reportRepository})
+    : _reportRepository = reportRepository;
 
   final RxBool isLoading = false.obs;
-  
+
   // Filtering States
-  final RxString selectedTimeframe = 'weekly'.obs; // 'weekly', 'monthly', 'custom'
+  final RxString selectedTimeframe =
+      'weekly'.obs; // 'weekly', 'monthly', 'custom'
   final Rxn<DateTime> startDate = Rxn<DateTime>();
   final Rxn<DateTime> endDate = Rxn<DateTime>();
   final RxString selectedOtRoom = ''.obs;
@@ -26,7 +28,8 @@ class ReportController extends GetxController {
   final RxMap<String, dynamic> recoveryStats = <String, dynamic>{}.obs;
 
   // Doctor performance specific state
-  final Rxn<DoctorPerformanceModel> doctorPerformance = Rxn<DoctorPerformanceModel>();
+  final Rxn<DoctorPerformanceModel> doctorPerformance =
+      Rxn<DoctorPerformanceModel>();
   final RxList<UserModel> doctorsList = <UserModel>[].obs;
   final RxString selectedDoctorId = ''.obs;
 
@@ -40,7 +43,7 @@ class ReportController extends GetxController {
     // Default timeframe setup
     _updateTimeframeDates();
     fetchAnalytics();
-    
+
     final user = Get.find<AuthController>().currentUser.value;
     if (user != null) {
       if (user.role == UserRole.doctor) {
@@ -52,7 +55,9 @@ class ReportController extends GetxController {
     }
 
     // Stream live operations for auto-updating charts (SRS-112)
-    FirebaseFirestore.instance.collection('operations').snapshots().listen((snapshot) {
+    FirebaseFirestore.instance.collection('operations').snapshots().listen((
+      snapshot,
+    ) {
       liveOperations.value = snapshot.docs
           .map((doc) => OperationModel.fromMap(doc.data(), doc.id))
           .toList();
@@ -96,16 +101,17 @@ class ReportController extends GetxController {
 
   Future<void> fetchAnalytics() async {
     isLoading.value = true;
-    
+
     final filters = <String, dynamic>{
       'startDate': startDate.value,
       'endDate': endDate.value,
       if (selectedOtRoom.value.isNotEmpty) 'otRoom': selectedOtRoom.value,
-      if (selectedSurgeryType.value.isNotEmpty) 'surgeryType': selectedSurgeryType.value,
+      if (selectedSurgeryType.value.isNotEmpty)
+        'surgeryType': selectedSurgeryType.value,
     };
 
     final result = await _reportRepository.fetchOperationAnalytics(filters);
-    
+
     result.fold(
       (failure) => SnackbarHelper.showError('Analytics Error', failure.message),
       (data) {
@@ -115,12 +121,9 @@ class ReportController extends GetxController {
 
     // Fetch recovery analytics
     final recResult = await _reportRepository.fetchRecoveryAnalytics(filters);
-    recResult.fold(
-      (failure) {},
-      (data) {
-        recoveryStats.value = data;
-      },
-    );
+    recResult.fold((failure) {}, (data) {
+      recoveryStats.value = data;
+    });
 
     isLoading.value = false;
   }
@@ -129,7 +132,8 @@ class ReportController extends GetxController {
     isLoading.value = true;
     final result = await _reportRepository.fetchDoctorPerformance(doctorId);
     result.fold(
-      (failure) => SnackbarHelper.showError('Doctor Stats Error', failure.message),
+      (failure) =>
+          SnackbarHelper.showError('Doctor Stats Error', failure.message),
       (data) {
         doctorPerformance.value = data;
       },
@@ -152,22 +156,36 @@ class ReportController extends GetxController {
     // Filter live operations
     var filtered = liveOperations.where((op) {
       // 1. Timeframe/Date filter
-      if (startDate.value != null && op.scheduledDate.isBefore(startDate.value!.subtract(const Duration(days: 1)))) {
+      if (startDate.value != null &&
+          op.scheduledDate.isBefore(
+            startDate.value!.subtract(const Duration(days: 1)),
+          )) {
         return false;
       }
-      if (endDate.value != null && op.scheduledDate.isAfter(endDate.value!.add(const Duration(days: 1)))) {
+      if (endDate.value != null &&
+          op.scheduledDate.isAfter(
+            endDate.value!.add(const Duration(days: 1)),
+          )) {
         return false;
       }
       // 2. Surgery type filter
-      if (selectedSurgeryType.value.isNotEmpty && op.surgeryType != selectedSurgeryType.value) {
+      if (selectedSurgeryType.value.isNotEmpty &&
+          op.surgeryType != selectedSurgeryType.value) {
         return false;
       }
       // 3. Demographic filter (mock based on patientId hashing)
-      final ageGroup = op.patientId.hashCode % 3; // 0 = pediatric, 1 = adult, 2 = geriatric
-      if (selectedDemographic.value == 'pediatric' && ageGroup != 0) return false;
-      if (selectedDemographic.value == 'adult' && ageGroup != 1) return false;
-      if (selectedDemographic.value == 'geriatric' && ageGroup != 2) return false;
-      
+      final ageGroup =
+          op.patientId.hashCode % 3; // 0 = pediatric, 1 = adult, 2 = geriatric
+      if (selectedDemographic.value == 'pediatric' && ageGroup != 0) {
+        return false;
+      }
+      if (selectedDemographic.value == 'adult' && ageGroup != 1) {
+        return false;
+      }
+      if (selectedDemographic.value == 'geriatric' && ageGroup != 2) {
+        return false;
+      }
+
       return true;
     }).toList();
 
@@ -176,8 +194,9 @@ class ReportController extends GetxController {
       if (outcome != null) {
         final notes = outcome.notes.toLowerCase();
         final complications = outcome.complications.toLowerCase();
-        
-        if (complications.contains('readmit') || notes.contains('readmission')) {
+
+        if (complications.contains('readmit') ||
+            notes.contains('readmission')) {
           readmissions++;
         }
 
@@ -207,7 +226,9 @@ class ReportController extends GetxController {
     }
 
     final totalWithOutcome = under2h + between2and4h + between4and8h + over8h;
-    final readmissionRate = filtered.isNotEmpty ? (readmissions / filtered.length) * 100 : 0.0;
+    final readmissionRate = filtered.isNotEmpty
+        ? (readmissions / filtered.length) * 100
+        : 0.0;
 
     recoveryStats.value = {
       'distribution': {

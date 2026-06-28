@@ -15,10 +15,13 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>?;
-    if (args == null) return const Scaffold(body: Center(child: Text('Error: No data')));
+    if (args == null) {
+      return const Scaffold(body: Center(child: Text('Error: No data')));
+    }
 
     final PatientModel patient = args['patient'] as PatientModel;
-    final AppointmentModel appointment = args['appointment'] as AppointmentModel;
+    final AppointmentModel appointment =
+        args['appointment'] as AppointmentModel;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -26,7 +29,10 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text('Patient Profile', style: AppTextStyles.headlineMedium),
@@ -46,13 +52,22 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
                       radius: 40,
                       backgroundColor: AppColors.primaryContainer,
                       child: Text(
-                        patient.name.isNotEmpty ? patient.name[0].toUpperCase() : 'P',
-                        style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primary),
+                        patient.name.isNotEmpty
+                            ? patient.name[0].toUpperCase()
+                            : 'P',
+                        style: AppTextStyles.headlineLarge.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.paddingM),
                     Text(patient.name, style: AppTextStyles.headlineMedium),
-                    Text('ID: ${patient.patientId}', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                    Text(
+                      'ID: ${patient.patientId}',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -71,7 +86,10 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
                   _InfoRow(label: 'Gender', value: patient.gender),
                   _InfoRow(label: 'Phone', value: patient.phone),
                   _InfoRow(label: 'Address', value: patient.address),
-                  _InfoRow(label: 'Guardian', value: patient.guardianName ?? 'N/A'),
+                  _InfoRow(
+                    label: 'Guardian',
+                    value: patient.guardianName ?? 'N/A',
+                  ),
                 ],
               ),
             ),
@@ -88,7 +106,9 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
                   _InfoRow(label: 'Blood Group', value: patient.bloodGroup),
                   _InfoRow(
                     label: 'Conditions',
-                    value: patient.medicalConditions.isNotEmpty ? patient.medicalConditions.join(', ') : 'None',
+                    value: patient.medicalConditions.isNotEmpty
+                        ? patient.medicalConditions.join(', ')
+                        : 'None',
                   ),
                 ],
               ),
@@ -99,40 +119,63 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
             FadeInUp(
               duration: const Duration(milliseconds: 400),
               delay: const Duration(milliseconds: 300),
-              child: Text('Appointment Actions', style: AppTextStyles.titleLarge),
+              child: Text(
+                'Appointment Actions',
+                style: AppTextStyles.titleLarge,
+              ),
             ),
             const SizedBox(height: AppDimensions.paddingM),
             FadeInUp(
               duration: const Duration(milliseconds: 400),
               delay: const Duration(milliseconds: 400),
-              child: Obx(() => Column(
-                children: [
-                  PrimaryButton(
-                    label: 'Mark as Completed',
-                    icon: Icons.check_circle_outline_rounded,
-                    isLoading: controller.isLoading.value,
-                    onPressed: () {
-                      controller.updateAppointmentStatus(appointment.appointmentId, AppointmentStatus.completed);
-                    },
-                  ),
-                  const SizedBox(height: AppDimensions.paddingM),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
+              child: Obx(
+                () => Column(
+                  children: [
+                    PrimaryButton(
+                      label: 'Mark as Completed',
+                      icon: Icons.check_circle_outline_rounded,
+                      isLoading: controller.isLoading.value,
                       onPressed: () {
-                        controller.updateAppointmentStatus(appointment.appointmentId, AppointmentStatus.noShow);
+                        controller.updateAppointmentStatus(
+                          appointment.appointmentId,
+                          AppointmentStatus.completed,
+                        );
                       },
-                      icon: const Icon(Icons.person_off_outlined, color: AppColors.warning),
-                      label: Text('Mark as No Show', style: AppTextStyles.labelLarge.copyWith(color: AppColors.warning)),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: AppColors.warning),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusM)),
+                    ),
+                    const SizedBox(height: AppDimensions.paddingM),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          controller.updateAppointmentStatus(
+                            appointment.appointmentId,
+                            AppointmentStatus.noShow,
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.person_off_outlined,
+                          color: AppColors.warning,
+                        ),
+                        label: Text(
+                          'Mark as No Show',
+                          style: AppTextStyles.labelLarge.copyWith(
+                            color: AppColors.warning,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.warning),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusM,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -140,7 +183,11 @@ class PatientDetailScreen extends GetView<AssignedPatientsController> {
     );
   }
 
-  Widget _buildInfoCard({required String title, required IconData icon, required List<Widget> children}) {
+  Widget _buildInfoCard({
+    required String title,
+    required IconData icon,
+    required List<Widget> children,
+  }) {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: BoxDecoration(
@@ -182,11 +229,14 @@ class _InfoRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 100,
-            child: Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              label,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
-          Expanded(
-            child: Text(value, style: AppTextStyles.bodyLarge),
-          ),
+          Expanded(child: Text(value, style: AppTextStyles.bodyLarge)),
         ],
       ),
     );

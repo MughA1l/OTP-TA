@@ -20,7 +20,8 @@ class DoctorPerformanceModel {
       doctorId: map['doctorId'] as String? ?? '',
       doctorName: map['doctorName'] as String? ?? '',
       operationsCompleted: map['operationsCompleted'] as int? ?? 0,
-      avgDurationMinutes: (map['avgDurationMinutes'] as num?)?.toDouble() ?? 0.0,
+      avgDurationMinutes:
+          (map['avgDurationMinutes'] as num?)?.toDouble() ?? 0.0,
       punctualityRate: (map['punctualityRate'] as num?)?.toDouble() ?? 0.0,
     );
   }
@@ -64,17 +65,27 @@ class AnalyticsCacheModel {
   factory AnalyticsCacheModel.fromMap(Map<String, dynamic> map, String docId) {
     final rawDocs = map['doctorPerformances'] as List? ?? [];
     final performances = rawDocs
-        .map((d) => DoctorPerformanceModel.fromMap(Map<String, dynamic>.from(d as Map)))
+        .map(
+          (d) => DoctorPerformanceModel.fromMap(
+            Map<String, dynamic>.from(d as Map),
+          ),
+        )
         .toList();
 
     return AnalyticsCacheModel(
       cacheId: docId,
-      lastUpdated: (map['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      lastUpdated:
+          (map['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
       totalOperations: map['totalOperations'] as int? ?? 0,
       successRate: (map['successRate'] as num?)?.toDouble() ?? 0.0,
-      avgDurationMinutes: (map['avgDurationMinutes'] as num?)?.toDouble() ?? 0.0,
-      operationsBySurgeryType: Map<String, int>.from(map['operationsBySurgeryType'] ?? {}),
-      operationsByOtRoom: Map<String, int>.from(map['operationsByOtRoom'] ?? {}),
+      avgDurationMinutes:
+          (map['avgDurationMinutes'] as num?)?.toDouble() ?? 0.0,
+      operationsBySurgeryType: Map<String, int>.from(
+        map['operationsBySurgeryType'] ?? {},
+      ),
+      operationsByOtRoom: Map<String, int>.from(
+        map['operationsByOtRoom'] ?? {},
+      ),
       operationsByDate: Map<String, int>.from(map['operationsByDate'] ?? {}),
       doctorPerformances: performances,
       recoveryMetrics: Map<String, double>.from(

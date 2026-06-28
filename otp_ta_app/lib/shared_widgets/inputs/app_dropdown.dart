@@ -24,7 +24,7 @@ class AppDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       items: items,
       onChanged: onChanged,
       dropdownColor: AppColors.surfaceOverlay,
@@ -32,8 +32,12 @@ class AppDropdown<T> extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary),
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+        labelStyle: AppTextStyles.labelMedium.copyWith(
+          color: AppColors.textSecondary,
+        ),
+        hintStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textTertiary,
+        ),
         prefixIcon: prefixIcon != null
             ? Icon(prefixIcon, color: AppColors.textSecondary, size: 20)
             : null,
@@ -45,15 +49,24 @@ class AppDropdown<T> extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.borderDefault,
+            width: 1,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.borderDefault,
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.borderFocused, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.borderFocused,
+            width: 1.5,
+          ),
         ),
       ),
     );
