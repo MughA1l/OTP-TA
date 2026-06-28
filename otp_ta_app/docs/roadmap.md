@@ -569,11 +569,11 @@ Phase 12 → Final Polish, Testing & Deployment
   - 24h link expiry is managed via `tokenExpiry: Timestamp` field in Firestore `users/{uid}`
   - On first login, Flutter checks `tokenExpiry` and forces password change (SRS-96)
 
-### 10.2 In-App Notification Center
+### ✅ 10.2 In-App Notification Center
 
-- `[B]`/`[F]` Implement `NotificationRepositoryImpl`: `watchNotifications(userId)`, `markAsRead()`, `clearAll()`
-- `[F]` Create `NotificationController`
-- `[F]` Build `notification_center_screen.dart`:
+- `[x] [B]`/`[F]` Implement `NotificationRepositoryImpl`: `watchNotifications(userId)`, `markAsRead()`, `clearAll()`
+- `[x] [F]` Create `NotificationController`
+- `[x] [F]` Build `notification_center_screen.dart`:
   - Chronological notification list (SRS-101)
   - Unread badge counter on notification icon in nav bar (SRS-102)
   - Tap to mark as read; "Clear All" button (SRS-103)

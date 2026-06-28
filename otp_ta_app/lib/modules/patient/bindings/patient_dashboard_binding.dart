@@ -6,11 +6,13 @@ import '../../../data/repositories/doctor_repository_impl.dart';
 import '../../../data/repositories/patient_repository.dart';
 import '../../../data/repositories/patient_repository_impl.dart';
 import '../../auth/controllers/auth_controller.dart';
+import '../../notifications/bindings/notification_binding.dart';
 import '../controllers/patient_dashboard_controller.dart';
 
 class PatientDashboardBinding extends Bindings {
   @override
   void dependencies() {
+    NotificationBinding().dependencies();
     Get.lazyPut<IPatientRepository>(() => PatientRepositoryImpl());
     Get.lazyPut<IAppointmentRepository>(() => AppointmentRepositoryImpl());
     Get.lazyPut<IDoctorRepository>(() => DoctorRepositoryImpl());

@@ -48,6 +48,8 @@ import '../modules/medication/views/medication_schedule_screen.dart';
 import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_list_screen.dart';
 import '../modules/chat/views/chat_room_screen.dart';
+import '../modules/notifications/bindings/notification_binding.dart';
+import '../modules/notifications/views/notification_center_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -209,6 +211,11 @@ abstract class AppPages {
       name: AppRoutes.chatRoom,
       page: () => const ChatRoomScreen(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.notificationCenter,
+      page: () => const NotificationCenterScreen(),
+      binding: NotificationBinding(),
     ),
   ];
 }

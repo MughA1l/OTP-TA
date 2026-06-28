@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../controllers/patient_dashboard_controller.dart';
+import '../../notifications/controllers/notification_controller.dart';
 import '../../../routes/app_routes.dart';
 
 class PatientDashboardScreen extends GetView<PatientDashboardController> {
@@ -86,6 +87,8 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(width: AppDimensions.paddingM),
+                                _buildNotificationBadge(),
                               ],
                             ),
                           ),
@@ -307,6 +310,47 @@ class PatientDashboardScreen extends GetView<PatientDashboardController> {
         ],
       ),
     );
+  }
+
+  Widget _buildNotificationBadge() {
+    final notifController = Get.find<NotificationController>();
+    return Obx(() {
+      final count = notifController.unreadCount.value;
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary, size: 28),
+            onPressed: () => Get.toNamed(AppRoutes.notificationCenter),
+          ),
+          if (count > 0)
+            Positioned(
+              right: 4,
+              top: 4,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  color: AppColors.error,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 16,
+                  minHeight: 16,
+                ),
+                child: Text(
+                  count > 9 ? '9+' : '$count',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 9,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      );
+    });
   }
 
   String _getWeekday(int weekday) {
