@@ -15,6 +15,9 @@ abstract class IChatRepository {
   /// Streams real-time chat rooms for a specific user.
   Stream<List<ChatRoomModel>> watchUserRooms(String userId);
 
+  /// Streams real-time updates for a single chat room.
+  Stream<ChatRoomModel> watchRoom(String roomId);
+
   /// Marks a specific message as read (SRS-90).
   Future<Either<Failure, void>> markAsRead(String roomId, String messageId);
 
@@ -22,5 +25,8 @@ abstract class IChatRepository {
   Future<Either<Failure, List<MessageModel>>> searchMessages(String roomId, String query);
 
   /// Triggers an emergency alert for a specific room (SRS-92).
-  Future<Either<Failure, void>> triggerEmergencyAlert(String roomId, List<String> fcmTokens);
+  Future<Either<Failure, void>> triggerEmergencyAlert(String roomId, String triggeredById, List<String> fcmTokens);
+
+  /// Acknowledges an active emergency alert (SRS-93).
+  Future<Either<Failure, void>> acknowledgeEmergency(String roomId);
 }

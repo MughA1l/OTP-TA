@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import '../../core/error/failures.dart';
+import '../../core/services/render_api_service.dart';
 import '../models/chat_model.dart';
 import 'chat_repository.dart';
 
@@ -83,6 +84,15 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
+  Stream<ChatRoomModel> watchRoom(String roomId) {
+    return _firestore
+        .collection('chat_rooms')
+        .doc(roomId)
+        .snapshots()
+        .map((snapshot) => ChatRoomModel.fromMap(snapshot.data() ?? {}, snapshot.id));
+  }
+
+  @override
   Future<Either<Failure, void>> markAsRead(String roomId, String messageId) async {
     try {
       await _firestore
@@ -120,32 +130,44 @@ class ChatRepositoryImpl implements IChatRepository {
   }
 
   @override
-  Future<Either<Failure, void>> triggerEmergencyAlert(String roomId, List<String> fcmTokens) async {
+  Future<Either<Failure, void>> triggerEmergencyAlert(String roomId, String triggeredById, List<String> fcmTokens) async {
     try {
       // 1. Update Firestore Document
       await _firestore.collection('chat_rooms').doc(roomId).update({
         'hasEmergency': true,
+        'emergencyTriggeredBy': triggeredById,
+        'emergencyAcknowledged': false,
       });
 
-      // 2. Mock HTTP call to Render server for push notification dispatch
-      final url = Uri.parse('https://otpta-backend.onrender.com/api/notify/emergency');
+      // 2. HTTP call to Render server for push notification dispatch
       try {
-        await http.post(
-          url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'roomId': roomId,
-            'tokens': fcmTokens,
-            'message': 'EMERGENCY: Immediate attention required in chat room $roomId',
-          }),
-        ).timeout(const Duration(seconds: 5)); // Ignore timeout/failure since it's a mock endpoint
+        await RenderApiService.sendEmergencyAlert(
+          fcmTokens: fcmTokens,
+          roomId: roomId,
+          message: 'EMERGENCY: Immediate attention required in chat room $roomId',
+        );
       } catch (e) {
-        // Suppress HTTP errors since Render.com backend is just mocked for this assignment step.
+        // Suppress HTTP errors
       }
 
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(FirestoreFailure(message: e.message ?? 'Failed to trigger emergency alert.'));
+    } catch (e) {
+      return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> acknowledgeEmergency(String roomId) async {
+    try {
+      await _firestore.collection('chat_rooms').doc(roomId).update({
+        'hasEmergency': false,
+        'emergencyAcknowledged': true,
+      });
+      return const Right(null);
+    } on FirebaseException catch (e) {
+      return Left(FirestoreFailure(message: e.message ?? 'Failed to acknowledge emergency.'));
     } catch (e) {
       return Left(FirestoreFailure(message: 'An unexpected error occurred.'));
     }

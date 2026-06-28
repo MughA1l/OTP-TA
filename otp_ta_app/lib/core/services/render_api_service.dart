@@ -61,4 +61,28 @@ class RenderApiService {
       return false;
     }
   }
+
+  /// Calls `POST /api/notify/emergency` on Render.com server with list of team member FCM tokens (SRS-92)
+  static Future<bool> sendEmergencyAlert({
+    required List<String> fcmTokens,
+    required String roomId,
+    required String message,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/api/notify/emergency'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'tokens': fcmTokens,
+          'roomId': roomId,
+          'message': message,
+        }),
+      );
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print('RenderApiService.sendEmergencyAlert Error: $e');
+      return false;
+    }
+  }
 }

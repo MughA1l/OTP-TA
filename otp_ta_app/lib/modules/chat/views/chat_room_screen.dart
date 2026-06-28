@@ -9,6 +9,7 @@ import '../../../core/utils/responsive_helper.dart';
 import '../../../data/models/chat_model.dart';
 import '../controllers/chat_controller.dart';
 import '../../auth/controllers/auth_controller.dart';
+import 'widgets/emergency_button.dart';
 
 class ChatRoomScreen extends GetView<ChatController> {
   const ChatRoomScreen({super.key});
@@ -89,90 +90,166 @@ class ChatRoomScreen extends GetView<ChatController> {
               onPressed: () => isSearching.value = true,
             );
           }),
-          // Basic Emergency Button (To be expanded in step 9.5)
-          IconButton(
-            icon: const Icon(Icons.warning_amber_rounded, color: AppColors.error),
-            onPressed: () {
-              // Stub for triggering emergency
-              controller.triggerEmergency(roomId, []); 
-            },
-          ),
           const SizedBox(width: AppDimensions.paddingS),
         ],
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
-          child: Column(
-            children: [
-              Expanded(
-                child: Obx(() {
-                  if (isSearching.value && searchController.text.isNotEmpty) {
-                    if (controller.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
-                    }
-                    if (controller.searchResults.isEmpty) {
-                      return const Center(child: Text('No results found.', style: AppTextStyles.bodyLarge));
-                    }
-                    return ListView.builder(
-                      reverse: true, // show from bottom
-                      padding: const EdgeInsets.all(AppDimensions.paddingL),
-                      itemCount: controller.searchResults.length,
-                      itemBuilder: (context, index) {
-                        final msg = controller.searchResults[controller.searchResults.length - 1 - index];
-                        return _MessageBubble(message: msg, isMe: msg.senderId == currentUserId);
-                      },
-                    );
-                  }
+      body: StreamBuilder<ChatRoomModel>(
+        stream: controller.watchRoom(roomId),
+        builder: (context, roomSnapshot) {
+          final room = roomSnapshot.data;
+          final hasEmergency = room?.hasEmergency ?? false;
+          final triggeredBy = room?.emergencyTriggeredBy;
+          final isMe = triggeredBy == currentUserId;
 
-                  return StreamBuilder<List<MessageModel>>(
-                    stream: controller.watchMessages(roomId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator(color: AppColors.primary));
-                      }
-                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'Say hi to start the conversation!',
-                            style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textTertiary),
-                          ),
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
+              child: Column(
+                children: [
+                  if (hasEmergency) ...[
+                    FadeInDown(
+                      duration: const Duration(milliseconds: 300),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.error.withOpacity(0.15),
+                          border: const Border(bottom: BorderSide(color: AppColors.error, width: 1)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 24),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'EMERGENCY BROADCAST ACTIVE',
+                                    style: AppTextStyles.titleMedium.copyWith(color: AppColors.errorLight, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    isMe
+                                        ? 'Surgical/ICU team notified. Waiting for acknowledgement...'
+                                        : 'A surgical/ICU team member has triggered an emergency.',
+                                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (!isMe)
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.error,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                ),
+                                onPressed: () {
+                                  controller.acknowledgeEmergency(roomId);
+                                },
+                                child: Text(
+                                  'Acknowledge',
+                                  style: AppTextStyles.bodyMedium.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ] else if (room?.emergencyAcknowledged ?? false) ...[
+                    FadeInDown(
+                      duration: const Duration(milliseconds: 300),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.15),
+                          border: const Border(bottom: BorderSide(color: AppColors.primary, width: 1)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle_outline_rounded, color: AppColors.primary, size: 24),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'Emergency situation resolved / acknowledged.',
+                                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryLight),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  Expanded(
+                    child: Obx(() {
+                      if (isSearching.value && searchController.text.isNotEmpty) {
+                        if (controller.isLoading.value) {
+                          return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                        }
+                        if (controller.searchResults.isEmpty) {
+                          return const Center(child: Text('No results found.', style: AppTextStyles.bodyLarge));
+                        }
+                        return ListView.builder(
+                          reverse: true, // show from bottom
+                          padding: const EdgeInsets.all(AppDimensions.paddingL),
+                          itemCount: controller.searchResults.length,
+                          itemBuilder: (context, index) {
+                            final msg = controller.searchResults[controller.searchResults.length - 1 - index];
+                            return _MessageBubble(message: msg, isMe: msg.senderId == currentUserId);
+                          },
                         );
                       }
 
-                      final messages = snapshot.data!.reversed.toList(); // Reverse for ListView(reverse: true)
-
-                      return ListView.builder(
-                        reverse: true,
-                        padding: const EdgeInsets.all(AppDimensions.paddingL),
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final msg = messages[index];
-                          final isMe = msg.senderId == currentUserId;
-
-                          // Automatically mark as read if it's not mine and status is not read
-                          if (!isMe && msg.status != MessageStatus.read) {
-                            controller.markAsRead(roomId, msg.messageId);
+                      return StreamBuilder<List<MessageModel>>(
+                        stream: controller.watchMessages(roomId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
                           }
-
-                          // Animate only the newest messages at the top of the reversed list
-                          if (index == 0) {
-                            return SlideInUp(
-                              duration: const Duration(milliseconds: 300),
-                              child: _MessageBubble(message: msg, isMe: isMe),
+                          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'Say hi to start the conversation!',
+                                style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textTertiary),
+                              ),
                             );
                           }
-                          return _MessageBubble(message: msg, isMe: isMe);
+
+                          final messages = snapshot.data!.reversed.toList(); // Reverse for ListView(reverse: true)
+
+                          return ListView.builder(
+                            reverse: true,
+                            padding: const EdgeInsets.all(AppDimensions.paddingL),
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              final msg = messages[index];
+                              final isMeMsg = msg.senderId == currentUserId;
+
+                              // Automatically mark as read if it's not mine and status is not read
+                              if (!isMeMsg && msg.status != MessageStatus.read) {
+                                controller.markAsRead(roomId, msg.messageId);
+                              }
+
+                              // Animate only the newest messages at the top of the reversed list
+                              if (index == 0) {
+                                return SlideInUp(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: _MessageBubble(message: msg, isMe: isMeMsg),
+                                );
+                              }
+                              return _MessageBubble(message: msg, isMe: isMeMsg);
+                            },
+                          );
                         },
                       );
-                    },
-                  );
-                }),
+                    }),
+                  ),
+                  _buildMessageInput(roomId, messageController),
+                ],
               ),
-              _buildMessageInput(roomId, messageController),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -187,6 +264,12 @@ class ChatRoomScreen extends GetView<ChatController> {
       child: SafeArea(
         child: Row(
           children: [
+            EmergencyButton(
+              onTap: () {
+                controller.triggerEmergency(roomId, []);
+              },
+            ),
+            const SizedBox(width: AppDimensions.paddingS),
             IconButton(
               icon: const Icon(Icons.attach_file_rounded, color: AppColors.textSecondary),
               onPressed: () {

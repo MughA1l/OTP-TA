@@ -77,6 +77,8 @@ class ChatRoomModel {
   final String lastMessage;
   final DateTime lastMessageTime;
   final bool hasEmergency;
+  final String? emergencyTriggeredBy;
+  final bool? emergencyAcknowledged;
 
   ChatRoomModel({
     required this.roomId,
@@ -84,6 +86,8 @@ class ChatRoomModel {
     required this.lastMessage,
     required this.lastMessageTime,
     required this.hasEmergency,
+    this.emergencyTriggeredBy,
+    this.emergencyAcknowledged,
   });
 
   factory ChatRoomModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -93,6 +97,8 @@ class ChatRoomModel {
       lastMessage: map['lastMessage'] as String? ?? '',
       lastMessageTime: (map['lastMessageTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       hasEmergency: map['hasEmergency'] as bool? ?? false,
+      emergencyTriggeredBy: map['emergencyTriggeredBy'] as String?,
+      emergencyAcknowledged: map['emergencyAcknowledged'] as bool?,
     );
   }
 
@@ -102,6 +108,8 @@ class ChatRoomModel {
       'lastMessage': lastMessage,
       'lastMessageTime': Timestamp.fromDate(lastMessageTime),
       'hasEmergency': hasEmergency,
+      if (emergencyTriggeredBy != null) 'emergencyTriggeredBy': emergencyTriggeredBy,
+      if (emergencyAcknowledged != null) 'emergencyAcknowledged': emergencyAcknowledged,
     };
   }
 
@@ -111,6 +119,8 @@ class ChatRoomModel {
     String? lastMessage,
     DateTime? lastMessageTime,
     bool? hasEmergency,
+    String? emergencyTriggeredBy,
+    bool? emergencyAcknowledged,
   }) {
     return ChatRoomModel(
       roomId: roomId ?? this.roomId,
@@ -118,6 +128,8 @@ class ChatRoomModel {
       lastMessage: lastMessage ?? this.lastMessage,
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       hasEmergency: hasEmergency ?? this.hasEmergency,
+      emergencyTriggeredBy: emergencyTriggeredBy ?? this.emergencyTriggeredBy,
+      emergencyAcknowledged: emergencyAcknowledged ?? this.emergencyAcknowledged,
     );
   }
 }

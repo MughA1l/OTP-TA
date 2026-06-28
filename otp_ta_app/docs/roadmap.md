@@ -533,12 +533,12 @@ Phase 12 → Final Polish, Testing & Deployment
   - Search bar within chat (SRS-90)
   - **Emergency Alert Button:** pulsing red button at bottom (SRS-92)
 
-### 9.5 Emergency Alert
+### ✅ 9.5 Emergency Alert
 
-- `[F]` Build `EmergencyButton` widget with continuous pulsing ring animation
-- `[F]` On tap: confirmation dialog → trigger `triggerEmergencyAlert()`
-- `[B]`/`[F]` Receiving staff sees high-priority FCM notification + in-app "Acknowledge" button (SRS-93)
-- `[F]` "Acknowledge" updates alert status in Firestore; sender sees confirmation
+- `[x] [F]` Build `EmergencyButton` widget with continuous pulsing ring animation
+- `[x] [F]` On tap: confirmation dialog → trigger `triggerEmergencyAlert()`
+- `[x] [B]`/`[F]` Receiving staff sees high-priority FCM notification + in-app "Acknowledge" button (SRS-93)
+- `[x] [F]` "Acknowledge" updates alert status in Firestore; sender sees confirmation
 
 ---
 
