@@ -478,9 +478,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - "Prescription Added Successfully" snackbar (SRS-83)
   - Edit mode: update dosage — auto-logs old vs new to audit (SRS-85)
 
-### 8.3 View Medication Schedule (Patient Mobile)
+### ✅ 8.3 View Medication Schedule (Patient Mobile)
 
-- `[F]` Build `medication_schedule_screen.dart` (Patient Mobile):
+- `[x] [F]` Build `medication_schedule_screen.dart` (Patient Mobile):
   - Daily timetable: Morning / Afternoon / Evening / Night timeline
   - Medicine cards with name, dosage, time — clearly formatted (SRS-86)
   - `FadeInLeft` animation on each medicine card
