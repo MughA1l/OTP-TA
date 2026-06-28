@@ -584,14 +584,14 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 11: Reports & Analytics Management
 
-### 11.1 Backend Setup
+### ✅ 11.1 Backend Setup
 
-- `[B]` Design Firestore queries for analytics (aggregations):
+- `[x] [B]` Design Firestore queries for analytics (aggregations):
   - Total operations by date range, by surgery type, by OT room
   - Success rate: `count(status == 'Completed') / count(all)`
   - Doctor performance: operations completed, avg duration, punctuality
   - Recovery analytics: recovery time, readmission rates
-- `[B]` For large dataset performance: write a Render.com endpoint `GET /api/analytics/precompute` that runs Firestore aggregation queries and caches results in a Firestore `analytics_cache` collection (updated nightly via cron-job.org)
+- `[x] [B]` For large dataset performance: write a Render.com endpoint `GET /api/analytics/precompute` that runs Firestore aggregation queries and caches results in a Firestore `analytics_cache` collection (updated nightly via cron-job.org)
 
 ### 11.2 Analytics Dashboard (Admin Web)
 

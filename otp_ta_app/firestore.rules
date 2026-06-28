@@ -45,5 +45,14 @@ service cloud.firestore {
       );
       allow delete: if request.auth != null && request.auth.token.role == 'admin';
     }
+
+    // Analytics Cache Rules
+    match /analytics_cache/{cacheId} {
+      allow read: if request.auth != null && (
+        request.auth.token.role == 'admin' ||
+        request.auth.token.role == 'doctor'
+      );
+      allow write: if request.auth != null && request.auth.token.role == 'admin';
+    }
   }
 }
