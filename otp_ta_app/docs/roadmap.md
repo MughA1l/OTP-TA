@@ -516,9 +516,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - `triggerEmergencyAlert(roomId)` (SRS-92)
 - `[x] [F]` Create `ChatController`
 
-### 9.3 Chat List Screen
+### ✅ 9.3 Chat List Screen
 
-- `[F]` Build `chat_list_screen.dart` (Doctor Mobile + Web):
+- `[x] [F]` Build `chat_list_screen.dart` (Doctor Mobile + Web):
   - List of active chat rooms with last message preview
   - Unread badge count per room
   - `FadeInUp` stagger on list items

@@ -39,4 +39,7 @@ abstract class AppRoutes {
   // Medication Module
   static const prescription = '/prescription';
   static const medicationSchedule = '/medication-schedule';
+
+  // Chat Module
+  static const chatList = '/chat-list';
 }

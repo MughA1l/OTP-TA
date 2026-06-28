@@ -45,6 +45,8 @@ import '../modules/operation/views/operation_list_screen.dart';
 import '../modules/medication/bindings/medication_binding.dart';
 import '../modules/medication/views/prescription_screen.dart';
 import '../modules/medication/views/medication_schedule_screen.dart';
+import '../modules/chat/bindings/chat_binding.dart';
+import '../modules/chat/views/chat_list_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -196,6 +198,11 @@ abstract class AppPages {
       name: AppRoutes.medicationSchedule,
       page: () => const MedicationScheduleScreen(),
       binding: MedicationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.chatList,
+      page: () => const ChatListScreen(),
+      binding: ChatBinding(),
     ),
   ];
 }
