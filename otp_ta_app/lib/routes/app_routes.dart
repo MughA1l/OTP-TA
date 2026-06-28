@@ -42,4 +42,5 @@ abstract class AppRoutes {
 
   // Chat Module
   static const chatList = '/chat-list';
+  static const chatRoom = '/chat-room';
 }

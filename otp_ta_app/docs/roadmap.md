@@ -523,9 +523,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - Unread badge count per room
   - `FadeInUp` stagger on list items
 
-### 9.4 Chat Room Screen
+### ✅ 9.4 Chat Room Screen
 
-- `[F]` Build `chat_room_screen.dart` (Shared):
+- `[x] [F]` Build `chat_room_screen.dart` (Shared):
   - Real-time message bubbles — sent (right, blue) / received (left, surface)
   - New messages slide up from bottom (`SlideInUp` animation)
   - Message status icons: Sent ✓ / Delivered ✓✓ / Read ✓✓ (blue) (SRS-91)
