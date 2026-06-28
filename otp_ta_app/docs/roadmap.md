@@ -407,9 +407,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - `uploadMedicalReport(file, operationId)` → Cloudinary + Firestore
 - `[x] [F]` Create `OperationController`
 
-### 7.3 Create Operation Record (Admin Web)
+### ✅ 7.3 Create Operation Record (Admin Web)
 
-- `[F]` Build `create_operation_screen.dart` (Web):
+- `[x] [F]` Build `create_operation_screen.dart` (Web):
   - Patient selector (searchable dropdown from patients collection)
   - Surgery Type input, OT Room selector, Date + Time pickers
   - "Create Record" `PrimaryButton`

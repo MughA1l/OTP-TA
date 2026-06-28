@@ -28,4 +28,8 @@ abstract class AppRoutes {
   
   // Patient Module
   static const patientProfile = '/patient-profile';
+
+  // Operation Module
+  static const createOperation = '/create-operation';
+  static const assignTeam = '/assign-team';
 }

@@ -36,6 +36,8 @@ import '../modules/patient/bindings/patient_binding.dart';
 import '../modules/admin/views/patient_list_screen.dart';
 import '../modules/admin/views/add_patient_screen.dart';
 import '../modules/patient/views/patient_profile_screen.dart';
+import '../modules/operation/bindings/operation_binding.dart';
+import '../modules/operation/views/create_operation_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -152,6 +154,11 @@ abstract class AppPages {
       name: AppRoutes.checkUpHistory,
       page: () => const CheckUpHistoryScreen(),
       binding: CheckUpHistoryBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.createOperation,
+      page: () => const CreateOperationScreen(),
+      binding: OperationBinding(),
     ),
   ];
 }

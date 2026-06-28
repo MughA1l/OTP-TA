@@ -5,23 +5,58 @@ import '../../../core/utils/snackbar_helper.dart';
 import '../../../core/services/render_api_service.dart';
 import '../../auth/controllers/auth_controller.dart';
 import '../../../data/models/operation_model.dart';
+import '../../../data/models/patient_model.dart';
+import '../../../data/models/doctor_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/operation_repository.dart';
+import '../../../data/repositories/patient_repository.dart';
+import '../../../data/repositories/doctor_repository.dart';
 
 class OperationController extends GetxController {
   final IOperationRepository _operationRepository;
+  final IPatientRepository _patientRepository;
+  final IDoctorRepository _doctorRepository;
 
   OperationController({
     required IOperationRepository operationRepository,
-  }) : _operationRepository = operationRepository;
+    required IPatientRepository patientRepository,
+    required IDoctorRepository doctorRepository,
+  })  : _operationRepository = operationRepository,
+        _patientRepository = patientRepository,
+        _doctorRepository = doctorRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<OperationModel> operationsList = <OperationModel>[].obs;
   final Rx<OperationModel?> selectedOperation = Rx<OperationModel?>(null);
 
+  // Observable lists of Patients and Doctors
+  final RxList<PatientModel> patientList = <PatientModel>[].obs;
+  final RxList<DoctorModel> doctorList = <DoctorModel>[].obs;
+
   // For pagination in history
   DocumentSnapshot? _lastDocument;
   final RxBool hasMore = true.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _watchPatients();
+    _watchDoctors();
+  }
+
+  void _watchPatients() {
+    _patientRepository.watchAllPatients().listen(
+      (list) => patientList.value = list,
+      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load patients list.'),
+    );
+  }
+
+  void _watchDoctors() {
+    _doctorRepository.watchAllDoctors().listen(
+      (list) => doctorList.value = list,
+      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load doctors list.'),
+    );
+  }
 
   /// Creates a new operation record and auto-navigates to team assignment (SRS-64)
   Future<void> createOperation(OperationModel operation) async {
@@ -32,7 +67,7 @@ class OperationController extends GetxController {
       (operationId) {
         SnackbarHelper.showSuccess('Success', 'Operation Record Created Successfully');
         // Auto-navigate to Assign Team screen passing the operationId
-        Get.toNamed('/assign-team', arguments: operationId);
+        Get.offNamed('/assign-team', arguments: operationId);
       },
     );
     isLoading.value = false;
