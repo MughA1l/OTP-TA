@@ -426,9 +426,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - "Assign Team" button → saves and sends notification to team members (SRS-69)
   - "Update Team" flow (SRS-67, SRS-68, SRS-70): shows audit log of who changed what
 
-### 7.5 Record Operation Outcome (Doctor Mobile)
+### ✅ 7.5 Record Operation Outcome (Doctor Mobile)
 
-- `[F]` Build `record_outcome_screen.dart` (Doctor Mobile + Web):
+- `[x] [F]` Build `record_outcome_screen.dart` (Doctor Mobile + Web):
   - Fields: Surgical Notes, Complications (if any), Patient Condition post-op
   - "Submit Outcome" button → updates operation status to "Completed" (SRS-72)
   - On submit → `OperationController` calls `POST /api/email/credentials` on Render.com server to trigger patient credential generation (SRS-73)
