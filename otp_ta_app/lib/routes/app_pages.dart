@@ -54,6 +54,7 @@ import '../modules/notifications/views/notification_center_screen.dart';
 import '../modules/reports/bindings/report_binding.dart';
 import '../modules/reports/views/analytics_dashboard_screen.dart';
 import '../modules/reports/views/doctor_performance_screen.dart';
+import '../modules/reports/views/patient_recovery_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -230,6 +231,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.doctorPerformance,
       page: () => const DoctorPerformanceScreen(),
+      binding: ReportBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.patientRecovery,
+      page: () => const PatientRecoveryScreen(),
       binding: ReportBinding(),
     ),
   ];

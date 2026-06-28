@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/responsive_helper.dart';
+import '../../../routes/app_routes.dart';
 import '../controllers/report_controller.dart';
 
 class AnalyticsDashboardScreen extends GetView<ReportController> {
@@ -26,6 +27,14 @@ class AnalyticsDashboardScreen extends GetView<ReportController> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.healing_rounded, color: AppColors.secondaryLight, size: 20),
+            label: Text('Patient Recovery', style: TextStyle(color: AppColors.secondaryLight)),
+            onPressed: () => Get.toNamed(AppRoutes.patientRecovery),
+          ),
+          const SizedBox(width: AppDimensions.paddingM),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingL),

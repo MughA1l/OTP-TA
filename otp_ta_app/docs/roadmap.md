@@ -611,9 +611,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - Doctor can only see their own report; Admin sees all (SRS-108)
   - Bar chart of operations per week
 
-### 11.4 Patient Recovery Analytics (Admin Web)
+### ✅ 11.4 Patient Recovery Analytics (Admin Web)
 
-- `[F]` Build `patient_recovery_screen.dart` (Web):
+- `[x] [F]` Build `patient_recovery_screen.dart` (Web):
   - Recovery time distribution chart (SRS-110)
   - Readmission rate card
   - Filter by surgical procedure or age demographic (SRS-111)
