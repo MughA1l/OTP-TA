@@ -371,9 +371,9 @@ Phase 12 → Final Polish, Testing & Deployment
 
 > This is the heart of the app. All other modules connect to this.
 
-### 7.1 Backend Setup
+### ✅ 7.1 Backend Setup
 
-- `[B]` Create `operations` Firestore collection schema (full schema):
+- `[x] [B]` Create `operations` Firestore collection schema (full schema):
   ```
   {
     operationId, patientId, patientName, surgeryType, otRoom,
@@ -386,16 +386,16 @@ Phase 12 → Final Polish, Testing & Deployment
     createdAt, updatedAt
   }
   ```
-- `[B]`/`[F]` **Operation Status Notification (replaces Cloud Function):**
+- `[x] [B]`/`[F]` **Operation Status Notification (replaces Cloud Function):**
   - When `OperationController.updateOperationStatus()` successfully writes to Firestore,
   - It calls `POST /api/notify/single` on Render.com server with patient's FCM token + new status
   - Render.com server sends FCM HTTP v1 push to patient's device (SRS-100)
-- `[B]`/`[F]` **Automated Patient Credentials (replaces Cloud Function, SRS-73, SRS-74):**
+- `[x] [B]`/`[F]` **Automated Patient Credentials (replaces Cloud Function, SRS-73, SRS-74):**
   - When `recordOutcome()` is called and operation is marked "Scheduled", Flutter controller calls
   - `POST /api/email/credentials` on Render.com server
   - Render.com uses **Resend** API to email temporary credentials to patient
   - Credentials link contains a deep-link with 24h expiry (SRS-95) managed via Firestore `tokenExpiry` field
-- `[B]` Firestore Indexes: operations by status, by doctorId, by patientId, by date
+- `[x] [B]` Firestore Indexes: operations by status, by doctorId, by patientId, by date
 
 ### 7.2 Operation Repository & Controller
 

@@ -41,10 +41,10 @@ class OperationTrackingController extends GetxController {
     );
   }
 
-  // Helper method for UI to determine active step index
   int get currentStepIndex {
-    final status = currentOperation.value?.status ?? OperationStatus.preOp;
+    final status = currentOperation.value?.status ?? OperationStatus.scheduled;
     switch (status) {
+      case OperationStatus.scheduled:
       case OperationStatus.preOp:
         return 0;
       case OperationStatus.inSurgery:
@@ -53,6 +53,8 @@ class OperationTrackingController extends GetxController {
         return 2;
       case OperationStatus.completed:
         return 3;
+      case OperationStatus.cancelled:
+        return -1;
     }
   }
 
