@@ -454,9 +454,9 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 8: Medication Management
 
-### 8.1 Backend Setup
+### ✅ 8.1 Backend Setup
 
-- `[B]` Create `prescriptions` Firestore collection:
+- `[x] [B]` Create `prescriptions` Firestore collection:
   ```
   {
     prescriptionId, operationId, patientId, doctorId,
@@ -465,7 +465,7 @@ Phase 12 → Final Polish, Testing & Deployment
     createdAt, updatedAt
   }
   ```
-- `[B]` Firestore Rule: Only the assigned doctor can create/update; patient can only read
+- `[x] [B]` Firestore Rule: Only the assigned doctor can create/update; patient can only read
 
 ### 8.2 Add & Update Prescription (Doctor Mobile)
 

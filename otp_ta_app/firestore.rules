@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Prescriptions Rules (SRS-81)
+    match /prescriptions/{prescriptionId} {
+      allow read: if request.auth != null && (
+        request.auth.token.role == 'admin' ||
+        request.auth.token.role == 'doctor' ||
+        resource.data.patientId == request.auth.uid
+      );
+      allow create, update: if request.auth != null && (
+        request.auth.token.role == 'admin' ||
+        (request.auth.token.role == 'doctor' && request.auth.uid == request.resource.data.doctorId)
+      );
+      allow delete: if request.auth != null && request.auth.token.role == 'admin';
+    }
+  }
+}
