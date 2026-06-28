@@ -416,9 +416,9 @@ Phase 12 → Final Polish, Testing & Deployment
   - On success: "Operation Record Created Successfully" snackbar (SRS-64)
   - Controller then auto-navigates to "Assign Team" step
 
-### 7.4 Assign / Update Surgical Team (Admin Web)
+### ✅ 7.4 Assign / Update Surgical Team (Admin Web)
 
-- `[F]` Build `assign_team_screen.dart` (Web):
+- `[x] [F]` Build `assign_team_screen.dart` (Web):
   - Primary Doctor selector (checks availability against `doctors/availability`)
   - Anaesthesiologist selector
   - Nursing staff multi-select

@@ -7,31 +7,37 @@ import '../../auth/controllers/auth_controller.dart';
 import '../../../data/models/operation_model.dart';
 import '../../../data/models/patient_model.dart';
 import '../../../data/models/doctor_model.dart';
+import '../../../data/models/staff_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/operation_repository.dart';
 import '../../../data/repositories/patient_repository.dart';
 import '../../../data/repositories/doctor_repository.dart';
+import '../../../data/repositories/staff_repository.dart';
 
 class OperationController extends GetxController {
   final IOperationRepository _operationRepository;
   final IPatientRepository _patientRepository;
   final IDoctorRepository _doctorRepository;
+  final IStaffRepository _staffRepository;
 
   OperationController({
     required IOperationRepository operationRepository,
     required IPatientRepository patientRepository,
     required IDoctorRepository doctorRepository,
+    required IStaffRepository staffRepository,
   })  : _operationRepository = operationRepository,
         _patientRepository = patientRepository,
-        _doctorRepository = doctorRepository;
+        _doctorRepository = doctorRepository,
+        _staffRepository = staffRepository;
 
   final RxBool isLoading = false.obs;
   final RxList<OperationModel> operationsList = <OperationModel>[].obs;
   final Rx<OperationModel?> selectedOperation = Rx<OperationModel?>(null);
 
-  // Observable lists of Patients and Doctors
+  // Observable lists of Patients, Doctors, and Staff
   final RxList<PatientModel> patientList = <PatientModel>[].obs;
   final RxList<DoctorModel> doctorList = <DoctorModel>[].obs;
+  final RxList<StaffModel> staffList = <StaffModel>[].obs;
 
   // For pagination in history
   DocumentSnapshot? _lastDocument;
@@ -42,6 +48,8 @@ class OperationController extends GetxController {
     super.onInit();
     _watchPatients();
     _watchDoctors();
+    _watchStaff();
+    _watchAllOperations(); // Watch operations list to perform real-time conflict checking
   }
 
   void _watchPatients() {
@@ -56,6 +64,48 @@ class OperationController extends GetxController {
       (list) => doctorList.value = list,
       onError: (_) => SnackbarHelper.showError('Error', 'Failed to load doctors list.'),
     );
+  }
+
+  void _watchStaff() {
+    _staffRepository.watchAllStaff().listen(
+      (list) => staffList.value = list,
+      onError: (_) => SnackbarHelper.showError('Error', 'Failed to load staff list.'),
+    );
+  }
+
+  void _watchAllOperations() {
+    // Listens to operations snapshots to populate operationsList for real-time conflicts
+    FirebaseFirestore.instance.collection('operations').snapshots().listen((qs) {
+      operationsList.value = qs.docs.map((doc) => OperationModel.fromMap(doc.data(), doc.id)).toList();
+    });
+  }
+
+  /// Checks if a doctor has an overlapping operation at the given scheduledDateTime
+  bool isDoctorAvailable(String doctorId, DateTime scheduledDateTime) {
+    if (doctorId.isEmpty) return true;
+    
+    // Check if doctor has any other active operation scheduled on the same date/hour
+    final hasConflict = operationsList.any((op) {
+      if (op.operationId == selectedOperation.value?.operationId) return false; // Ignore current operation
+      if (op.status == OperationStatus.cancelled || op.status == OperationStatus.completed) return false;
+      if (op.surgicalTeam.primaryDoctorId != doctorId && op.surgicalTeam.anaesthesiologistId != doctorId) return false;
+      
+      // If dates match and time is within, say, 2 hours (or same hour)
+      final difference = op.scheduledDate.difference(scheduledDateTime).inHours.abs();
+      return difference < 2; // Conflict if operations are within 2 hours
+    });
+    
+    return !hasConflict;
+  }
+
+  /// Checks if a doctor's weekly availability slots contain the proposed day
+  bool isDoctorScheduledSlotValid(DoctorModel doctor, DateTime dateTime) {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final dayName = days[dateTime.weekday - 1];
+    
+    if (doctor.availabilitySlots.isEmpty) return true;
+    
+    return doctor.availabilitySlots.any((slot) => slot.startsWith(dayName));
   }
 
   /// Creates a new operation record and auto-navigates to team assignment (SRS-64)
