@@ -467,11 +467,11 @@ Phase 12 → Final Polish, Testing & Deployment
   ```
 - `[x] [B]` Firestore Rule: Only the assigned doctor can create/update; patient can only read
 
-### 8.2 Add & Update Prescription (Doctor Mobile)
+### ✅ 8.2 Add & Update Prescription (Doctor Mobile)
 
-- `[B]`/`[F]` Implement `MedicationRepositoryImpl`: `addPrescription()`, `updateDosage()`, `fetchSchedule(patientId)`
-- `[F]` Create `PrescriptionController`
-- `[F]` Build `prescription_screen.dart` (Doctor Mobile):
+- `[x] [B]`/`[F]` Implement `MedicationRepositoryImpl`: `addPrescription()`, `updateDosage()`, `fetchSchedule(patientId)`
+- `[x] [F]` Create `PrescriptionController`
+- `[x] [F]` Build `prescription_screen.dart` (Doctor Mobile):
   - Dynamic form: Add multiple medicines (drug name, dosage, frequency, duration)
   - "Add More Medicine" expandable row
   - Validation: all mandatory fields (SRS-82)

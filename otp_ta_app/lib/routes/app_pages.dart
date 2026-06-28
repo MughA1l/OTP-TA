@@ -42,6 +42,8 @@ import '../modules/operation/views/assign_team_screen.dart';
 import '../modules/operation/views/record_outcome_screen.dart';
 import '../modules/operation/views/operation_detail_screen.dart';
 import '../modules/operation/views/operation_list_screen.dart';
+import '../modules/medication/bindings/medication_binding.dart';
+import '../modules/medication/views/prescription_screen.dart';
 
 abstract class AppPages {
   static final pages = [
@@ -183,6 +185,11 @@ abstract class AppPages {
       name: AppRoutes.operationList,
       page: () => const OperationListScreen(),
       binding: OperationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.prescription,
+      page: () => const PrescriptionScreen(),
+      binding: MedicationBinding(),
     ),
   ];
 }

@@ -35,4 +35,7 @@ abstract class AppRoutes {
   static const recordOutcome = '/record-outcome';
   static const operationDetail = '/operation-detail';
   static const operationList = '/operation-list';
+
+  // Medication Module
+  static const prescription = '/prescription';
 }
