@@ -37,7 +37,7 @@ class AuthController extends GetxController {
         (failure) => currentUser.value = null,
         (userData) {
           currentUser.value = userData;
-          // Don't navigate here — SplashController handles initial routing
+          _updateFcmToken(user.uid);
         },
       );
     }

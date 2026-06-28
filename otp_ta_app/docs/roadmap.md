@@ -544,26 +544,26 @@ Phase 12 → Final Polish, Testing & Deployment
 
 ## ✅ Phase 10: Notifications Management
 
-### 10.1 Backend Setup
+### ✅ 10.1 Backend Setup
 
-- `[B]` Configure FCM in Firebase Console:
+- `[x] [B]` Configure FCM in Firebase Console:
   - Enable **Cloud Messaging API (V1)** in Project Settings → Cloud Messaging tab
   - For Web: generate VAPID key pair in FCM Console (used for web push)
   - Download **Service Account JSON** → upload to Render.com as environment variable (used by Render server for FCM HTTP v1 auth)
-- `[B]` Create `notifications` Firestore collection:
+- `[x] [B]` Create `notifications` Firestore collection:
   ```
   { notificationId, userId, fcmToken, title, body, type, isRead, timestamp }
   ```
-- `[B]` Store user's FCM device token in Firestore `users/{uid}/fcmToken` field (updated each login by Flutter)
-- `[B]` **Checkup Reminders (replaces Cloud Function scheduled trigger, SRS-97):**
+- `[x] [B]` Store user's FCM device token in Firestore `users/{uid}/fcmToken` field (updated each login by Flutter)
+- `[x] [B]` **Checkup Reminders (replaces Cloud Function scheduled trigger, SRS-97):**
   - cron-job.org → every 30 minutes → calls `GET /api/reminders/check` on Render.com
   - Render.com server queries Firestore for appointments due in ±2h or ±24h
   - Sends FCM HTTP v1 push to matching patients via `firebase-admin` SDK
   - Notification includes: doctor name, time, room number (SRS-98)
-- `[B]` **Operation Status Notification (replaces Cloud Function, SRS-100):**
+- `[x] [B]` **Operation Status Notification (replaces Cloud Function, SRS-100):**
   - Triggered by Flutter controller (not a server trigger) → calls `POST /api/notify/single`
   - See Phase 7.1 for details
-- `[B]` **Account Credentials Email (replaces Cloud Function, SRS-94, SRS-95):**
+- `[x] [B]` **Account Credentials Email (replaces Cloud Function, SRS-94, SRS-95):**
   - Triggered by Flutter controller → calls `POST /api/email/credentials` on Render.com
   - Render.com uses Resend SDK to send email with temporary password
   - 24h link expiry is managed via `tokenExpiry: Timestamp` field in Firestore `users/{uid}`
