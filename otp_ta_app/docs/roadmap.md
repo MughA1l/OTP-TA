@@ -508,13 +508,13 @@ Phase 12 → Final Polish, Testing & Deployment
   - Render.com sends FCM HTTP v1 high-priority push to all surgical/ICU team members (SRS-92)
   - Firestore `chat_rooms/{roomId}/hasEmergency` is set to `true` by Flutter directly
 
-### 9.2 Chat Repository & Controller
+### ✅ 9.2 Chat Repository & Controller
 
-- `[B]`/`[F]` Implement `ChatRepositoryImpl`:
+- `[x] [B]`/`[F]` Implement `ChatRepositoryImpl`:
   - `sendMessage()`, `watchMessages(roomId)` → real-time stream
   - `markAsRead(messageId)`, `searchMessages(query)` (SRS-90)
   - `triggerEmergencyAlert(roomId)` (SRS-92)
-- `[F]` Create `ChatController`
+- `[x] [F]` Create `ChatController`
 
 ### 9.3 Chat List Screen
 
